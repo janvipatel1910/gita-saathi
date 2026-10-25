@@ -41,7 +41,10 @@ All 18 chapters are listed as levels. Progress is saved on the device.
 | 6 Dhyana Yoga | Playable | 6.5, 6.19, 6.26, 6.40 |
 | 7 Gyaan aur Vigyaan | Playable | 7.7, 7.8, 7.16 |
 | 8 Akshara Brahma Yoga | Playable | 8.6, 8.7 |
-| 9–18 | Coming soon | |
+| 9 Raja Vidya | Playable | 9.22, 9.26, 9.27, 9.31 |
+| 10 Vibhuti Yoga | Playable | 10.20, 10.25–37, 10.41 |
+| 11 Vishwarupa Darshana | Playable | 11.8, 11.12, 11.45, 11.54 |
+| 12–18 | Coming soon | |
 
 ## How to run it
 

@@ -351,9 +351,9 @@ const CHAPTERS=[
  ["Daivasura Sampad Vibhaga Yoga","Divine and harmful qualities"],["Shraddhatraya Vibhaga Yoga","Three kinds of faith"],["Moksha Sanyasa Yoga","Freedom by letting go"]];
 const isDone=n=>{try{return localStorage.getItem("gs-story-"+n)==="done";}catch(e){return false;}};
 const storyDone=()=>isDone(1);
-const PLAYABLE=[1,3,4,5,6,7,8];
+const PLAYABLE=[1,3,4,5,6,7,8,9,10,11];
 const doneCount=()=>(isDone(1)?2:0)+PLAYABLE.filter(n=>n>1&&isDone(n)).length;
-const CHTITLE={1:"Chapters 1–2 · Arjuna ka Dukh, Krishna ka Gyaan",3:"Chapter 3 · Karma Yoga",4:"Chapter 4 · Gyaan aur Karma",5:"Chapter 5 · Karma Sanyasa Yoga",6:"Chapter 6 · Dhyana Yoga",7:"Chapter 7 · Gyaan aur Vigyaan",8:"Chapter 8 · Akshara Brahma Yoga"};
+const CHTITLE={1:"Chapters 1–2 · Arjuna ka Dukh, Krishna ka Gyaan",3:"Chapter 3 · Karma Yoga",4:"Chapter 4 · Gyaan aur Karma",5:"Chapter 5 · Karma Sanyasa Yoga",6:"Chapter 6 · Dhyana Yoga",7:"Chapter 7 · Gyaan aur Vigyaan",8:"Chapter 8 · Akshara Brahma Yoga",9:"Chapter 9 · Raja Vidya",10:"Chapter 10 · Vibhuti Yoga",11:"Chapter 11 · Vishwarupa Darshana"};
 const HOME_HELP=`<div class="help quiet">Gita Saathi shares the Gita's wisdom. It isn't a replacement for talking to someone. If things feel very heavy, call <strong>Samaritans 116 123</strong> (UK) or <strong>Tele-MANAS 14416</strong> (India).</div>`;
 function stopVoice(){try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}}
 function mainHome(msg){
@@ -816,6 +816,134 @@ const ALL={1:[
      on:()=>[{w:"N",t:"<em>Jo roz sochoge, wahi banoge.</em> What you think every day, you become."}]}
   ]}];})(),
 
+ /* ===== Chapter 9: The royal secret ===== */
+ 9:(()=>{
+  const day=(mA,glow)=>svg(sky("#ffe2b8","#fff6e6",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#b6d39a","#9cc07f")+krishna(1060,780,.95,{bless:true,glow:!!glow})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const ITEM={leaf:`<path d="M-60 0 Q0 -90 60 0 Q0 30 -60 0Z" fill="#4f9a48"/><path d="M-50 0 Q0 -10 55 -2" stroke="#2f6e39" stroke-width="4" fill="none"/>`,
+    flower:`<g fill="#f28cb1"><circle cx="0" cy="-40" r="22"/><circle cx="-26" cy="-22" r="22"/><circle cx="26" cy="-22" r="22"/><circle cx="-16" cy="6" r="22"/><circle cx="16" cy="6" r="22"/></g><circle cy="-14" r="14" fill="#f4c430"/>`,
+    fruit:`<circle cy="-30" r="42" fill="#f08a24"/><path d="M0 -72 q6 -20 22 -24" stroke="#5a3a20" stroke-width="6" fill="none"/><ellipse cx="22" cy="-94" rx="16" ry="8" fill="#4f9a48"/>`,
+    water:`<path d="M-40 -70 H40 L30 0 H-30Z" fill="#c9a24a"/><ellipse cy="-70" rx="40" ry="10" fill="#7cc6f0"/>`};
+  const BURDEN=["Money worries","Exams or work","Family problems","Health","Fear of the future"];
+  return [
+  {title:"Raja Vidya",sub:"Chapter 9 · The royal secret",art:()=>day("happy"),steps:[
+    {w:"K",t:"Arjuna, now I'll share the most secret and royal knowledge. And the best part? It's easy and joyful to practise."}]},
+  {art:()=>svg(sky("#ffe2b8","#fff6e6")+hills("#b6d39a","#9cc07f")
+      +`<g transform="translate(620 760)"><ellipse rx="170" ry="34" fill="#d4a017"/><ellipse rx="140" ry="24" fill="#f4c430"/>${S.offer?`<g class="grow" transform="translate(0 -6)">${ITEM[S.offer]}</g>`:""}</g>`
+      +krishna(1080,800,.95,{bless:true,glow:!!S.offer})),
+   steps:[
+    {w:"K",t:"You don't need gold or grand rituals to reach Me."},
+    {act:"choice",w:"N",q:"If you could offer Krishna something right now, what would it be?",opts:[["A leaf","leaf"],["A flower","flower"],["A fruit","fruit"],["Some water","water"]],
+     on:k=>{S.offer=k;return [
+      {w:"K",t:V("Bhagavad Gita 9.26","पत्रं पुष्पं फलं तोयं यो मे भक्त्या प्रयच्छति।<br>तदहं भक्त्युपहृतमश्नामि प्रयतात्मनः॥","Patram pushpam phalam toyam, yo me bhaktya prayachchhati. Tad aham bhakty upahritam, ashnami prayatatmanah.","Whoever offers Me a leaf, a flower, a fruit or water with love, I accept that offering of love from a pure heart.")},
+      {w:"N",t:"Krishna doesn't measure the gift. He looks at the love inside it. <em>Bhaav dekhte hain, bhent nahi.</em>"}];}}
+  ]},
+  {art:()=>{const g=S.given||[],left=BURDEN.filter(b=>!g.includes(b));
+     const sack=(x,y,t,glow)=>`<g transform="translate(${x} ${y})">${glow?`<circle cy="-40" r="70" fill="#fff3b0" opacity=".6"/>`:""}<path d="M-70 0 Q-80 -70 -30 -86 L-18 -100 H18 L30 -86 Q80 -70 70 0Z" fill="#a8763e"/><rect x="-22" y="-102" width="44" height="12" rx="5" fill="#6b4a2c"/><text y="-30" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="700" font-size="22" fill="#fff6e6">${t}</text></g>`;
+     return svg(sky("#c9e4f5","#f2f9fd")+hills("#9cc98a","#7fb36f")
+      +left.map((b,i)=>sack(150+(i%3)*160,800-Math.floor(i/3)*110,b,false)).join("")
+      +arjuna(700,800,.85,{mood:left.length?"sad":"happy"})
+      +g.map((b,i)=>sack(1240+(i%3)*120,860-Math.floor(i/3)*90,b,true).replace(/translate\(([\d.]+) ([\d.]+)\)/,(m,x,y)=>`translate(${x} ${y}) scale(.7)`)).join("")
+      +krishna(1080,800,.85,{bless:true}));},
+   steps:[
+    {w:"N",t:"Everyone carries something heavy. Arjuna does too."},
+    {act:"collect",key:"given",opts:BURDEN,w:"N",q:"Hand each heavy bag to Krishna.",
+     on:()=>[{w:"K",t:V("Bhagavad Gita 9.22","अनन्याश्चिन्तयन्तो मां ये जनाः पर्युपासते।<br>तेषां नित्याभियुक्तानां योगक्षेमं वहाम्यहम्॥","Ananyash chintayanto mam, ye janah paryupasate. Tesham nityabhiyuktanam, yoga kshemam vahamy aham.","For those who think of Me with full devotion and always stay connected to Me, I bring what they lack and protect what they have.")},
+      {w:"N",t:"You still do your part, just like Arjuna. But you don't have to carry it all alone. <em>Bojh baant lo.</em>"}]}
+  ]},
+  {art:()=>day("happy",true),steps:[
+    {w:"A",t:"Krishna, what about people who've made big mistakes? Are they still welcome?"},
+    {w:"K",t:V("Bhagavad Gita 9.31","क्षिप्रं भवति धर्मात्मा शश्वच्छान्तिं निगच्छति।<br>कौन्तेय प्रतिजानीहि न मे भक्तः प्रणश्यति॥","Kshipram bhavati dharmatma, shashvach chhantim nigachchhati. Kaunteya pratijanihi, na me bhaktah pranashyati.","They soon become good-hearted and find lasting peace. Arjuna, declare it boldly: My devotee is never lost.")},
+    {w:"N",t:"No past is too heavy for a fresh start. <em>Kabhi bhi shuru kar sakte ho.</em>"}
+  ]},
+  {art:()=>day("firm",true),steps:[
+    {act:"write",w:"K",q:"What's one ordinary thing you'll do today as an offering to Krishna?",ph:"e.g. cooking dinner, or my shift at work",
+     ref:"Bhagavad Gita 9.27",rom:"Yat karoshi yad ashnasi … tat kurushva mad arpanam",card:v=>`Today I offer to Krishna: <strong>${v}</strong>`,
+     on:()=>[{w:"K",t:"Whatever you do, eat, give or work hard at, do it as an offering to Me (9.27)."},
+      {w:"N",t:"Then even washing dishes becomes a prayer. <em>Har kaam pooja ban sakta hai.</em>"}]}
+  ]}];})(),
+
+ /* ===== Chapter 10: Krishna's glories ===== */
+ 10:(()=>{
+  const day=(mA,glow)=>svg(sky("#d6c3ec","#f6effc",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#a9c99a","#8fb47f")+krishna(1060,780,.95,{bless:true,glow:!!glow})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const G=[["Among mountains","the Himalaya","10.25",`<path d="M-50 20 L0 -50 L50 20Z" fill="#8fa9c9"/><path d="M-16 -28 L0 -50 L16 -28 L6 -22 L0 -30 L-6 -22Z" fill="#fff"/>`],
+    ["Among rivers","the Ganga","10.31",`<path d="M-50 -20 q25 -18 50 0 t50 0 M-50 4 q25 -18 50 0 t50 0" stroke="#3f7fd0" stroke-width="9" fill="none" stroke-linecap="round"/>`],
+    ["Among trees","the peepal tree","10.26",`<rect x="-7" y="-10" width="14" height="34" fill="#8b4a1c"/><circle cy="-26" r="34" fill="#4f9a48"/>`],
+    ["Among seasons","spring","10.35",`<g fill="#f28cb1"><circle cy="-18" r="14"/><circle cx="-16" cy="-6" r="14"/><circle cx="16" cy="-6" r="14"/><circle cx="-10" cy="12" r="14"/><circle cx="10" cy="12" r="14"/></g><circle r="10" fill="#f4c430"/>`],
+    ["Among the Pandavas","Arjuna!","10.37",`<path d="M-10 -50 Q40 0 -10 50" fill="none" stroke="#8b4a1c" stroke-width="8" stroke-linecap="round"/><line x1="-10" y1="-50" x2="-10" y2="50" stroke="#5a3a20" stroke-width="2"/>`]];
+  const pos=[[110,140],[480,140],[850,140],[295,370],[665,370]];
+  return [
+  {title:"Vibhuti Yoga",sub:"Chapter 10 · Krishna's glories",art:()=>day("happy"),steps:[
+    {w:"A",t:"Krishna, you are everywhere, but my mind needs something to hold on to. Where should I look for You?"}]},
+  {art:()=>day("happy",true),steps:[
+    {w:"K",t:V("Bhagavad Gita 10.20","अहमात्मा गुडाकेश सर्वभूताशयस्थितः।<br>अहमादिश्च मध्यं च भूतानामन्त एव च॥","Aham atma gudakesha, sarva bhutashaya sthitah. Aham adish cha madhyam cha, bhutanam anta eva cha.","I am the Self in the heart of every being, Arjuna. I am the beginning, the middle and the end of all beings.")},
+    {w:"K",t:"But since you asked, I'll tell you where I shine the brightest."}
+  ]},
+  {art:()=>{const o=S.open||[];
+     return svg(sky("#d6c3ec","#f6effc")+hills("#a9c99a","#8fb47f")
+      +G.map(([a,b,r,ic],i)=>{const [x,y]=pos[i],on=o.includes(a);
+        return `<g transform="translate(${x} ${y})"><rect width="340" height="180" rx="22" fill="${on?"#fff3d6":"#ffffff"}" stroke="${on?"#f4a81d":"#e2d6ee"}" stroke-width="5"/><text x="170" y="44" text-anchor="middle" font-family="Mukta,sans-serif" font-weight="600" font-size="28" fill="#6d5f80">${a}…</text>${on?`<g class="grow"><g transform="translate(52 112) scale(.8)">${ic}</g><text x="100" y="124" font-family="Baloo 2,sans-serif" font-weight="800" font-size="${b.length>12?27:32}" fill="#2b2140">${b}</text><text x="322" y="166" text-anchor="end" font-family="Mukta,sans-serif" font-size="20" fill="#6d5f80">${r}</text></g>`:`<text x="170" y="128" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="800" font-size="64" fill="#e2d6ee">?</text>`}</g>`;}).join("")
+      +arjuna(1060,860,.55,{mood:o.includes("Among the Pandavas")?"firm":"happy"})+krishna(1380,860,.7,{bless:true,glow:o.length>=5}));},
+   steps:[
+    {act:"collect",key:"open",opts:G.map(g=>g[0]),w:"N",q:"Krishna says, “Among all things, I am the best.” Tap each card to see.",wait:1300,
+     on:()=>[{w:"A",t:"Wait… among the Pandavas, You are <em>me</em>?"},
+      {w:"K",t:"Yes, Arjuna. Your courage, your skill, your good heart: they're My spark shining in you."},
+      {w:"K",t:V("Bhagavad Gita 10.41","यद्यद्विभूतिमत्सत्त्वं श्रीमदूर्जितमेव वा।<br>तत्तदेवावगच्छ त्वं मम तेजोंऽशसम्भवम्॥","Yad yad vibhutimat sattvam, shrimad urjitam eva va. Tat tad evavagachchha tvam, mama tejo 'msha sambhavam.","Whatever is glorious, beautiful or strong, know that it comes from just a spark of My splendour.")}]}
+  ]},
+  {art:()=>day("firm",true),steps:[
+    {w:"N",t:"If Krishna's spark shines in Arjuna, it shines in you too."},
+    {act:"write",w:"K",q:"What's one good quality in you that could be Krishna's spark?",ph:"e.g. my patience, my cooking, how I listen to people",
+     ref:"Bhagavad Gita 10.41",rom:"Mama tejo 'msha sambhavam",card:v=>`A spark of Krishna in me: <strong>${v}</strong>`,
+     on:()=>[{w:"N",t:"<em>Apni roshni ko chhota mat samjho.</em> Don't think your light is small."}]}
+  ]}];})(),
+
+ /* ===== Chapter 11: The universal form ===== */
+ 11:(()=>{
+  const day=(mA,glow)=>svg(sky("#bfe3f2","#eef8fd",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#9cc98a","#7fb36f")+krishna(1060,780,.95,{bless:true,glow:!!glow,flute:!glow})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const stars=n=>{let g="";for(let i=0;i<n;i++){const x=(i*397)%1600,y=(i*233)%900,r=1+(i%3);g+=`<circle cx="${x}" cy="${y}" r="${r}" fill="#fff" opacity="${.4+(i%5)/10}"/>`;}return g;};
+  function cosmic(suns){
+    const arms=[[-180,-400],[-230,-310],[-230,-210],[-185,-120],[180,-400],[230,-310],[230,-210],[185,-120]];
+    const items=[`<g fill="#fff"><path d="M-14 -12 Q0 -30 14 -12 Q20 6 0 18 Q-20 6 -14 -12Z"/></g>`,`<g fill="#f28cb1"><path d="M0 -26 C12 -10 10 6 0 10 C-10 6 -12 -10 0 -26Z"/></g>`,"","",
+      `<g stroke="#f4c430" stroke-width="4" fill="none"><circle r="22"/>${[0,45,90,135].map(a=>`<line x1="${-22*Math.cos(a*Math.PI/180)}" y1="${-22*Math.sin(a*Math.PI/180)}" x2="${22*Math.cos(a*Math.PI/180)}" y2="${22*Math.sin(a*Math.PI/180)}"/>`).join("")}</g>`,`<rect x="-5" y="-40" width="10" height="44" fill="#d4a017"/><circle cy="-44" r="14" fill="#f4c430"/>`,"",""];
+    let a="";arms.forEach(([x,y],i)=>{a+=`<path d="M${x<0?-40:40} -215 Q${x*.6} ${(y-215)/2} ${x} ${y}" stroke="#3f7fd0" stroke-width="20" stroke-linecap="round" fill="none"/><circle cx="${x}" cy="${y}" r="14" fill="#3f7fd0"/><g transform="translate(${x} ${y-10})">${items[i]}</g>`;});
+    let rays="";for(let i=0;i<24;i++){const t=i*15*Math.PI/180;rays+=`<line x1="${170*Math.cos(t)}" y1="${-290+170*Math.sin(t)}" x2="${(260+(i%2)*60)*Math.cos(t)}" y2="${-290+(260+(i%2)*60)*Math.sin(t)}" stroke="#ffd36b" stroke-width="8" stroke-linecap="round" opacity=".8"/>`;}
+    let sn="";for(let i=0;i<suns;i++){const t=(i/Math.max(suns,1))*Math.PI*2-Math.PI/2;sn+=`<g class="grow"><circle cx="${420*Math.cos(t)}" cy="${-290+330*Math.sin(t)}" r="44" fill="#ffd36b"/><circle cx="${420*Math.cos(t)}" cy="${-290+330*Math.sin(t)}" r="62" fill="#ffd36b" opacity=".3" class="pulse"/></g>`;}
+    return `<g transform="translate(800 900) scale(1.15)"><circle cy="-290" r="${200+suns*30}" fill="#fff3b0" opacity="${.15+suns*.08}"/>${sn}${rays}<g class="bob">${a}</g>${krishna(0,0,1,{glow:false})}</g>`;
+  }
+  return [
+  {title:"Vishwarupa Darshana",sub:"Chapter 11 · The universal form",art:()=>day("happy"),steps:[
+    {w:"N",t:"Arjuna has heard Krishna say He is everything. Now he has one wish."}]},
+  {art:()=>S.eyes
+      ? svg(`<rect width="1600" height="900" fill="#120e2a"/>`+stars(120)+`<circle cx="300" cy="200" r="160" fill="#5a3a8a" opacity=".35"/><circle cx="1300" cy="650" r="220" fill="#1f8a8a" opacity=".25"/>`+cosmic(0)+arjuna(220,880,.5,{sit:true,mood:"sad"}))
+      : day("happy"),
+   steps:[
+    {w:"A",t:"Krishna, if I'm able to see it, please show me Your divine, universal form."},
+    {w:"K",t:V("Bhagavad Gita 11.8","न तु मां शक्यसे द्रष्टुमनेनैव स्वचक्षुषा।<br>दिव्यं ददामि ते चक्षुः पश्य मे योगमैश्वरम्॥","Na tu mam shakyase drashtum, anenaiva sva chakshusha. Divyam dadami te chakshuh, pashya me yogam aishvaram.","You can't see Me with these ordinary eyes. I'll give you divine eyes. Now see My divine power!")},
+    {act:"dawn",label:"Open your divine eyes",flag:"eyes",w:"N",q:"Take a breath, then open your divine eyes.",
+     on:()=>[{w:"N",t:"Arjuna gasps. Krishna is suddenly vast, with countless arms, faces and eyes, filling the whole sky."}]}
+  ]},
+  {art:()=>svg(`<rect width="1600" height="900" fill="#120e2a"/>`+stars(120)+`<circle cx="300" cy="200" r="160" fill="#5a3a8a" opacity=".35"/><circle cx="1300" cy="650" r="220" fill="#1f8a8a" opacity=".25"/>`+cosmic(S.suns||0)+arjuna(220,880,.5,{sit:true,mood:"sad"})),
+   steps:[
+    {act:"tapcount",key:"suns",n:8,w:"N",q:"How bright was it? Light up the sky.",label:i=>`Light a sun (${i} of 8)`,
+     on:()=>[{w:"N",t:"Even eight suns can't come close."},
+      {w:"N",t:V("Bhagavad Gita 11.12","दिवि सूर्यसहस्रस्य भवेद्युगपदुत्थिता।<br>यदि भाः सदृशी सा स्याद्भासस्तस्य महात्मनः॥","Divi surya sahasrasya, bhaved yugapad utthita. Yadi bhah sadrishi sa syad, bhasas tasya mahatmanah.","If a thousand suns rose in the sky at the same moment, that light might come close to the splendour of that great Being.")}]}
+  ]},
+  {art:()=>S.gentle
+      ? svg(sky("#ffd9a8","#fff3dd",`<circle cx="800" cy="360" r="150" fill="#fff1c1"/>`)+hills("#a6c97e","#86b062")+krishna(1000,800,.95,{flute:true})+arjuna(620,800,.95,{mood:"happy"}))
+      : svg(`<rect width="1600" height="900" fill="#120e2a"/>`+stars(120)+cosmic(8)+arjuna(220,880,.5,{sit:true,mood:"sad"})),
+   steps:[
+    {w:"A",t:V("Bhagavad Gita 11.45","अदृष्टपूर्वं हृषितोऽस्मि दृष्ट्वा भयेन च प्रव्यथितं मनो मे।<br>तदेव मे दर्शय देव रूपं प्रसीद देवेश जगन्निवास॥","Adrishta purvam hrishito 'smi drishtva, bhayena cha pravyathitam mano me. Tad eva me darshaya deva rupam, prasida devesha jagan nivasa.","I'm thrilled to see what no one has seen before, but my mind is shaking with fear. Please show me Your familiar form again, Lord. Be kind, home of the universe.")},
+    {act:"dawn",label:"Ask Krishna to come back as a friend",flag:"gentle",w:"N",q:"Arjuna is overwhelmed. Help him.",
+     on:()=>[{w:"N",t:"And there He is again: the smiling Krishna with His flute, standing next to His friend."},
+      {w:"N",t:"The Krishna who holds the whole universe is the same Krishna who stands beside you. <em>Itne bade, phir bhi itne paas.</em> So big, and yet so close."}]}
+  ]},
+  {art:()=>day("firm"),steps:[
+    {w:"K",t:V("Bhagavad Gita 11.54","भक्त्या त्वनन्यया शक्य अहमेवंविधोऽर्जुन।<br>ज्ञातुं द्रष्टुं च तत्त्वेन प्रवेष्टुं च परन्तप॥","Bhaktya tv ananyaya shakya, aham evam vidho 'rjuna. Jnatum drashtum cha tattvena, praveshtum cha parantapa.","Only through wholehearted love can I be known like this, Arjuna, truly seen, and become one with.")},
+    {w:"N",t:"Not by cleverness, money or power. Only love opens this door."},
+    {act:"write",w:"K",q:"When do you feel closest to Krishna, or most at peace?",ph:"e.g. at the mandir, singing bhajans, walking in nature",
+     ref:"Bhagavad Gita 11.54",rom:"Bhaktya tv ananyaya shakya",card:v=>`I feel closest to Krishna when: <strong>${v}</strong>`,
+     on:()=>[{w:"N",t:"Go there more often. <em>Wahi aapka mandir hai.</em> That's your temple."}]}
+  ]}];})(),
+
  /* ===== Chapter 6: Meditation ===== */
  6:(()=>{
   const day=(mA)=>svg(sky("#bfe3f2","#eef8fd")+hills("#9cc98a","#7fb36f")+krishna(1060,780,.95,{bless:true})+arjuna(620,780,.95,{mood:mA||"happy"}));
@@ -923,7 +1051,7 @@ const ACTS={
 
   still(st){const b=btn("Start","",()=>{b.disabled=true;let n=10;b.textContent="Do nothing… 10";const iv=setInterval(()=>{n--;if(n<=0){clearInterval(iv);b.remove();done(st);}else b.textContent="Do nothing… "+n;},1000);});},
   chain(st){let i=0;const b=btn(st.chain[0],"opt",()=>{S.flame=(S.flame||0)+1;draw();i++;if(i>=st.chain.length){b.remove();setTimeout(()=>done(st),900);}else b.innerHTML=st.chain[i];});},
-  dawn(st){btn("Bring back the light","",function(){this.remove();S.light=true;draw();setTimeout(()=>done(st),1200);});},
+  dawn(st){btn(st.label||"Bring back the light","",function(){this.remove();S[st.flag||"light"]=true;draw();setTimeout(()=>done(st),1200);});},
   cut(st){const wrap=document.createElement("div");wrap.className="field";wrap.innerHTML=`<input id="doubtIn" type="text" maxlength="40" placeholder="${st.ph}" aria-label="Your doubt"><button type="button" id="doubtGo">Put it into words</button>`;act.appendChild(wrap);
     const go=()=>{const v=$("doubtIn").value.trim();if(!v){$("doubtIn").focus();return;}S.doubt=v;draw();act.innerHTML="";say.innerHTML="There it is, tangled up. Now cut through it.";
       btn("Cut it with the sword of knowledge","",function(){this.remove();S.cut=true;draw();setTimeout(()=>done(st),1000);});};
