@@ -351,9 +351,9 @@ const CHAPTERS=[
  ["Daivasura Sampad Vibhaga Yoga","Divine and harmful qualities"],["Shraddhatraya Vibhaga Yoga","Three kinds of faith"],["Moksha Sanyasa Yoga","Freedom by letting go"]];
 const isDone=n=>{try{return localStorage.getItem("gs-story-"+n)==="done";}catch(e){return false;}};
 const storyDone=()=>isDone(1);
-const PLAYABLE=[1,3,4,5,6,7,8,9,10,11,12,13,14];
+const PLAYABLE=[1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18];
 const doneCount=()=>(isDone(1)?2:0)+PLAYABLE.filter(n=>n>1&&isDone(n)).length;
-const CHTITLE={1:"Chapters 1–2 · Arjuna ka Dukh, Krishna ka Gyaan",3:"Chapter 3 · Karma Yoga",4:"Chapter 4 · Gyaan aur Karma",5:"Chapter 5 · Karma Sanyasa Yoga",6:"Chapter 6 · Dhyana Yoga",7:"Chapter 7 · Gyaan aur Vigyaan",8:"Chapter 8 · Akshara Brahma Yoga",9:"Chapter 9 · Raja Vidya",10:"Chapter 10 · Vibhuti Yoga",11:"Chapter 11 · Vishwarupa Darshana",12:"Chapter 12 · Bhakti Yoga",13:"Chapter 13 · Kshetra aur Kshetragya",14:"Chapter 14 · Teen Gun"};
+const CHTITLE={1:"Chapters 1–2 · Arjuna ka Dukh, Krishna ka Gyaan",3:"Chapter 3 · Karma Yoga",4:"Chapter 4 · Gyaan aur Karma",5:"Chapter 5 · Karma Sanyasa Yoga",6:"Chapter 6 · Dhyana Yoga",7:"Chapter 7 · Gyaan aur Vigyaan",8:"Chapter 8 · Akshara Brahma Yoga",9:"Chapter 9 · Raja Vidya",10:"Chapter 10 · Vibhuti Yoga",11:"Chapter 11 · Vishwarupa Darshana",12:"Chapter 12 · Bhakti Yoga",13:"Chapter 13 · Kshetra aur Kshetragya",14:"Chapter 14 · Teen Gun",15:"Chapter 15 · Purushottama Yoga",16:"Chapter 16 · Daivi aur Asuri",17:"Chapter 17 · Shraddha",18:"Chapter 18 · Moksha Sanyasa"};
 const HOME_HELP=`<div class="help quiet">Gita Saathi shares the Gita's wisdom. It isn't a replacement for talking to someone. If things feel very heavy, call <strong>Samaritans 116 123</strong> (UK) or <strong>Tele-MANAS 14416</strong> (India).</div>`;
 function stopVoice(){try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}}
 function mainHome(msg){
@@ -1056,6 +1056,155 @@ const ALL={1:[
      on:()=>[{w:"N",t:"<em>Saaf paani jaisa mann.</em> A mind like clear water."}]}
   ]}];})(),
 
+ /* ===== Chapter 15: The supreme person ===== */
+ 15:(()=>{
+  const day=(mA,glow)=>svg(sky("#c9e4f5","#f2f9fd",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#9cc98a","#7fb36f")+krishna(1060,780,.95,{bless:true,glow:!!glow})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const BR=["Needing approval","Chasing money","Comparing myself","Holding grudges"];
+  const ends=[[240,620],[490,740],[770,740],[1010,620]];
+  return [
+  {title:"Purushottama Yoga",sub:"Chapter 15 · The supreme person",art:()=>day("happy"),steps:[
+    {w:"N",t:"In Chapter 15, Krishna describes a very strange tree."}]},
+  {art:()=>{const c=S.cut15||[];
+     return svg(sky("#c9e4f5","#f2f9fd")+`<rect y="780" width="1600" height="120" fill="#9cc98a"/>`
+      +`<g stroke="#8b4a1c" stroke-linecap="round" fill="none"><path d="M600 60 Q480 20 380 50 M600 60 Q720 20 820 50 M600 60 Q560 10 520 0 M600 60 Q650 10 690 0" stroke-width="12"/><path d="M600 60 V420" stroke-width="40"/></g>`
+      +BR.map((b,i)=>{const [x,y]=ends[i],gone=c.includes(b);
+        return `<g opacity="${gone?.18:1}"><path d="M600 ${380+i*8} Q${(600+x)/2} ${y-120} ${x} ${y-40}" stroke="#8b4a1c" stroke-width="16" fill="none" stroke-linecap="round" ${gone?'stroke-dasharray="20 14"':""}/><g fill="#4f9a48"><circle cx="${x-40}" cy="${y-40}" r="34"/><circle cx="${x+30}" cy="${y-30}" r="30"/><circle cx="${x}" cy="${y-70}" r="32"/></g></g>`
+          +`<g transform="translate(${x} ${y+20})"><rect x="-115" y="-26" width="230" height="52" rx="26" fill="${gone?"#e7e2d8":"#fff6e6"}" stroke="#6b4a2c" stroke-width="3"/><text y="10" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="700" font-size="26" fill="${gone?"#a39a8c":"#2b2140"}" ${gone?'text-decoration="line-through"':""}>${b}</text></g>`;}).join("")
+      +krishna(1300,820,.85,{bless:true,glow:c.length>=BR.length}));},
+   steps:[
+    {w:"K",t:V("Bhagavad Gita 15.1","ऊर्ध्वमूलमधःशाखमश्वत्थं प्राहुरव्ययम्।<br>छन्दांसि यस्य पर्णानि यस्तं वेद स वेदवित्॥","Urdhva mulam adhah shakham, ashvattham prahur avyayam. Chhandamsi yasya parnani, yas tam veda sa veda vit.","They speak of an eternal peepal tree with its roots above and its branches below. Its leaves are the sacred hymns. Whoever understands this tree understands the Vedas.")},
+    {w:"N",t:"This upside-down tree is the world we get tangled in. Its branches grow and grow, wrapping around us."},
+    {w:"K",t:"Cut this deep-rooted tree with the strong axe of non-attachment, Arjuna. (15.3)"},
+    {act:"collect",key:"cut15",opts:BR,w:"N",q:"Tap each tangled branch to cut it loose.",
+     on:()=>[{w:"N",t:"Lighter already. Letting go doesn't mean you stop caring. It means these things stop pulling you around."}]}
+  ]},
+  {art:()=>{const h=!!S.heart;
+     return svg(sky(h?"#ffe2b8":"#d8e6f2",h?"#fff6e6":"#eef4f9")+hills("#9cc98a","#7fb36f")+arjuna(800,860,1.15,{mood:h?"happy":"happy"})
+      +`<g transform="translate(800 668) scale(.75)">${h?`<circle r="120" fill="#fff3b0" opacity=".6" class="pulse"/>`:""}<path d="M0 40 C-70 -10 -60 -70 -20 -70 C-5 -70 0 -58 0 -50 C0 -58 5 -70 20 -70 C60 -70 70 -10 0 40Z" fill="${h?"#e05a47":"#c9b8b8"}" stroke="#fff" stroke-width="4"/>${h?`<g transform="translate(4 -10) rotate(18) scale(.5)"><path d="M0 0 Q-12 -60 0 -105 Q14 -60 0 0Z" fill="#1f8a70"/><ellipse cy="-82" rx="12" ry="17" fill="#2fb3a0"/><circle cy="-82" r="7" fill="#1b3f8b"/></g>`:""}</g>`);},
+   steps:[
+    {w:"A",t:"But Krishna, after I cut myself free, where do I find You?"},
+    {act:"dawn",label:"Put your hand on your heart",flag:"heart",w:"N",q:"Krishna's answer is very close. Put your hand on your heart, then tap the button.",
+     on:()=>[{w:"K",t:V("Bhagavad Gita 15.15","सर्वस्य चाहं हृदि सन्निविष्टो मत्तः स्मृतिर्ज्ञानमपोहनं च।<br>वेदैश्च सर्वैरहमेव वेद्यो वेदान्तकृद्वेदविदेव चाहम्॥","Sarvasya chaham hridi sannivishto, mattah smritir jnanam apohanam cha. Vedaish cha sarvair aham eva vedyo, vedanta krid veda vid eva chaham.","I live in the heart of everyone. From Me come memory, knowledge and forgetting. I am the one to be known through all the Vedas.")},
+      {w:"N",t:"You never have to search far. <em>Krishna dil mein hain.</em>"}]}
+  ]},
+  {art:()=>day("firm",true),steps:[
+    {w:"K",t:"I am beyond everything that changes, and beyond even the unchanging. That is why I am called <em>Purushottama</em>, the Supreme Person. (15.18)"},
+    {act:"write",w:"K",q:"What's one thing you're holding too tightly that you could loosen this week?",ph:"e.g. needing everyone at work to like me",
+     ref:"Bhagavad Gita 15.3",rom:"Asanga shastrena dridhena chhittva",card:v=>`This week I'll loosen my grip on: <strong>${v}</strong>`,
+     on:()=>[{w:"N",t:"<em>Pakad dheeli karo, dil halka hoga.</em> Loosen the grip, and the heart gets lighter."}]}
+  ]}];})(),
+
+ /* ===== Chapter 16: Divine and harmful qualities ===== */
+ 16:(()=>{
+  const day=(mA,glow)=>svg(sky("#ffe2b8","#fff6e6",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#b6d39a","#9cc07f")+krishna(1060,780,.95,{bless:true,glow:!!glow})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const GATES=["Kaam: selfish desire","Krodh: anger","Lobh: greed"];
+  return [
+  {title:"Daivi aur Asuri",sub:"Chapter 16 · Divine and harmful qualities",art:()=>day("happy"),steps:[
+    {w:"N",t:"In Chapter 16, Krishna describes two kinds of qualities a person can have: divine ones, and harmful ones."}]},
+  {art:()=>day("happy",true),steps:[
+    {w:"K",t:V("Bhagavad Gita 16.1","अभयं सत्त्वसंशुद्धिर्ज्ञानयोगव्यवस्थितिः।<br>दानं दमश्च यज्ञश्च स्वाध्यायस्तप आर्जवम्॥","Abhayam sattva samshuddhir, jnana yoga vyavasthitih. Danam damash cha yajnash cha, svadhyayas tapa arjavam.","Fearlessness, a pure heart, steadiness in wisdom, generosity, self-control, sacrifice, study of scripture, discipline and honesty…")},
+    {w:"K",t:"…and kindness, truthfulness, freedom from anger, compassion, gentleness, forgiveness and patience. These are the divine qualities. (16.1–3)"},
+    {act:"choice",w:"N",q:"Which divine quality can you already see in yourself, even a little?",opts:[["Fearlessness","f"],["Generosity","g"],["Honesty","h"],["Compassion","c"],["Forgiveness","fo"]],
+     on:()=>[{w:"A",t:"But Krishna, sometimes I see the harmful qualities in me too. Am I a bad person?"},
+      {w:"K",t:V("Bhagavad Gita 16.5","दैवी सम्पद्विमोक्षाय निबन्धायासुरी मता।<br>मा शुचः सम्पदं दैवीमभिजातोऽसि पाण्डव॥","Daivi sampad vimokshaya, nibandhayasuri mata. Ma shuchah sampadam daivim, abhijato 'si pandava.","Divine qualities lead to freedom, and harmful ones lead to bondage. But don't worry, Arjuna. You were born with divine qualities.")},
+      {w:"N",t:"<em>Ma shuchah</em>: don't worry. The good is already in you. You just keep choosing it."}]}
+  ]},
+  {art:()=>{const c=S.closed||[],all=c.length>=GATES.length;
+     return svg(sky(all?"#ffcf8a":"#cdbfd8",all?"#fff3dd":"#efe8f3",all?`<circle cx="800" cy="360" r="150" fill="#fff1c1"/>`:"")+hills("#a6c97e","#86b062")
+      +GATES.map((g,i)=>{const x=330+i*470,cl=c.includes(g);
+        return `<g transform="translate(${x} 760)"><path d="M-140 0 V-300 Q0 -420 140 -300 V0Z" fill="#8a7a6a"/><path d="M-110 0 V-285 Q0 -385 110 -285 V0Z" fill="${cl?"#a8763e":"#5a1f1f"}"/>${cl?`<g class="grow"><line x1="0" y1="-370" x2="0" y2="0" stroke="#6b4a2c" stroke-width="5"/><rect x="-22" y="-160" width="44" height="40" rx="8" fill="#f4c430"/><path d="M-12 -160 v-14 a12 12 0 0 1 24 0 v14" stroke="#f4c430" stroke-width="6" fill="none"/></g>`:`<circle cy="-140" r="80" fill="#e05a47" opacity=".35" class="pulse"/>`}<rect x="-150" y="20" width="300" height="56" rx="28" fill="#fff6e6"/><text y="58" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="700" font-size="30" fill="#2b2140">${g}</text></g>`;}).join(""));},
+   steps:[
+    {w:"K",t:V("Bhagavad Gita 16.21","त्रिविधं नरकस्येदं द्वारं नाशनमात्मनः।<br>कामः क्रोधस्तथा लोभस्तस्मादेतत्त्रयं त्यजेत्॥","Trividham narakasyedam, dvaram nashanam atmanah. Kamah krodhas tatha lobhas, tasmad etat trayam tyajet.","There are three gates to hell that destroy a person: selfish desire, anger and greed. So give up all three.")},
+    {act:"collect",key:"closed",opts:GATES,w:"N",q:"Close and lock all three gates.",
+     on:()=>[{w:"N",t:"All three gates are closed, and the sky has brightened. Krishna says that someone free of these three walks towards the highest good (16.22)."}]}
+  ]},
+  {art:()=>day("firm",true),steps:[
+    {act:"write",w:"K",q:"Which gate will you keep closed this week, and how?",ph:"e.g. Anger: I'll walk away for 5 minutes before I reply",
+     ref:"Bhagavad Gita 16.21",rom:"Kamah krodhas tatha lobhas",card:v=>`The gate I'll keep closed: <strong>${v}</strong>`,
+     on:()=>[{w:"N",t:"<em>Teen darwaze band, ek raasta khula.</em> Three gates closed, one path open."}]}
+  ]}];})(),
+
+ /* ===== Chapter 17: Three kinds of faith ===== */
+ 17:(()=>{
+  const day=(mA,glow)=>svg(sky("#d8eef0","#f4fbfb",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#9cc98a","#7fb36f")+krishna(1060,780,.95,{bless:true,glow:!!glow})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const FOOD=[["Fresh fruit, and dal with rice","sattva","Fresh, light and nourishing. It keeps the mind calm."],
+    ["Extra-spicy, very salty fried snacks","rajas","Very hot, salty and sharp. It stirs the mind up."],
+    ["Food left out overnight that's gone stale","tamas","Stale food makes us feel heavy and dull."],
+    ["Warm milk with a little honey","sattva","Gentle and soothing."],
+    ["Strong coffee to keep going all night","rajas","Restless energy, and a crash afterwards."],
+    ["Takeaway reheated from three days ago","tamas","Old food with little life left in it."]];
+  const bowl=(x,y,label,n,col)=>`<g transform="translate(${x} ${y})"><ellipse rx="130" ry="44" fill="#d9c9a8"/><ellipse rx="110" ry="32" fill="#efe3c8"/>${Array.from({length:n},(_,i)=>`<circle class="grow" cx="${-50+i*50}" cy="-6" r="20" fill="${col}"/>`).join("")}<text y="90" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="800" font-size="36" fill="#2b2140">${label}</text></g>`;
+  return [
+  {title:"Shraddha",sub:"Chapter 17 · Three kinds of faith",art:()=>day("happy"),steps:[
+    {w:"K",t:V("Bhagavad Gita 17.3","सत्त्वानुरूपा सर्वस्य श्रद्धा भवति भारत।<br>श्रद्धामयोऽयं पुरुषो यो यच्छ्रद्धः स एव सः॥","Sattvanurupa sarvasya, shraddha bhavati bharata. Shraddhamayo 'yam purusho, yo yach chhraddhah sa eva sah.","Everyone's faith matches their nature, Arjuna. A person is made of their faith. Whatever they put their faith in, that is what they become.")},
+    {w:"N",t:"Remember the three gunas from Chapter 14? Krishna shows how they appear even in what we eat, say and give."}]},
+  {art:()=>{const c=S.counts||{sattva:0,rajas:0,tamas:0};
+     return svg(sky("#d8eef0","#f4fbfb")+hills("#9cc98a","#7fb36f")+`<ellipse cx="800" cy="560" rx="700" ry="250" fill="#d4a017"/><ellipse cx="800" cy="560" rx="660" ry="225" fill="#f4c430"/>`
+      +bowl(380,520,"Sattva",c.sattva,"#7cc576")+bowl(800,520,"Rajas",c.rajas,"#e8552f")+bowl(1220,520,"Tamas",c.tamas,"#8a6a4a"));},
+   steps:[
+    {act:"sort",items:FOOD,prompt:"Which bowl does this go in?",w:"N",q:"",
+     on:()=>[{w:"N",t:"Krishna describes sattvic food as fresh, wholesome and pleasing, food that brings health, strength and happiness (17.8)."}]}
+  ]},
+  {art:()=>day("happy"),steps:[
+    {w:"N",t:"Now for speech. Your friend says, “You're always late! You never take anything seriously.”"},
+    {act:"choice",w:"N",q:"Which reply is true, kind <em>and</em> helpful?",opts:[["“And you're always nagging!”","a"],["Say nothing and sulk all day","b"],["“You're right, I was late. I'm sorry. I'll leave earlier next time.”","c"]],
+     on:k=>[{w:"N",t:k==="c"?"Yes. That one is honest, kind and useful, all at once.":"That's a very human reaction! The third reply is the one Krishna describes: honest, kind and useful, all at once."},
+      {w:"K",t:V("Bhagavad Gita 17.15","अनुद्वेगकरं वाक्यं सत्यं प्रियहितं च यत्।<br>स्वाध्यायाभ्यसनं चैव वाङ्मयं तप उच्यते॥","Anudvega karam vakyam, satyam priya hitam cha yat. Svadhyayabhyasanam chaiva, van mayam tapa uchyate.","Words that don't hurt others, that are true, kind and helpful, together with regular study of scripture: this is called discipline of speech.")}]}
+  ]},
+  {art:()=>day("firm",true),steps:[
+    {w:"K",t:V("Bhagavad Gita 17.20","दातव्यमिति यद्दानं दीयतेऽनुपकारिणे।<br>देशे काले च पात्रे च तद्दानं सात्त्विकं स्मृतम्॥","Datavyam iti yad danam, diyate 'nupakarine. Deshe kale cha patre cha, tad danam sattvikam smritam.","A gift given simply because it is right to give, to someone who can't repay it, at the right place and time, to the right person: that is sattvic giving.")},
+    {act:"write",w:"K",q:"Who's one person you'll speak to this week with words that are true, kind and helpful?",ph:"e.g. my brother, after our argument",
+     ref:"Bhagavad Gita 17.15",rom:"Satyam priya hitam cha yat",card:v=>`This week my words will be true, kind and helpful with: <strong>${v}</strong>`,
+     on:()=>[{w:"N",t:"<em>Jaisa khaana, jaisi vaani, waisa mann.</em> As our food and our words are, so is our mind."}]}
+  ]}];})(),
+
+ /* ===== Chapter 18: Freedom by letting go ===== */
+ 18:(()=>{
+  const day=(mA,glow)=>svg(sky("#ffd9a8","#fff3dd",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#a6c97e","#86b062")+krishna(1060,780,.95,{bless:true,glow:!!glow})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const diya=(x,y,lit)=>`<g transform="translate(${x} ${y})">${lit?`<circle cy="-30" r="44" fill="#ffd36b" opacity=".3"/>`:""}<path d="M-40 0 Q0 30 40 0 Z" fill="#d9622b"/>${lit?`<path class="flick" d="M0 -44 C18 -22 15 0 0 2 C-15 0 -18 -22 0 -44Z" fill="#ffd36b"/>`:`<line x1="0" y1="0" x2="0" y2="-14" stroke="#5a3a20" stroke-width="4"/>`}</g>`;
+  return [
+  {title:"Moksha Sanyasa",sub:"Chapter 18 · Freedom by letting go",art:()=>day("happy"),steps:[
+    {w:"N",t:"The last chapter. Krishna brings together everything He has taught Arjuna."}]},
+  {art:()=>day("happy",true),steps:[
+    {w:"A",t:"Krishna, what does it really mean to let go?"},
+    {w:"K",t:"Letting go doesn't mean running away from your work. It means doing your duty, while letting go of selfishness and the hunger for results. (18.9)"},
+    {w:"K",t:V("Bhagavad Gita 18.47","श्रेयान्स्वधर्मो विगुणः परधर्मात्स्वनुष्ठितात्।<br>स्वभावनियतं कर्म कुर्वन्नाप्नोति किल्बिषम्॥","Shreyan sva dharmo vigunah, para dharmat svanushthitat. Svabhava niyatam karma, kurvan napnoti kilbisham.","It is better to follow your own path imperfectly than someone else's path perfectly. Doing the work that suits your nature, you do no wrong.")}
+  ]},
+  {art:()=>day("happy",true),steps:[
+    {w:"K",t:V("Bhagavad Gita 18.63","इति ते ज्ञानमाख्यातं गुह्याद्गुह्यतरं मया।<br>विमृश्यैतदशेषेण यथेच्छसि तथा कुरु॥","Iti te jnanam akhyatam, guhyad guhyataram maya. Vimrishyaitad asheshena, yathechchhasi tatha kuru.","I have told you this wisdom, more secret than any secret. Think it over fully, and then do as you choose.")},
+    {w:"N",t:"After all this teaching, Krishna doesn't force Arjuna. He leaves the choice to him."},
+    {act:"choice",w:"N",q:"Now the choice is yours too. What will you do with what you've learnt?",opts:[["Try one lesson every day","daily"],["Come back when I'm stressed","stress"],["Share it with my family","share"],["Keep thinking it over","think"]],
+     on:()=>[{w:"K",t:"Every one of these is a good choice. <em>Yathechchhasi tatha kuru</em>: do as you choose."}]}
+  ]},
+  {art:()=>day("happy",true),steps:[
+    {w:"N",t:"And then, Krishna gives His final, most loving promise."},
+    {w:"K",t:V("Bhagavad Gita 18.66","सर्वधर्मान्परित्यज्य मामेकं शरणं व्रज।<br>अहं त्वां सर्वपापेभ्यो मोक्षयिष्यामि मा शुचः॥","Sarva dharman parityajya, mam ekam sharanam vraja. Aham tvam sarva papebhyo, mokshayishyami ma shuchah.","Set aside all other duties and take refuge in Me alone. I will free you from all wrongs. Do not grieve.")},
+    {w:"N",t:"<em>Ma shuchah.</em> Do not grieve. The Gita began with Arjuna crying, and it ends with these two words."}
+  ]},
+  {art:()=>S.ready
+      ? svg(sky("#ffcf8a","#fff3dd",`<circle cx="800" cy="360" r="160" fill="#fff1c1"/>`)+hills("#9bb08f","#7c9a6c")+krishna(1080,800,.95,{bless:true,glow:true})+arjuna(600,800,.95,{bow:true,mood:"firm"}))
+      : svg(sky("#c8b6d8","#efe6f2")+hills("#9bb08f","#7c9a6c")+krishna(1080,800,.95,{bless:true})+arjuna(600,800,.95,{sit:true,mood:"sad"})),
+   steps:[
+    {w:"K",t:"Have you heard all this with full attention, Arjuna? Has your confusion gone? (18.72)"},
+    {act:"dawn",label:"Help Arjuna stand up",flag:"ready",w:"N",q:"Arjuna is ready to answer. Help him up.",
+     on:()=>[{w:"A",t:V("Bhagavad Gita 18.73","नष्टो मोहः स्मृतिर्लब्धा त्वत्प्रसादान्मयाच्युत।<br>स्थितोऽस्मि गतसन्देहः करिष्ये वचनं तव॥","Nashto mohah smritir labdha, tvat prasadan mayachyuta. Sthito 'smi gata sandehah, karishye vachanam tava.","My confusion is gone. By Your grace, I remember who I am. I stand firm, free of doubt. I will do as You say.")},
+      {w:"N",t:"The same Arjuna who dropped his bow in Chapter 1 now stands tall."}]}
+  ]},
+  {art:()=>{const n=S.lit||0;let g="";for(let i=0;i<18;i++){const r=Math.floor(i/9),x=160+(i%9)*160,y=r?640:400;g+=diya(x,y,i<n)+`<text x="${x}" y="${y+60}" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="700" font-size="28" fill="${i<n?"#f4c430":"#7a6a8a"}">${i+1}</text>`;}
+     return svg(sky("#1d1b3a","#4a3a6a",`<g fill="#fff" opacity=".6"><circle cx="200" cy="80" r="3"/><circle cx="1250" cy="110" r="3"/><circle cx="980" cy="60" r="2"/></g>`)+g+`<text x="800" y="180" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="800" font-size="56" fill="#fff6e6">${n>=18?"Your Gita journey":"18 chapters"}</text>`);},
+   steps:[
+    {act:"tapcount",key:"lit",n:18,w:"N",q:"You've walked with Arjuna through the whole Gita. Light a diya for every chapter.",label:i=>`Light the diya for Chapter ${i+1}`,wait:1200,
+     on:()=>[{w:"N",t:"Eighteen chapters, eighteen diyas. Shabash!"}]}
+  ]},
+  {art:()=>svg(sky("#ffb36b","#ffe9b8",`<circle cx="800" cy="300" r="120" fill="#fff1c1"/>`)+`<rect y="560" width="1600" height="340" fill="#d9b27c"/>`+chariot(800,790,.62,krishna(-70,-120,.75,{mood:"happy",still:true})+arjuna(90,-120,.75,{bow:true,mood:"firm"}))),
+   steps:[
+    {w:"N",t:"Sanjaya, who has been telling this whole story to the blind King Dhritarashtra, ends with these words:"},
+    {w:"N",t:V("Bhagavad Gita 18.78","यत्र योगेश्वरः कृष्णो यत्र पार्थो धनुर्धरः।<br>तत्र श्रीर्विजयो भूतिर्ध्रुवा नीतिर्मतिर्मम॥","Yatra yogeshvarah krishno, yatra partho dhanur dharah. Tatra shrir vijayo bhutir, dhruva nitir matir mama.","Wherever there is Krishna, the master of yoga, and Arjuna, the archer, there will surely be good fortune, victory, wellbeing and goodness. That is my belief.")},
+    {act:"write",w:"N",q:"What's the one lesson from the Gita you'll carry with you?",ph:"e.g. do my duty and let go of the worry about results",
+     ref:"Bhagavad Gita · All 18 chapters",rom:"Yatra yogeshvarah krishno, yatra partho dhanur dharah",card:v=>`The lesson I'll carry with me: <strong>${v}</strong>`,
+     on:()=>[{w:"N",t:"<em>Jai Shri Krishna.</em> Come back whenever your mann ghabraye. Krishna is always here."}]}
+  ]}];})(),
+
  /* ===== Chapter 6: Meditation ===== */
  6:(()=>{
   const day=(mA)=>svg(sky("#bfe3f2","#eef8fd")+hills("#9cc98a","#7fb36f")+krishna(1060,780,.95,{bless:true})+arjuna(620,780,.95,{mood:mA||"happy"}));
@@ -1163,7 +1312,7 @@ const ACTS={
     if(S.rung<st.levels.length-1)btn("That's too hard for me right now","opt",()=>{S.rung++;show();});};show();},
   sort(st){S.counts={sattva:0,rajas:0,tamas:0};let i=0;const N={sattva:"Sattva",rajas:"Rajas",tamas:"Tamas"};
     const show=()=>{act.innerHTML="";const it=st.items[i];who.textContent="Story";who.className="who N";
-      say.innerHTML=`Which water is this? <strong>“${it[0]}”</strong> <span class="tiny">(${i+1} of ${st.items.length})</span>`;
+      say.innerHTML=`${st.prompt||"Which water is this?"} <strong>“${it[0]}”</strong> <span class="tiny">(${i+1} of ${st.items.length})</span>`;
       ["sattva","rajas","tamas"].forEach(g=>btn(N[g],"opt",()=>{act.innerHTML="";S.counts[it[1]]++;draw();
         say.innerHTML=(g===it[1]?"Yes! It's ":"Good guess, but it's actually ")+`<strong>${N[it[1]]}</strong>. ${it[2]}`;i++;
         btn(i<st.items.length?"Next":"See what Krishna says","",()=>{if(i<st.items.length)show();else done(st);});}));};show();},
