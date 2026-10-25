@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Gita Saathi: an interactive Bhagavad Gita companion in English mixed with Hindi.">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Gita Saathi</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Mukta:wght@400;600&family=Tiro+Devanagari+Sanskrit&display=swap">
+<style>
+/* Layout: home = Krishna banner + 3x3 grid of feelings + my cards; feeling view = storybook stage, dialogue box, action, keepsake card. One bright look by choice. */
+:root{
+  --page:#fff6e6; --ink:#2b2140; --soft:#6d5f80; --line:#eadcc4; --card:#ffffff;
+  --peacock:#1f8a8a; --marigold:#f4a81d; --krishna:#3f7fd0; --rose:#d9534f;
+  --display:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --body:"Mukta","Segoe UI",system-ui,sans-serif;
+  --deva:"Tiro Devanagari Sanskrit","Mukta","Noto Sans Devanagari",serif;
+  color-scheme:light;
+}
+html,body{background:var(--page);color:var(--ink)}
+body{font-family:var(--body);font-size:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:18px}
+.wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+h1,h2{font-family:var(--display);margin:0;line-height:1.1;text-wrap:balance}
+h1{font-weight:800;font-size:clamp(1.6rem,4.6vw,2.4rem);color:var(--peacock)}
+h2{font-weight:700;font-size:1.25rem}
+.lead{margin:0;font-size:1.1rem;color:var(--soft)}
+.hero{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center}
+.hero svg{width:clamp(96px,22vw,150px);height:auto;display:block}
+.hero > div{min-width:0;display:flex;flex-direction:column;gap:6px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media (max-width:560px){.grid{grid-template-columns:repeat(2,1fr)}}
+.feel{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px 14px 12px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:2px;font:inherit;color:var(--ink);transition:transform .15s,border-color .15s}
+.feel:hover{transform:translateY(-2px);border-color:var(--marigold)}
+.feel .hi{font-family:var(--display);font-weight:700;font-size:1.2rem;line-height:1.15}
+.feel .en{color:var(--soft);font-size:.95rem}
+.feel .dot{width:14px;height:14px;border-radius:50%;margin-bottom:6px}
+.feel.done{border-color:var(--peacock)}
+.stage{position:relative;width:100%;max-width:100%;aspect-ratio:16/9;border-radius:18px;overflow:hidden;border:4px solid var(--card);box-shadow:0 10px 30px rgba(43,33,64,.16);background:#cfe8f5}
+.stage svg{width:100%;height:100%;display:block}
+.box{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:14px 18px 16px;display:flex;flex-direction:column;gap:8px}
+.who{font-family:var(--display);font-weight:700;font-size:.9rem;letter-spacing:.03em;align-self:flex-start;padding:.05em .75em;border-radius:99px;color:#fff;background:var(--peacock)}
+.who.K{background:var(--krishna)}
+.say{font-size:clamp(1.05rem,2.6vw,1.25rem);line-height:1.5;margin:0}
+.say em{font-style:normal;font-weight:600;color:var(--peacock)}
+.verse{display:flex;flex-direction:column;gap:6px;padding:4px 0}
+.verse .dev{font-family:var(--deva);font-size:clamp(1.2rem,3.2vw,1.55rem);line-height:1.7;color:var(--ink)}
+.verse .rom{font-style:italic;color:var(--peacock);font-size:1.02rem;line-height:1.45}
+.verse .mean{font-size:1.12rem;line-height:1.5}
+.verse .ref{font-size:.85rem;color:var(--soft);letter-spacing:.04em;text-transform:uppercase}
+.act{display:flex;flex-wrap:wrap;gap:8px}
+.act:empty{display:none}
+.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+button{font:700 1rem var(--display);border:0;border-radius:99px;padding:.55em 1.25em;cursor:pointer;background:var(--marigold);color:var(--ink);transition:transform .15s}
+button:hover{transform:translateY(-1px)}
+button:active{transform:scale(.97)}
+button:focus-visible,input:focus-visible,.feel:focus-visible{outline:3px solid var(--peacock);outline-offset:2px}
+button.ghost{background:transparent;border:2px solid var(--line);color:var(--soft)}
+button.opt{background:#fff;border:2px solid var(--peacock);color:var(--peacock)}
+button.opt:hover{background:var(--peacock);color:#fff}
+button[disabled]{opacity:.4;cursor:default;transform:none}
+.hold{position:relative;overflow:hidden;background:#fff;border:2px solid var(--marigold);user-select:none;-webkit-user-select:none;touch-action:none;min-width:230px}
+.hold i{position:absolute;inset:0 auto 0 0;width:0;background:var(--marigold)}
+.hold span{position:relative}
+.field{display:flex;gap:8px;flex-wrap:wrap;width:100%}
+.field input{flex:1;min-width:0;font:400 1.05rem var(--body);padding:.55em .9em;border-radius:12px;border:2px solid var(--line);background:#fff;color:var(--ink)}
+.keep{background:linear-gradient(160deg,#fff 0%,#fff3d6 100%);border:3px solid var(--marigold);border-radius:18px;padding:16px 20px;display:flex;flex-direction:column;gap:6px;text-align:center}
+.keep .v{font-family:var(--display);font-weight:700;color:var(--peacock);font-size:1.05rem}
+.keep .m{font-size:1.2rem;line-height:1.4}
+.keep .f{color:var(--soft);font-size:.88rem}
+.help{background:#fff;border:2px solid var(--line);border-left:6px solid var(--rose);border-radius:14px;padding:12px 16px;font-size:.95rem;line-height:1.5}
+.help strong{color:var(--rose)}
+.help.quiet{border-left-color:var(--line);color:var(--soft);font-size:.88rem}
+.help.quiet strong{color:var(--soft)}
+.cards{display:flex;flex-direction:column;gap:8px}
+.mini{background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px 14px;display:flex;flex-direction:column;gap:2px}
+.mini .r{font-size:.82rem;color:var(--soft);text-transform:uppercase;letter-spacing:.04em}
+.tiny{color:var(--soft);font-size:.85rem;margin:0}
+.pulse{animation:pulse 2.6s ease-in-out infinite;transform-origin:center;transform-box:fill-box}
+.bob{animation:bob 3s ease-in-out infinite}
+.flick{animation:flick 1.2s ease-in-out infinite;transform-origin:50% 100%;transform-box:fill-box}
+.drift{animation:drift 6s ease-in forwards}
+@keyframes pulse{50%{opacity:.35;transform:scale(1.06)}}
+@keyframes bob{50%{transform:translateY(-8px)}}
+@keyframes flick{50%{transform:scaleY(1.12) scaleX(.92)}}
+@keyframes drift{to{transform:translate(1300px,-160px);opacity:0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.who.A{background:var(--rose)} .who.N{background:var(--peacock)}
+.stage.story{cursor:pointer}
+.box.story{min-height:118px}
+.say strong{font-family:var(--display);font-weight:700;color:var(--rose)}
+.shead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.dots{display:flex;gap:6px}
+.dots span{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.dots span.on{background:var(--marigold)} .dots span.done{background:var(--peacock)}
+.titlecard{position:absolute;inset:0 0 auto;padding:5% 6% 0;text-align:center;pointer-events:none}
+.titlecard .t{font-family:var(--display);font-weight:800;font-size:clamp(1.3rem,4.6vw,2.9rem);color:#fff;text-shadow:0 3px 0 var(--peacock),0 6px 14px rgba(0,0,0,.25);line-height:1.05}
+.titlecard .s{font-family:var(--display);font-weight:600;color:var(--ink);font-size:clamp(.8rem,2vw,1.15rem);margin-top:.3em}
+.spacer{flex:1}
+label.tts{display:flex;align-items:center;gap:6px;color:var(--soft);font-size:.9rem;cursor:pointer}
+.blessing{background:linear-gradient(160deg,#fff 0%,#fff3d6 100%);border:3px solid var(--marigold);border-radius:18px;padding:18px 22px;display:flex;flex-direction:column;gap:6px;text-align:center}
+.blessing .v{font-family:var(--display);font-weight:700;color:var(--peacock);font-size:1.2rem}
+.blessing .m{font-size:1.2rem;line-height:1.4} .blessing .f{color:var(--soft);font-size:.9rem}
+.hint{color:var(--soft);font-size:.85rem;margin:0}
+.rain line{animation:rain .8s linear infinite}
+.floatword{animation:floatw 3.2s ease-out forwards}
+.grow{animation:grow .8s cubic-bezier(.3,1.6,.5,1) both;transform-origin:50% 100%;transform-box:fill-box}
+@keyframes rain{from{transform:translateY(-30px);opacity:0}30%{opacity:1}to{transform:translateY(60px);opacity:0}}
+@keyframes floatw{from{transform:translateX(-200px);opacity:0}20%{opacity:1}to{transform:translateX(1500px);opacity:0}}
+@keyframes grow{from{transform:scale(0)}}
+/* home + chapters */
+.doors{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:620px){.doors{grid-template-columns:1fr}}
+.door{border:0;border-radius:22px;padding:20px 22px;text-align:left;cursor:pointer;color:#fff;display:flex;flex-direction:column;gap:6px;font:inherit;min-height:150px;transition:transform .15s}
+.door:hover{transform:translateY(-3px)}
+.door .k{font-family:var(--display);font-weight:800;font-size:clamp(1.4rem,3.6vw,1.8rem);line-height:1.1}
+.door .d{font-size:1.02rem;line-height:1.4;opacity:.95}
+.door .p{margin-top:auto;font-family:var(--display);font-weight:700;font-size:.95rem;background:rgba(255,255,255,.22);align-self:flex-start;padding:.15em .8em;border-radius:99px}
+.door.feelings{background:var(--peacock)} .door.gita{background:var(--krishna)}
+.chlist{display:flex;flex-direction:column;gap:8px}
+.ch{display:grid;grid-template-columns:3.2em 1fr auto;gap:12px;align-items:center;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:10px 14px;text-align:left;font:inherit;color:var(--ink)}
+.ch > span{min-width:0}
+.ch .n{font-family:var(--display);font-weight:800;font-size:1.3rem;color:var(--peacock);text-align:center;font-variant-numeric:tabular-nums}
+.ch .t{display:flex;flex-direction:column}
+.ch .t b{font-family:var(--display);font-weight:700;font-size:1.08rem;line-height:1.2}
+.ch .t i{font-style:normal;color:var(--soft);font-size:.92rem}
+.ch .s{font-family:var(--display);font-weight:700;font-size:.85rem;padding:.15em .75em;border-radius:99px;background:var(--line);color:var(--soft);white-space:nowrap}
+.ch.open{cursor:pointer;border-color:var(--marigold)}
+.ch.open .s{background:var(--marigold);color:var(--ink)}
+.ch.open.done .s{background:var(--peacock);color:#fff}
+.ch.locked{opacity:.7}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+(function(){
+/* ---------- Krishna (original design) ---------- */
+const SK="#3f7fd0",GOLD="#f4c430",HAIR="#1c1c2e";
+function krishna(x,y,s,o){o=o||{};
+  const arm=o.bless?`<path d="M40 -215 Q85 -240 92 -290" stroke="${SK}" stroke-width="22" stroke-linecap="round" fill="none"/><circle cx="92" cy="-300" r="15" fill="${SK}"/>`
+                   :`<path d="M40 -215 Q70 -170 60 -135" stroke="${SK}" stroke-width="22" stroke-linecap="round" fill="none"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="bob">
+  ${o.glow?`<circle cy="-220" r="200" fill="#fff3b0" class="pulse"/>`:""}
+  <path d="M-52 0 L-42 -140 H42 L52 0Z" fill="#f7c948"/><path d="M-52 0 L-46 -40 H46 L52 0Z" fill="#e8a317"/>
+  <rect x="-46" y="-150" width="92" height="18" rx="8" fill="#e05a47"/>
+  <path d="M-42 -140 Q-48 -235 0 -238 Q48 -235 42 -140Z" fill="${SK}"/>
+  <path d="M-30 -228 Q0 -192 30 -228" stroke="${GOLD}" stroke-width="7" fill="none"/>
+  <path d="M-40 -215 Q-70 -170 -60 -135" stroke="${SK}" stroke-width="22" stroke-linecap="round" fill="none"/>${arm}
+  ${o.flute?`<rect x="-80" y="-180" width="150" height="9" rx="4" fill="#b5651d" transform="rotate(-12)"/>`:""}
+  <circle cy="-290" r="56" fill="${SK}"/>
+  <path d="M-56 -292 Q-58 -355 0 -356 Q58 -355 56 -292 Q44 -330 0 -332 Q-44 -330 -56 -292Z" fill="${HAIR}"/>
+  <path d="M-40 -336 L-32 -380 L-14 -358 L0 -392 L14 -358 L32 -380 L40 -336Z" fill="${GOLD}" stroke="#d99a00" stroke-width="3"/>
+  <circle cy="-350" r="6" fill="#e05a47"/>
+  <g transform="translate(24 -378) rotate(18)"><path d="M0 0 Q-12 -60 0 -105 Q14 -60 0 0Z" fill="#1f8a70"/><ellipse cy="-82" rx="12" ry="17" fill="#2fb3a0"/><circle cy="-82" r="7" fill="#1b3f8b"/></g>
+  <path d="M0 -318 v-12" stroke="#e05a47" stroke-width="5" stroke-linecap="round"/>
+  <path d="M-27 -290 q9 -10 18 0 M9 -290 q9 -10 18 0" stroke="${HAIR}" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M-17 -268 q17 16 34 0" stroke="${HAIR}" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <circle cx="-32" cy="-274" r="9" fill="#ff8fa3" opacity=".45"/><circle cx="32" cy="-274" r="9" fill="#ff8fa3" opacity=".45"/>
+  </g></g>`;}
+const svg=(inner,vb)=>`<svg viewBox="${vb||"0 0 1600 900"}" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${inner}</svg>`;
+const sky=(a,b)=>`<defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><rect width="1600" height="900" fill="url(#sk)"/>`;
+const hills=(c1,c2)=>`<path d="M0 600 Q300 520 620 580 T1600 560 V900 H0Z" fill="${c1}"/><path d="M0 680 Q400 630 800 680 T1600 670 V900 H0Z" fill="${c2}"/>`;
+function diya(x,y,s,lit,steady){return `<g transform="translate(${x} ${y}) scale(${s})">${lit?`<circle cy="-60" r="110" fill="#ffd36b" opacity=".3" class="pulse"/>`:""}<path d="M-80 0 Q0 60 80 0 Z" fill="#d9622b"/><path d="M-80 0 Q0 25 80 0" stroke="#f4c430" stroke-width="5" fill="none"/>${lit?`<g class="${steady?"":"flick"}"><path d="M0 -80 C34 -40 28 0 0 4 C-28 0 -34 -40 0 -80Z" fill="#ffd36b"/><path d="M0 -50 C14 -30 12 -6 0 -2 C-12 -6 -14 -30 0 -50Z" fill="#fff6d6"/></g>`:`<line x1="0" y1="0" x2="0" y2="-24" stroke="#5a3a20" stroke-width="5"/>`}</g>`;}
+
+/* ---------- content: Krishna's words are the verses; everything else is plain explanation ---------- */
+const FEELINGS=[
+ {id:"fear",hi:"Darr lag raha hai",en:"Worried about results",color:"#3f7fd0",sky:["#9fd4f0","#e6f6fc"],
+  open:"Arjuna was afraid of what would happen. In Chapter 2, Krishna told him this.",
+  ref:"Bhagavad Gita 2.47",
+  dev:"कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।<br>मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि॥",
+  rom:"Karmanye vadhikaraste, ma phaleshu kadachana. Ma karmaphala hetur bhur, ma te sango 'stvakarmani.",
+  mean:"You have a right to your work, but never to its results. Don't work only for the reward, and don't give up on your work either.",
+  simple:"Most worry lives in the future. Your effort lives in today. <em>Apni taakat wahan lagao jahan aapka bas chalta hai.</em> Put your energy where you have power.",
+  act:{type:"write",q:"What is one thing you can do today, with full effort? Just one.",ph:"e.g. Revise one topic, or send one job application",card:v=>`Today I will: <strong>${v}</strong>. The result is not my worry.`}},
+ {id:"anger",hi:"Gussa aa raha hai",en:"Angry",color:"#d9534f",sky:["#f6b49a","#fde6d8"],
+  open:"Krishna warned Arjuna about where anger leads. This is from Chapter 2.",
+  ref:"Bhagavad Gita 2.63",
+  dev:"क्रोधाद्भवति सम्मोहः सम्मोहात्स्मृतिविभ्रमः।<br>स्मृतिभ्रंशाद्बुद्धिनाशो बुद्धिनाशात्प्रणश्यति॥",
+  rom:"Krodhad bhavati sammohah, sammohat smriti vibhramah. Smriti bhranshad buddhi nasho, buddhi nashat pranashyati.",
+  mean:"From anger comes confusion. Confusion clouds memory. When memory is lost, judgement is destroyed, and when judgement is destroyed, a person falls.",
+  simple:"Anger feels powerful, but it switches off our wisdom. A pause switches it back on. <em>Pehle saans, phir jawaab.</em>",
+  act:{type:"count",q:"Before you reply to anyone, take 10 slow breaths. Tap once for each breath.",card:()=>`I pause before I reply. <strong>Gussa jayega, samajh rahegi.</strong>`}},
+ {id:"sad",hi:"Mann udaas hai",en:"Feeling low",color:"#6c8fb3",sky:["#b4c4d8","#eef2f7"],
+  open:"Krishna taught Arjuna that pain and happiness both pass. This is from Chapter 2.",
+  ref:"Bhagavad Gita 2.14",
+  dev:"मात्रास्पर्शास्तु कौन्तेय शीतोष्णसुखदुःखदाः।<br>आगमापायिनोऽनित्यास्तांस्तितिक्षस्व भारत॥",
+  rom:"Matra sparshas tu kaunteya, shitoshna sukha duhkha dah. Agamapayino 'nityas, tans titikshasva bharata.",
+  mean:"Heat and cold, happiness and pain, come from our contact with the world. They come and they go; they do not last. Bear them patiently, Arjuna.",
+  simple:"This feeling is real, but it is like weather. It came, and it will move on. <em>Yeh mausam badlega.</em>",
+  act:{type:"cloud",q:"Type a word or two for what you're feeling. Then let it float away like a cloud.",ph:"e.g. lonely, tired, hurt",card:()=>`This feeling came, and it will pass. <strong>Yeh bhi guzar jayega.</strong>`}},
+ {id:"fail",hi:"Haar gaya hoon",en:"Feeling like a failure",color:"#8a6a4a",sky:["#f2d3a6","#fff4e2"],
+  open:"In Chapter 6, Krishna says something about how we treat ourselves.",
+  ref:"Bhagavad Gita 6.5",
+  dev:"उद्धरेदात्मनात्मानं नात्मानमवसादयेत्।<br>आत्मैव ह्यात्मनो बन्धुरात्मैव रिपुरात्मनः॥",
+  rom:"Uddhared atmanatmanam, natmanam avasadayet. Atmaiva hyatmano bandhur, atmaiva ripur atmanah.",
+  mean:"Lift yourself up by your own mind; do not pull yourself down. Your own mind can be your best friend, or your worst enemy.",
+  simple:"Would you talk to a friend the way you're talking to yourself right now? <em>Apne dost bano, dushman nahi.</em>",
+  act:{type:"write",q:"Write one kind sentence to yourself, the way a good friend would say it.",ph:"e.g. You tried hard, and you can try again",card:v=>`A note from my best friend, me: <strong>${v}</strong>`}},
+ {id:"compare",hi:"Doosron se compare",en:"Comparing myself",color:"#9a6ac4",sky:["#d6c3ec","#f6effc"],
+  open:"Arjuna wanted to leave his own path. In Chapter 3, Krishna told him this.",
+  ref:"Bhagavad Gita 3.35",
+  dev:"श्रेयान्स्वधर्मो विगुणः परधर्मात्स्वनुष्ठितात्।<br>स्वधर्मे निधनं श्रेयः परधर्मो भयावहः॥",
+  rom:"Shreyan svadharmo vigunah, paradharmat svanushthitat. Svadharme nidhanam shreyah, paradharmo bhayavahah.",
+  mean:"It is better to follow your own path, even imperfectly, than to follow someone else's path perfectly. Living someone else's path is full of fear.",
+  simple:"Their life is their path. Yours is yours. <em>Apni race, apni speed.</em>",
+  act:{type:"write",q:"Name one thing that is truly yours: a strength, a value, or a dream.",ph:"e.g. I am patient with people",card:v=>`My own path: <strong>${v}</strong>`}},
+ {id:"grief",hi:"Kisi ki yaad",en:"Missing someone I lost",color:"#d98a00",sky:["#2a2448","#5a4a7a"],gentle:true,
+  open:"Arjuna feared losing the people he loved. In Chapter 2, Krishna told him this about the soul.",
+  ref:"Bhagavad Gita 2.20",
+  dev:"न जायते म्रियते वा कदाचिन्नायं भूत्वा भविता वा न भूयः।<br>अजो नित्यः शाश्वतोऽयं पुराणो न हन्यते हन्यमाने शरीरे॥",
+  rom:"Na jayate mriyate va kadachin, nayam bhutva bhavita va na bhuyah. Ajo nityah shashvato 'yam purano, na hanyate hanyamane sharire.",
+  mean:"The soul is never born and never dies. It did not begin, and it will not end. It is unborn, eternal and ancient. It is not destroyed when the body is destroyed.",
+  simple:"The person you love was more than their body. Missing them is love with nowhere to go. It's okay to cry.",
+  act:{type:"diya",q:"Light a diya for them. If you like, write their name or one happy memory.",ph:"e.g. Nani, and her laugh",card:v=>`A diya for <strong>${v||"someone I love"}</strong>. The love does not end.`}},
+ {id:"mind",hi:"Bahut soch raha hoon",en:"Restless mind, overthinking",color:"#1f8a8a",sky:["#1d1b3a","#4a3a6a"],
+  open:"In Chapter 6, Arjuna told Krishna the mind is restless, like the wind. Krishna agreed, and then said this.",
+  ref:"Bhagavad Gita 6.35",
+  dev:"असंशयं महाबाहो मनो दुर्निग्रहं चलम्।<br>अभ्यासेन तु कौन्तेय वैराग्येण च गृह्यते॥",
+  rom:"Asanshayam mahabaho, mano durnigraham chalam. Abhyasena tu kaunteya, vairagyena cha grihyate.",
+  mean:"No doubt, mighty Arjuna, the mind is restless and hard to control. But with practice and letting go, it can be held steady.",
+  simple:"Even Krishna said the mind is hard to control. You're not doing anything wrong. <em>Thoda thoda abhyaas.</em> A little practice each day.",
+  act:{type:"breathe",q:"Press and hold the button while you breathe in. Let go and breathe out. Three times.",card:()=>`<strong>Abhyaas se mann shaant hota hai.</strong> Practice calms the mind.`}},
+ {id:"tired",hi:"Bahut thak gaya hoon",en:"Tired, burnt out",color:"#4f9a48",sky:["#bfe3c0","#f0faf0"],
+  open:"Krishna never asked anyone to work without rest. In Chapter 6, he said this.",
+  ref:"Bhagavad Gita 6.17",
+  dev:"युक्ताहारविहारस्य युक्तचेष्टस्य कर्मसु।<br>युक्तस्वप्नावबोधस्य योगो भवति दुःखहा॥",
+  rom:"Yuktahara viharasya, yukta cheshtasya karmasu. Yukta svapnavabodhasya, yogo bhavati duhkha ha.",
+  mean:"For someone who is balanced in eating and relaxing, in effort at work, and in sleeping and waking, yoga takes away sorrow.",
+  simple:"Rest is not laziness. Balance is part of the path. <em>Khud ka bhi khayal rakho.</em>",
+  act:{type:"choose",q:"Pick one small thing to do for yourself today.",opts:["Drink a glass of water","Step outside for 10 minutes","Sleep 30 minutes earlier","Eat a proper meal"],card:v=>`Today I'll look after myself: <strong>${v}</strong>.`}},
+ {id:"alone",hi:"Sab bahut zyada hai",en:"Alone, everything is too much",color:"#c0392b",sky:["#f7c8a8","#fff1e4"],gentle:true,
+  open:"At the very end of the Gita, in Chapter 18, Krishna gave Arjuna this promise.",
+  ref:"Bhagavad Gita 18.66",
+  dev:"सर्वधर्मान्परित्यज्य मामेकं शरणं व्रज।<br>अहं त्वां सर्वपापेभ्यो मोक्षयिष्यामि मा शुचः॥",
+  rom:"Sarva dharman parityajya, mam ekam sharanam vraja. Aham tvam sarva papebhyo, mokshayishyami ma shuchah.",
+  mean:"Set aside all other duties and take refuge in Me alone. I will free you from all wrongs. Do not grieve.",
+  simple:"Krishna's last promise ends with two words: <em>ma shuchah</em>, do not grieve. You don't have to carry everything alone, and you're allowed to ask people for help too.",
+  act:{type:"write",q:"Who is one person you could message today? Just a 'hi' is enough.",ph:"e.g. my sister, or an old friend",card:v=>`Today I'll reach out to <strong>${v}</strong>. I am not alone.`}}
+];
+
+/* ---------- saved cards (this device only) ---------- */
+function loadCards(){try{return JSON.parse(localStorage.getItem("mgh-cards")||"[]");}catch(e){return [];}}
+function saveCards(c){try{localStorage.setItem("mgh-cards",JSON.stringify(c.slice(-30)));}catch(e){}}
+let cards=loadCards();
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const app=document.getElementById("app");
+
+const HELP_FULL=`<div class="help"><strong>If you feel unsafe or are thinking of harming yourself</strong>, please talk to someone now. In the UK, call Samaritans free on <strong>116 123</strong>, any time. In India, call Tele-MANAS on <strong>14416</strong>. In an emergency, call 999 (UK) or 112 (India).</div>`;
+const HELP_QUIET=`<div class="help quiet">This app shares the Gita's wisdom. It isn't a replacement for talking to someone. If things feel very heavy, call <strong>Samaritans 116 123</strong> (UK) or <strong>Tele-MANAS 14416</strong> (India).</div>`;
+
+/* ---------- home ---------- */
+function feelings(msg){
+  try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}
+  const seen=new Set(cards.map(c=>c.id));
+  app.innerHTML=`<div class="controls"><button class="ghost" id="toHome" type="button">‹ Home</button></div>
+   <div class="hero">${svg(sky("#fff6e6","#fff6e6")+`<circle cx="800" cy="520" r="330" fill="#ffe7a8"/>`+krishna(800,900,1.9,{flute:true}),"300 80 1000 820")}
+     <div><h1>Mann Ghabraya Hai?</h1><p class="lead">${msg||"Batao, kya ho raha hai? Pick what you're feeling, and hear what Krishna said about it."}</p></div></div>
+   <div class="grid">${FEELINGS.map(f=>`<button class="feel${seen.has(f.id)?" done":""}" data-id="${f.id}" type="button"><span class="dot" style="background:${f.color}"></span><span class="hi">${f.hi}</span><span class="en">${f.en}</span></button>`).join("")}</div>
+   ${cards.length?`<h2>My cards <span class="tiny">(${cards.length}, saved on this device)</span></h2><div class="cards">${cards.slice().reverse().slice(0,6).map(c=>`<div class="mini"><span class="r">${esc(c.ref)}</span><span>${c.html}</span></div>`).join("")}</div>`:""}
+   ${HELP_QUIET}`;
+  app.querySelectorAll(".feel").forEach(b=>b.onclick=()=>open(b.dataset.id));document.getElementById("toHome").onclick=()=>mainHome();
+  window.scrollTo(0,0);
+}
+
+/* ---------- feeling journey ---------- */
+let F=null, st={};
+function open(id){
+  F=FEELINGS.find(f=>f.id===id); st={taps:0,breaths:0,lit:false,cloud:"",gone:false};
+  app.innerHTML=`
+   <div class="controls"><button class="ghost" id="back" type="button">‹ All feelings</button></div>
+   <div class="stage" id="stage"></div>
+   <div class="box" aria-live="polite"><span class="who" id="who">Story</span><div id="say" class="say"></div><div class="act" id="act"></div></div>
+   <div id="keep"></div>
+   ${F.gentle?HELP_FULL:""}`;
+  document.getElementById("back").onclick=()=>feelings();
+  draw(); step(0); window.scrollTo(0,0);
+}
+function draw(){
+  const s=document.getElementById("stage"); if(!s) return;
+  let el="", t=F.act.type;
+  if(t==="count"){const r=Math.max(0,1-st.taps/10);
+    el=`<g transform="translate(520 720)"><ellipse rx="160" ry="22" fill="#5a3a20" opacity=".35"/><g transform="scale(${.35+r*.85})"><path d="M0 -260 C110 -150 120 -40 0 0 C-120 -40 -110 -150 0 -260Z" fill="${r>0?"#e8552f":"#7cc6f0"}"/><path d="M0 -150 C50 -90 50 -30 0 -10 C-50 -30 -50 -90 0 -150Z" fill="${r>0?"#ffb347":"#d8f0fb"}"/></g></g>`;}
+  if(t==="cloud"&&st.cloud){el=`<g class="${st.gone?"drift":""}"><g transform="translate(330 260)"><ellipse rx="210" ry="80" fill="#fff"/><ellipse cx="-100" cy="-45" rx="110" ry="70" fill="#fff"/><ellipse cx="100" cy="-40" rx="100" ry="62" fill="#fff"/><text y="14" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="700" font-size="54" fill="#6c8fb3">${esc(st.cloud).slice(0,18)}</text></g></g>`;}
+  if(t==="diya") el=diya(520,760,1.6,st.lit,false);
+  if(t==="breathe") el=diya(520,760,1.2+st.breaths*.25,true,st.breaths>=3);
+  const dark=F.id==="grief"||F.id==="mind";
+  s.innerHTML=svg(sky(F.sky[0],F.sky[1])+(dark?`<g fill="#fff" opacity=".7"><circle cx="200" cy="120" r="3"/><circle cx="420" cy="80" r="2"/><circle cx="1250" cy="140" r="3"/><circle cx="980" cy="60" r="2"/></g><rect y="720" width="1600" height="180" fill="#2a2246"/>`:hills("#9cc98a","#7fb36f"))
+    +el+krishna(1120,840,1,{bless:true,glow:!!st.glow}));
+}
+function who(k){const w=document.getElementById("who");w.textContent=k==="K"?"Krishna's words":"Story";w.className="who"+(k==="K"?" K":"");}
+function setSay(h){document.getElementById("say").innerHTML=h;}
+function setAct(h){const a=document.getElementById("act");a.innerHTML=h||"";return a;}
+function nextBtn(label,fn){const a=document.getElementById("act");const b=document.createElement("button");b.type="button";b.textContent=label;b.onclick=fn;a.appendChild(b);setTimeout(()=>{try{b.focus({preventScroll:true});}catch(e){}},30);return b;}
+
+function step(n){
+  if(n===0){who("N");setSay(F.open);setAct("");nextBtn("Hear Krishna's words",()=>step(1));}
+  if(n===1){st.glow=true;draw();who("K");
+    setSay(`<div class="verse"><span class="ref">${F.ref}</span><div class="dev" lang="sa">${F.dev}</div><div class="rom">${F.rom}</div><div class="mean">${F.mean}</div></div>`);
+    setAct("");nextBtn("What does it mean for me?",()=>step(2));}
+  if(n===2){who("N");setSay(F.simple);setAct("");nextBtn("Let's try something",()=>step(3));}
+  if(n===3){who("N");setSay(F.act.q);setAct("");ACT[F.act.type]();}
+}
+function finish(val){
+  const html=F.act.card(esc(val||""));
+  const card={id:F.id,ref:F.ref,html,when:Date.now()}; cards.push(card); saveCards(cards);
+  who("N");setSay("Shabash. Keep this card and come back to it whenever you need.");setAct("");
+  document.getElementById("keep").innerHTML=`<div class="keep"><div class="v">${F.rom.split(".")[0]}</div><div class="m">${html}</div><div class="f">${F.ref}</div><div><button class="opt" type="button" id="copy">Copy my card</button></div></div>`;
+  document.getElementById("copy").onclick=function(){const txt=document.querySelector(".keep .m").innerText+"\n"+F.ref;const b=this;
+    try{navigator.clipboard.writeText(txt).then(()=>b.textContent="Copied",()=>b.textContent="Select the text to copy");}catch(e){b.textContent="Select the text to copy";}};
+  nextBtn("I feel a little better",()=>mainHome("Jai Shri Krishna. Come back any time your mann ghabraye."));
+  const b=document.createElement("button");b.type="button";b.className="ghost";b.textContent="Something else is on my mind";b.onclick=()=>feelings();document.getElementById("act").appendChild(b);
+}
+const ACT={
+  write(){const a=setAct(`<div class="field"><input id="inp" type="text" maxlength="90" placeholder="${esc(F.act.ph)}" aria-label="Your answer"><button type="button" id="go">Make my card</button></div>`);
+    const go=()=>{const v=document.getElementById("inp").value.trim();if(!v){document.getElementById("inp").focus();return;}finish(v);};
+    document.getElementById("go").onclick=go;document.getElementById("inp").addEventListener("keydown",e=>{if(e.key==="Enter")go();});
+    setTimeout(()=>{try{document.getElementById("inp").focus({preventScroll:true});}catch(e){}},50);},
+  count(){const b=nextBtn("Breath 1 of 10",()=>{st.taps++;draw();
+      if(st.taps>=10){b.remove();setSay("Feel that? The fire has cooled. Now you can choose your words.");nextBtn("Make my card",()=>finish());}
+      else b.textContent=`Breath ${st.taps+1} of 10`;});},
+  cloud(){setAct(`<div class="field"><input id="inp" type="text" maxlength="18" placeholder="${esc(F.act.ph)}" aria-label="Your feeling"><button type="button" id="go">Put it in a cloud</button></div>`);
+    const go=()=>{const v=document.getElementById("inp").value.trim();if(!v)return;st.cloud=v;draw();setAct("");setSay("There it is. It's real. Now watch it move.");
+      nextBtn("Let it float away",function(){st.gone=true;draw();this.remove();setTimeout(()=>{setSay("The sky is still here. So are you.");nextBtn("Make my card",()=>finish());},2200);});};
+    document.getElementById("go").onclick=go;document.getElementById("inp").addEventListener("keydown",e=>{if(e.key==="Enter")go();});},
+  diya(){const b=nextBtn("Light the diya",()=>{st.lit=true;draw();b.remove();
+      setAct(`<div class="field"><input id="inp" type="text" maxlength="60" placeholder="${esc(F.act.ph)}" aria-label="Name or memory"><button type="button" id="go">Make my card</button></div>`);
+      const go=()=>finish(document.getElementById("inp").value.trim());document.getElementById("go").onclick=go;document.getElementById("inp").addEventListener("keydown",e=>{if(e.key==="Enter")go();});});},
+  breathe(){const a=setAct(`<button type="button" class="hold" id="hold"><i></i><span>Hold and breathe in</span></button>`);
+    const b=document.getElementById("hold"),fill=b.querySelector("i"),lab=b.querySelector("span");let t0=0,raf=0,full=false;
+    const tick=()=>{const p=Math.min(1,(performance.now()-t0)/3000);fill.style.width=p*100+"%";if(p>=1){full=true;lab.textContent="Now let go, breathe out";return;}raf=requestAnimationFrame(tick);};
+    const down=e=>{e.preventDefault();full=false;t0=performance.now();lab.textContent="Breathing in…";raf=requestAnimationFrame(tick);};
+    const up=()=>{if(!t0)return;t0=0;cancelAnimationFrame(raf);fill.style.width="0";
+      if(full){st.breaths++;draw();if(st.breaths>=3){setAct("");setSay("See how the flame has gone still? So can the mind, a little at a time.");nextBtn("Make my card",()=>finish());return;}lab.textContent=`Good. Again (${st.breaths} of 3)`;}
+      else lab.textContent="Hold a little longer";};
+    b.addEventListener("pointerdown",down);b.addEventListener("pointerup",up);b.addEventListener("pointerleave",up);b.addEventListener("pointercancel",up);
+    b.addEventListener("keydown",e=>{if((e.key===" "||e.key==="Enter")&&!e.repeat)down(e);});b.addEventListener("keyup",e=>{if(e.key===" "||e.key==="Enter")up();});},
+  choose(){F.act.opts.forEach(o=>{const b=document.createElement("button");b.type="button";b.className="opt";b.textContent=o;b.onclick=()=>finish(o);document.getElementById("act").appendChild(b);});}
+};
+
+window.openFeelings=feelings;window.mgCards=()=>loadCards();
+
+
+const CHAPTERS=[
+ ["Arjuna Vishada Yoga","Arjuna's sorrow"],["Sankhya Yoga","The wisdom of the soul"],["Karma Yoga","The path of action"],
+ ["Jnana Karma Sanyasa Yoga","Knowledge and action"],["Karma Sanyasa Yoga","Letting go while acting"],["Dhyana Yoga","Meditation and the mind"],
+ ["Jnana Vijnana Yoga","Knowing the divine"],["Akshara Brahma Yoga","The eternal"],["Raja Vidya Raja Guhya Yoga","The royal secret"],
+ ["Vibhuti Yoga","Krishna's glories"],["Vishwarupa Darshana Yoga","The universal form"],["Bhakti Yoga","The path of devotion"],
+ ["Kshetra Kshetrajna Vibhaga Yoga","The body and the knower"],["Gunatraya Vibhaga Yoga","The three qualities"],["Purushottama Yoga","The supreme person"],
+ ["Daivasura Sampad Vibhaga Yoga","Divine and harmful qualities"],["Shraddhatraya Vibhaga Yoga","Three kinds of faith"],["Moksha Sanyasa Yoga","Freedom by letting go"]];
+const isDone=n=>{try{return localStorage.getItem("gs-story-"+n)==="done";}catch(e){return false;}};
+const storyDone=()=>isDone(1);
+const PLAYABLE=[1,3,4,6];
+const doneCount=()=>(isDone(1)?2:0)+[3,4,6].filter(isDone).length;
+const CHTITLE={1:"Chapters 1–2 · Arjuna ka Dukh, Krishna ka Gyaan",3:"Chapter 3 · Karma Yoga",4:"Chapter 4 · Gyaan aur Karma",6:"Chapter 6 · Dhyana Yoga"};
+const HOME_HELP=`<div class="help quiet">Gita Saathi shares the Gita's wisdom. It isn't a replacement for talking to someone. If things feel very heavy, call <strong>Samaritans 116 123</strong> (UK) or <strong>Tele-MANAS 14416</strong> (India).</div>`;
+function stopVoice(){try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}}
+function mainHome(msg){
+  stopVoice();
+  const n=window.mgCards?window.mgCards().length:0;
+  app.innerHTML=`
+   <div class="hero">${svg(sky("#fff6e6","#fff6e6")+`<circle cx="800" cy="520" r="330" fill="#ffe7a8"/>`+krishna(800,900,1.9,{flute:true}),"300 80 1000 820")}
+     <div><h1>Gita Saathi</h1><p class="lead">${msg||"Namaste! Krishna's wisdom from the Bhagavad Gita, for the moments when life feels heavy."}</p></div></div>
+   <div class="doors">
+     <button class="door feelings" id="goFeel" type="button"><span class="k">Mann ghabraya hai?</span><span class="d">Tell Krishna what you're feeling and hear the verse that speaks to it.</span><span class="p">9 feelings${n?` · ${n} card${n>1?"s":""} saved`:""}</span></button>
+     <button class="door gita" id="goGita" type="button"><span class="k">Gita ki kahani</span><span class="d">The whole Gita, chapter by chapter, as a story you take part in.</span><span class="p">${doneCount()} of 18 chapters done</span></button>
+   </div>
+   ${HOME_HELP}`;
+  document.getElementById("goFeel").onclick=()=>window.openFeelings();
+  document.getElementById("goGita").onclick=()=>chapters();
+  window.scrollTo(0,0);
+}
+function chapters(){
+  stopVoice();
+  const done=storyDone();
+  app.innerHTML=`<div class="controls"><button class="ghost" id="toHome" type="button">‹ Home</button></div>
+   <h1>Gita ki kahani</h1><p class="lead">18 chapters, 18 levels. Each one is a short story where you make choices and keep a card at the end.</p>
+   <div class="chlist">${CHAPTERS.map((c,i)=>{
+     if(i===0) return `<button class="ch open${done?" done":""}" id="ch12" type="button"><span class="n">1–2</span><span class="t"><b>Arjuna ka Dukh, Krishna ka Gyaan</b><i>${c[0]} and ${CHAPTERS[1][0]}: ${c[1].toLowerCase()} and ${CHAPTERS[1][1].toLowerCase()}</i></span><span class="s">${done?"Play again":"Play"}</span></button>`;
+     if(i===1) return "";
+     if(PLAYABLE.includes(i+1)){const d=isDone(i+1);return `<button class="ch open${d?" done":""}" data-ch="${i+1}" type="button"><span class="n">${i+1}</span><span class="t"><b>${c[1]}</b><i>${c[0]}</i></span><span class="s">${d?"Play again":"Play"}</span></button>`;}
+     return `<div class="ch locked"><span class="n">${i+1}</span><span class="t"><b>${c[1]}</b><i>${c[0]}</i></span><span class="s">Coming soon</span></div>`;}).join("")}</div>
+   <p class="tiny">Stories are retold in simple words. Krishna's actual verses are always shown with their chapter and verse number.</p>
+   ${HOME_HELP}`;
+  document.getElementById("toHome").onclick=()=>mainHome();
+  document.getElementById("ch12").onclick=()=>storyOne(1);app.querySelectorAll(".ch[data-ch]").forEach(b=>b.onclick=()=>storyOne(+b.dataset.ch));
+  window.scrollTo(0,0);
+}
+
+function storyOne(CH){ CH=CH||1;
+app.innerHTML=`<div class="controls"><button class="ghost" id="toChapters" type="button">‹ Chapters</button></div>
+  <header class="shead"><h2>${CHTITLE[CH]}</h2><div class="dots" id="dots" aria-hidden="true"></div></header>
+  <div class="stage story" id="stage" role="img" aria-label="Story picture"></div>
+  <div class="box story" aria-live="polite"><span class="who N" id="who">Story</span><p class="say" id="say"></p><div class="act" id="act"></div></div>
+  <div class="controls"><button class="ghost" id="back" type="button">‹ Back</button><button id="next" type="button">Next ›</button><span class="spacer"></span><label class="tts" for="tts"><input type="checkbox" id="tts"> Read aloud</label></div>
+  <div id="cardHost"></div><p class="hint">Tap the picture or press Next to move on. Some scenes ask you to do something first.</p>`;
+  document.getElementById("toChapters").onclick=()=>chapters();window.scrollTo(0,0);
+/* ---------- characters (original designs) ---------- */
+let TALK=null; const SKIN_K="#3f7fd0", SKIN_A="#c98a5e", GOLD="#f4c430", HAIR="#1c1c2e";
+function face(mood,talk){
+  const ink=HAIR;
+  let eyes, mouth, extra="";
+  if(mood==="sad"){
+    eyes=`<path d="M-27 -300 l16 4 M11 -296 l16 -4" stroke="${ink}" stroke-width="5" stroke-linecap="round"/><circle cx="-18" cy="-290" r="5" fill="${ink}"/><circle cx="18" cy="-290" r="5" fill="${ink}"/>`;
+    mouth=`<path d="M-15 -262 q15 -12 30 0" stroke="${ink}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+    extra=`<path d="M22 -282 q5 12 0 18 q-5 -6 0 -18Z" fill="#7cc6f0"/>`;
+  } else if(mood==="firm"){
+    eyes=`<path d="M-28 -302 l18 -4 M10 -306 l18 4" stroke="${ink}" stroke-width="5" stroke-linecap="round"/><circle cx="-18" cy="-290" r="6" fill="${ink}"/><circle cx="18" cy="-290" r="6" fill="${ink}"/>`;
+    mouth=`<path d="M-14 -266 q14 10 28 0" stroke="${ink}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+  } else {
+    eyes=`<path d="M-27 -290 q9 -10 18 0 M9 -290 q9 -10 18 0" stroke="${ink}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+    mouth=`<path d="M-17 -268 q17 16 34 0" stroke="${ink}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+  }
+  if(talk) mouth=`<ellipse cx="0" cy="-264" rx="15" ry="11" fill="#6a1f2b"/>`;
+  return `${eyes}${mouth}${extra}<circle cx="-32" cy="-274" r="9" fill="#ff8fa3" opacity=".45"/><circle cx="32" cy="-274" r="9" fill="#ff8fa3" opacity=".45"/>`;
+}
+function krishna(x,y,s,o){
+  o=o||{};
+  const armR=o.bless
+    ? `<path d="M40 -215 Q85 -240 92 -290" stroke="${SKIN_K}" stroke-width="22" stroke-linecap="round" fill="none"/><circle cx="92" cy="-300" r="15" fill="${SKIN_K}"/>`
+    : `<path d="M40 -215 Q70 -170 60 -135" stroke="${SKIN_K}" stroke-width="22" stroke-linecap="round" fill="none"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'bob'}">
+  ${o.glow?`<circle cy="-220" r="200" fill="#fff3b0" class="pulse"/>`:""}
+  <path d="M-52 0 L-42 -140 H42 L52 0Z" fill="#f7c948"/>
+  <path d="M-52 0 L-46 -40 H46 L52 0Z" fill="#e8a317"/>
+  <rect x="-46" y="-150" width="92" height="18" rx="8" fill="#e05a47"/>
+  <path d="M-42 -140 Q-48 -235 0 -238 Q48 -235 42 -140Z" fill="${SKIN_K}"/>
+  <path d="M-30 -228 Q0 -192 30 -228" stroke="${GOLD}" stroke-width="7" fill="none"/>
+  <path d="M-40 -215 Q-70 -170 -60 -135" stroke="${SKIN_K}" stroke-width="22" stroke-linecap="round" fill="none"/>
+  ${armR}
+  ${o.flute?`<rect x="-80" y="-180" width="150" height="9" rx="4" fill="#b5651d" transform="rotate(-12)"/>`:""}
+  <circle cy="-290" r="56" fill="${SKIN_K}"/>
+  <path d="M-56 -292 Q-58 -355 0 -356 Q58 -355 56 -292 Q44 -330 0 -332 Q-44 -330 -56 -292Z" fill="${HAIR}"/>
+  <path d="M-40 -336 L-32 -380 L-14 -358 L0 -392 L14 -358 L32 -380 L40 -336Z" fill="${GOLD}" stroke="#d99a00" stroke-width="3"/>
+  <circle cx="0" cy="-350" r="6" fill="#e05a47"/>
+  <g transform="translate(24 -378) rotate(18)"><path d="M0 0 Q-12 -60 0 -105 Q14 -60 0 0Z" fill="#1f8a70"/><ellipse cy="-82" rx="12" ry="17" fill="#2fb3a0"/><circle cy="-82" r="7" fill="#1b3f8b"/></g>
+  <path d="M0 -318 v-12" stroke="#e05a47" stroke-width="5" stroke-linecap="round"/>
+  ${face(o.mood||"happy",TALK==="K")}
+  </g></g>`;
+}
+function arjuna(x,y,s,o){
+  o=o||{};
+  const sit=!!o.sit, lift=sit?80:0;
+  const legs = sit
+    ? `<path d="M-95 0 Q0 -30 95 0 Q70 -75 0 -82 Q-70 -75 -95 0Z" fill="#f6eedf"/><path d="M-95 0 Q0 -30 95 0" stroke="#d9534f" stroke-width="8" fill="none"/>`
+    : `<path d="M-52 0 L-42 -140 H42 L52 0Z" fill="#f6eedf"/><path d="M-52 0 L-49 -14 H49 L52 0Z" fill="#d9534f"/>`;
+  const armR = o.bow
+    ? `<path d="M40 -215 Q90 -215 108 -250" stroke="${SKIN_A}" stroke-width="22" stroke-linecap="round" fill="none"/>
+       <path d="M112 -380 Q190 -240 112 -100" fill="none" stroke="#8b4a1c" stroke-width="10" stroke-linecap="round"/>
+       <line x1="112" y1="-380" x2="112" y2="-100" stroke="#5a3a20" stroke-width="2"/>`
+    : (o.mood==="sad"
+      ? `<path d="M40 -215 Q60 -170 30 -145" stroke="${SKIN_A}" stroke-width="22" stroke-linecap="round" fill="none"/>`
+      : `<path d="M40 -215 Q70 -170 60 -135" stroke="${SKIN_A}" stroke-width="22" stroke-linecap="round" fill="none"/>`);
+  return `<g transform="translate(${x} ${y}) scale(${s})">
+  ${legs}
+  <g transform="translate(0 ${lift})">
+    <rect x="-46" y="-150" width="92" height="18" rx="8" fill="#d9534f"/>
+    <path d="M-42 -140 Q-48 -235 0 -238 Q48 -235 42 -140Z" fill="${SKIN_A}"/>
+    <path d="M-38 -230 L30 -150" stroke="#d9534f" stroke-width="12"/>
+    <path d="M-30 -228 Q0 -196 30 -228" stroke="${GOLD}" stroke-width="7" fill="none"/>
+    <path d="M-40 -215 Q${o.mood==="sad"?"-60 -170 -30 -145":"-70 -170 -60 -135"}" stroke="${SKIN_A}" stroke-width="22" stroke-linecap="round" fill="none"/>
+    ${armR}
+    <g transform="${o.mood==="sad"?"rotate(10 0 -240)":""}">
+      <path d="M-58 -290 Q-66 -230 -48 -215 L-40 -290Z M58 -290 Q66 -230 48 -215 L40 -290Z" fill="${HAIR}"/>
+      <circle cy="-290" r="56" fill="${SKIN_A}"/>
+      <path d="M-56 -292 Q-58 -352 0 -354 Q58 -352 56 -292 Q44 -326 0 -330 Q-44 -326 -56 -292Z" fill="${HAIR}"/>
+      <path d="M-42 -334 L-42 -372 Q0 -398 42 -372 L42 -334Z" fill="${GOLD}" stroke="#d99a00" stroke-width="3"/>
+      <circle cy="-356" r="9" fill="#2fb3a0"/>
+      ${face(o.mood||"happy",TALK==="A")}
+    </g>
+  </g></g>`;
+}
+function chariot(x,y,s,inner){
+  return `<g transform="translate(${x} ${y}) scale(${s})">
+    <line x1="0" y1="-120" x2="0" y2="-560" stroke="#8b4a1c" stroke-width="8"/>
+    <path d="M0 -560 l90 25 -90 25Z" fill="#e8a317"/>
+    ${inner}
+    <rect x="-200" y="-120" width="400" height="110" rx="18" fill="#c0392b"/>
+    <rect x="-200" y="-120" width="400" height="22" rx="10" fill="${GOLD}"/>
+    <g fill="none" stroke="#5a3a20" stroke-width="12"><circle cx="-110" cy="10" r="60"/><circle cx="110" cy="10" r="60"/></g>
+    <g stroke="#5a3a20" stroke-width="6"><line x1="-170" y1="10" x2="-50" y2="10"/><line x1="-110" y1="-50" x2="-110" y2="70"/><line x1="50" y1="10" x2="170" y2="10"/><line x1="110" y1="-50" x2="110" y2="70"/></g>
+  </g>`;
+}
+function army(x0,dir,flag){
+  let g="";
+  for(let r=0;r<3;r++)for(let i=0;i<7;i++){
+    const x=x0+dir*(i*62+r*28), y=600+r*42;
+    g+=`<g transform="translate(${x} ${y})"><line x1="${dir*14}" y1="0" x2="${dir*20}" y2="-90" stroke="#5a3a20" stroke-width="4"/><path d="M-18 40 Q-18 -5 0 -8 Q18 -5 18 40Z" fill="${flag}" opacity=".9"/><circle cy="-20" r="16" fill="#8a6a4a"/><path d="M-17 -22 Q0 -46 17 -22Z" fill="#9aa3ad"/></g>`;
+  }
+  return g+`<g transform="translate(${x0+dir*120} 470)"><line y1="0" y2="-140" stroke="#5a3a20" stroke-width="6"/><path d="M0 -140 l${dir*-80} 22 ${dir*80} 22Z" fill="${flag}"/></g>`;
+}
+const sky=(a,b,c)=>`<defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><rect width="1600" height="900" fill="url(#sk)"/>${c||""}`;
+const hills=(c1,c2)=>`<path d="M0 560 Q300 470 620 540 T1600 520 V900 H0Z" fill="${c1}"/><path d="M0 640 Q400 590 800 640 T1600 630 V900 H0Z" fill="${c2}"/>`;
+const svg=inner=>`<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${inner}</svg>`;
+
+/* ---------- state & personal lines ---------- */
+const S={feel:null,worry:null,worryLabel:"",breaths:0,seeds:0,rained:false,praise:false,crit:false,bowUp:false,duty:""};
+const WORRY={
+  exam:["Exams or studies","Study with your full heart. The marks are the rain."],
+  work:["Work or finding a job","Prepare well and apply with your best effort. The 'yes' or 'no' is the rain."],
+  family:["Family or relationships","Speak with love and honesty. How others respond is the rain."],
+  health:["Health","Rest, eat well and follow your doctor's advice. How fast you heal is the rain."],
+  decision:["A big decision","Think it through and choose with a clean heart. What happens next is the rain."],
+  other:["Something else","Give it your best effort. The result is the rain."]
+};
+
+/* ---------- scenes ---------- */
+const V=(ref,dev,rom,mean)=>`<span class="verse"><span class="ref">${ref}</span><span class="dev" lang="sa">${dev}</span><span class="rom">${rom}</span><span class="mean">${mean}</span></span>`;
+const ALL={1:[
+ { art:()=>svg(sky("#7fd3f0","#d8f3fb",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#7cc576","#5aa85a")+krishna(640,760,.95,{flute:true})+arjuna(960,760,.95,{})),
+   title:true,
+   steps:[
+    {w:"N",t:"Namaste! Over 5,000 years ago, on a battlefield, Shri Krishna gave his friend Arjuna advice that people still live by."},
+    {w:"K",t:"Aao, aao! This story is not only about Arjuna. It's about <em>you</em> too."},
+    {w:"N",t:"Tap Next. Along the way, you'll make choices and help Arjuna."}
+ ]},
+ { art:()=>svg(sky("#f9c784","#fde9c4",`<circle cx="800" cy="300" r="110" fill="#fff1c1"/>`)+`<rect y="560" width="1600" height="340" fill="#d9b27c"/>`+army(70,1,"#2f80c9")+army(1530,-1,"#c0392b")+chariot(800,790,.62,krishna(-70,-120,.75,{mood:"happy",still:true})+arjuna(90,-120,.75,{bow:true}))),
+   steps:[
+    {w:"N",t:"Kurukshetra. <em>Do senaayein aamne-saamne.</em>"},
+    {w:"N",t:"On one side, the Pandavas, in blue. On the other, the Kauravas, in red. They are cousins."},
+    {w:"A",t:"Krishna, take my chariot between the two armies. I want to see who I am fighting."},
+    {w:"K",t:"<em>Jaisi tumhari ichha</em>, Arjuna. Dekho."}
+ ]},
+ { art:()=>svg(sky("#a7b8d6","#e7dfe9")+hills("#9bb08f","#86a07c")+krishna(1060,780,.95,{mood:"happy"})+arjuna(620,780,.95,{sit:true,mood:"sad"})+`<g transform="translate(400 770) rotate(-80)"><path d="M0 -130 Q80 0 0 130" fill="none" stroke="#8b4a1c" stroke-width="10" stroke-linecap="round"/><line x1="0" y1="-130" x2="0" y2="130" stroke="#5a3a20" stroke-width="2"/></g>`),
+   steps:[
+    {w:"N",t:"Arjuna looks across and sees his grandfather Bhishma, his teacher Dronacharya, his cousins, his friends."},
+    {w:"A",t:"<em>Yeh toh mere apne hain…</em> Krishna, <em>main yeh nahi kar sakta.</em>"},
+    {w:"N",t:"His hands shake. His bow falls to the ground."},
+    {act:"choice",w:"N",q:"How do you think Arjuna feels right now?",
+     opts:[["Scared","scared"],["Confused","confused"],["Sad","sad"],["All of these","all"]],
+     on:k=>{S.feel=k; return [{w:"N",t:(k==="all"?"All of these, at once. ":"Yes, "+k+", and more. ")+"Even the greatest archer of his time felt this. Feeling it doesn't make you weak."}];}}
+ ]},
+ { art:()=>{
+     const keys=Object.keys(WORRY); let g="";
+     keys.forEach((k,i)=>{const x=260+(i%3)*360, y=230+Math.floor(i/3)*250, on=S.worry===k;
+       g+=`<g transform="translate(${x} ${y})"><rect x="-150" y="-80" width="300" height="160" rx="30" fill="${on?"#f4a81d":"#ffffff"}" stroke="${on?"#d98a00":"#eadcc4"}" stroke-width="6"/><text y="14" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="700" font-size="${WORRY[k][0].length>16?28:36}" fill="#2b2140">${WORRY[k][0]}</text></g>`;});
+     return svg(sky("#fde3c8","#fff6e6")+g+krishna(1380,880,.7,{mood:"happy",bless:!!S.worry}));
+   },
+   steps:[
+    {w:"K",t:"<em>Ab aap batao.</em> Arjuna's battle had arrows. Ours usually doesn't."},
+    {act:"choice",w:"K",q:"What makes <em>your mann ghabraye</em> these days?",
+     opts:Object.keys(WORRY).map(k=>[WORRY[k][0],k]),
+     on:k=>{S.worry=k;S.worryLabel=WORRY[k][0];return [
+       {w:"K",t:"<em>Samajh gaya.</em> Then "+WORRY[k][0].toLowerCase()+" is your Kurukshetra, <em>mere dost</em>."},
+       {w:"K",t:"Let's hear what I told Arjuna. It's for you too."}];}}
+ ]},
+ { art:()=>{
+     const f=1+S.breaths*.35;
+     return svg(sky("#1d1b3a","#4a3a6a",`<g fill="#fff" opacity=".7"><circle cx="200" cy="120" r="3"/><circle cx="420" cy="80" r="2"/><circle cx="1250" cy="140" r="3"/><circle cx="1450" cy="90" r="2"/><circle cx="980" cy="60" r="2"/></g>`)+`<rect y="700" width="1600" height="200" fill="#2a2246"/>`+krishna(1080,800,.95,{glow:true,bless:true})
+      +`<g transform="translate(560 720)"><circle cy="-60" r="${60*f+20}" fill="#ffd36b" opacity=".25" class="pulse"/><path d="M-80 0 Q0 60 80 0 Z" fill="#d9622b"/><path d="M-80 0 Q0 25 80 0" stroke="#f4c430" stroke-width="5" fill="none"/><g transform="scale(${f})"><path class="flick" d="M0 -80 C34 -40 28 0 0 4 C-28 0 -34 -40 0 -80Z" fill="#ffd36b"/><path d="M0 -50 C14 -30 12 -6 0 -2 C-12 -6 -14 -30 0 -50Z" fill="#fff6d6"/></g></g>`);
+   },
+   steps:[
+    {w:"K",t:"Arjuna, the real you is not just this body."},
+    {w:"K",t:"Your <em>aatma</em> is never born and never dies. Fear can't touch it."},
+    {act:"breath",w:"N",q:"Let's feel that calm together. Press and hold the button while you breathe in. Let go and breathe out. Three times.",
+     on:()=>[{w:"K",t:"<em>Dekha?</em> The worry may still be there, but you are bigger than it."}]}
+ ]},
+ { art:()=>{
+     let sprouts="";
+     for(let i=0;i<S.seeds;i++){const x=640+i*210;
+       sprouts+= S.rained
+        ? `<g class="grow" transform="translate(${x} 650)"><path d="M0 0 V-90" stroke="#3e7d3a" stroke-width="8"/><ellipse cx="-24" cy="-80" rx="26" ry="12" fill="#4f9a48"/><ellipse cx="24" cy="-92" rx="26" ry="12" fill="#4f9a48"/><circle cy="-110" r="14" fill="#f4a81d"/></g>`
+        : `<g class="grow" transform="translate(${x} 650)"><ellipse rx="34" ry="12" fill="#6b4a2c"/><circle cy="-4" r="7" fill="#f6eedf"/></g>`;}
+     return svg(sky(S.rained?"#9ec9e6":"#8fd0f2","#e6f6fc",`<circle cx="1450" cy="140" r="70" fill="#ffe28a" opacity="${S.rained?.4:1}"/>`)
+      +`<rect y="580" width="1600" height="320" fill="#8a5a33"/><g stroke="#6b4423" stroke-width="6"><line x1="0" y1="660" x2="1600" y2="660"/><line x1="0" y1="750" x2="1600" y2="750"/></g>`
+      +`<g transform="translate(1050 190)"><ellipse rx="170" ry="60" fill="${S.rained?"#c9d3e0":"#fff"}"/><ellipse cx="-80" cy="-35" rx="90" ry="55" fill="${S.rained?"#c9d3e0":"#fff"}"/><ellipse cx="80" cy="-30" rx="80" ry="50" fill="${S.rained?"#c9d3e0":"#fff"}"/>${S.rained?`<g class="rain" stroke="#3f7fd0" stroke-width="5" stroke-linecap="round">${[-120,-60,0,60,120].map((x,i)=>`<line x1="${x}" y1="80" x2="${x-8}" y2="110" style="animation-delay:${i*.15}s"/>`).join("")}</g>`:""}</g>`
+      +sprouts+krishna(260,820,.85,{mood:"happy",flute:true}));
+   },
+   steps:[
+    {w:"K",t:"Now, my most famous teaching."},
+    {w:"K",t:"<strong>Karmanye vadhikaraste, ma phaleshu kadachana.</strong>"},
+    {w:"N",t:"It means: you have a right to your work, but not to its results."},
+    {act:"farm",w:"N",q:"Be the farmer. Plant three seeds.",
+     on:()=>[
+      {w:"K",t:"The farmer's job is the seed. The rain comes in its own time."},
+      {w:"K",t:()=>"For you, with "+S.worryLabel.toLowerCase()+": "+(S.worry?WORRY[S.worry][1]:WORRY.other[1])},
+      {w:"N",t:"<em>Apna kaam poori lagan se karo, phal ki chinta chhod do.</em>"}]}
+ ]},
+ { art:()=>svg(sky("#ffd6c0","#cfe8f5")+`<path d="M0 470 L280 330 L520 440 L780 300 L1040 430 L1300 320 L1600 470Z" fill="#8fa9c9"/><rect y="470" width="1600" height="430" fill="#5e9cc4"/>`
+      +`<g id="ripples" fill="none" stroke="#fff" stroke-width="3" opacity=".7"><ellipse cx="800" cy="640" rx="60" ry="14"><animate attributeName="rx" from="60" to="320" dur="4s" repeatCount="indefinite"/><animate attributeName="ry" from="14" to="70" dur="4s" repeatCount="indefinite"/><animate attributeName="opacity" from=".8" to="0" dur="4s" repeatCount="indefinite"/></ellipse></g>`
+      +`<g transform="translate(800 640)"><ellipse rx="150" ry="26" fill="#3e8a4a"/><g fill="#f28cb1"><path d="M0 -110 C40 -60 34 -10 0 0 C-34 -10 -40 -60 0 -110Z"/><path d="M-10 0 C-90 -10 -110 -60 -90 -70 C-50 -60 -20 -30 -10 0Z" opacity=".9"/><path d="M10 0 C90 -10 110 -60 90 -70 C50 -60 20 -30 10 0Z" opacity=".9"/></g><circle cy="-30" r="12" fill="#f4c430"/></g>`
+      +`<g id="words"></g>`+krishna(1350,880,.7,{mood:"happy"})),
+   steps:[
+    {w:"K",t:"Life brings praise. Life brings criticism. Both come, and both go."},
+    {act:"winds",w:"N",q:"Try it. Send both at the lotus and watch what happens.",
+     on:()=>[
+      {w:"N",t:"The words blew past. The lotus stayed still."},
+      {w:"K",t:"<strong>Samatvam yoga uchyate.</strong> A steady mind, in success and failure, is true yoga."}]}
+ ]},
+ { art:()=>svg(sky(S.bowUp?"#ffb36b":"#c8b6d8",S.bowUp?"#ffe9b8":"#efe6f2",`<circle cx="800" cy="${S.bowUp?380:620}" r="150" fill="#fff1c1" opacity="${S.bowUp?1:.5}"/>`)+hills("#9bb08f","#7c9a6c")
+      +krishna(1080,800,.95,{bless:true,mood:"happy"})
+      +(S.bowUp?arjuna(600,800,.95,{bow:true,mood:"firm"})
+        :arjuna(600,800,.95,{sit:true,mood:"sad"})+`<g id="bowOnGround" style="cursor:pointer" transform="translate(380 790) rotate(-80)"><path d="M0 -130 Q80 0 0 130" fill="none" stroke="#8b4a1c" stroke-width="12" stroke-linecap="round"/><line x1="0" y1="-130" x2="0" y2="130" stroke="#5a3a20" stroke-width="3"/><circle r="150" fill="#f4a81d" opacity=".18" class="pulse"/></g>`)),
+   steps:[
+    {w:"N",t:"Krishna keeps talking, and slowly, Arjuna's doubt clears."},
+    {w:"K",t:"<em>Uttho</em>, Arjuna! Do your duty."},
+    {act:"bow",w:"N",q:"Help him up. Tap Arjuna's bow.",
+     on:()=>[
+      {w:"A",t:"My confusion is gone, Krishna. <em>Main taiyaar hoon.</em>"},
+      {w:"N",t:"Arjuna's battle was outside. Ours is often inside."}]},
+    {act:"duty",w:"K",q:"Now you. What is one thing you'll do today with your full heart, without worrying about the result?",
+     on:()=>[{w:"N",t:"<em>Jab bhi mann ghabraye</em>, come back to your card. <em>Jai Shri Krishna.</em>"}]}
+ ]}
+],
+
+ /* ===== Chapter 3: Karma Yoga ===== */
+ 3:(()=>{
+  const day=(mA,extra,bless)=>svg(sky("#8fd0f2","#e6f6fc",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#7cc576","#5aa85a")+(extra||"")+krishna(1060,780,.95,{bless:bless!==false})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  return [
+  {title:"Karma Yoga",sub:"Chapter 3 · The path of action",art:()=>day("happy"),steps:[
+    {w:"N",t:"In Chapter 2, Krishna praised wisdom and a steady mind. Now Arjuna is confused."}]},
+  {art:()=>day("sad"),steps:[
+    {w:"A",t:"Krishna, if wisdom is better than action, why are you pushing me into this terrible battle? Your words confuse me."},
+    {w:"K",t:"Arjuna, let me ask you something first. Can anyone truly stop acting?"},
+    {act:"still",w:"N",q:"Try it. Press Start, then do nothing at all for 10 seconds.",
+     on:()=>[{w:"N",t:"In those 10 seconds your heart beat about 12 times, you breathed two or three times, and your mind kept thinking. Even doing nothing is doing something."},
+      {w:"K",t:V("Bhagavad Gita 3.5","न हि कश्चित्क्षणमपि जातु तिष्ठत्यकर्मकृत्।<br>कार्यते ह्यवशः कर्म सर्वः प्रकृतिजैर्गुणैः॥","Na hi kashchit kshanam api, jatu tishthaty akarma krit. Karyate hy avashah karma, sarvah prakriti jair gunaih.","No one can stay without acting, even for a moment. Everyone is driven to act by the qualities of nature.")},
+      {w:"N",t:"So the question isn't whether to act. It's <em>how</em> to act."}]}
+  ]},
+  {art:()=>{let f="";for(let i=0;i<4;i++)f+=`<g transform="translate(${430-i*95} ${790+i*6}) scale(${.42-i*.03})">${arjuna(0,0,1,{mood:"happy"})}</g>`;
+     return svg(sky("#ffd9a8","#fff3dd")+hills("#a6c97e","#86b062")+`<path d="M0 820 Q600 760 1200 800 T1600 790" stroke="#e0c08a" stroke-width="60" fill="none" opacity=".7"/>`+f+arjuna(700,790,.85,{mood:"happy"})+krishna(1180,790,.85,{bless:true}));},
+   steps:[
+    {w:"K",t:"People watch what you do, Arjuna, more than they listen to what you say."},
+    {w:"K",t:V("Bhagavad Gita 3.21","यद्यदाचरति श्रेष्ठस्तत्तदेवेतरो जनः।<br>स यत्प्रमाणं कुरुते लोकस्तदनुवर्तते॥","Yad yad acharati shreshthas, tat tad evetaro janah. Sa yat pramanam kurute, lokas tad anuvartate.","Whatever a great person does, others follow. Whatever standard they set, the world follows it.")},
+    {act:"choice",w:"N",q:"Who learns from watching <em>you</em>?",opts:[["Children in my family","kids"],["My friends","friends"],["People at work","work"],["Everyone around me","all"]],
+     on:()=>[{w:"N",t:"They're watching, even when you don't notice. Your actions teach them more than any lecture."}]}
+  ]},
+  {art:()=>{const f=[.5,.9,1.4,2][Math.min(3,S.flame||0)];
+     return svg(sky("#3a2a4a","#7a4a5a")+`<rect y="700" width="1600" height="200" fill="#2a1d30"/>`+arjuna(1120,800,.9,{mood:(S.flame||0)>=3?"firm":"sad"})
+      +`<g transform="translate(560 700) scale(${f})"><path d="M0 -160 C70 -90 75 -20 0 0 C-75 -20 -70 -90 0 -160Z" fill="${(S.flame||0)>=3?"#e8552f":"#f4a81d"}"/><path d="M0 -90 C30 -55 30 -15 0 -6 C-30 -15 -30 -55 0 -90Z" fill="#ffe08a"/></g>`);},
+   steps:[
+    {w:"A",t:"Then what makes people do wrong, Krishna, even when they don't want to?"},
+    {w:"K",t:V("Bhagavad Gita 3.37","काम एष क्रोध एष रजोगुणसमुद्भवः।<br>महाशनो महापाप्मा विद्ध्येनमिह वैरिणम्॥","Kama esha krodha esha, rajo guna samudbhavah. Mahashano mahapapma, viddhy enam iha vairinam.","It is desire, and it turns into anger. It comes from restlessness, it is never satisfied, and it is the real enemy here.")},
+    {act:"chain",w:"N",q:"Watch how it grows. Tap each step.",chain:["“I want it so badly…”","“I didn't get it.”","“Gussa!”"],
+     on:()=>[{w:"N",t:"A small wish became a fire. Krishna's advice: notice desire early, while the flame is still small."}]}
+  ]},
+  {art:()=>day("firm"),steps:[
+    {w:"K",t:"So do your work, Arjuna. Do it well, do it for the good of others, and don't be a slave to the result."},
+    {act:"write",w:"K",q:"What's one good thing you'll do this week that someone could learn from?",ph:"e.g. Stay patient with my team, or help Mum without being asked",
+     ref:"Bhagavad Gita 3.21",rom:"Yad yad acharati shreshthas, tat tad evetaro janah",card:v=>`This week I'll set an example: <strong>${v}</strong>`,
+     on:()=>[{w:"N",t:"That's Karma Yoga. <em>Kaam karo, achha karo, sabke liye karo.</em>"}]}
+  ]}];})(),
+
+ /* ===== Chapter 4: Knowledge and action ===== */
+ 4:(()=>{
+  const day=(mA,top)=>svg(sky("#9fd4f0","#eef8fd",top||`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#7cc576","#5aa85a")+krishna(1060,780,.95,{bless:true})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  return [
+  {title:"Gyaan aur Karma",sub:"Chapter 4 · Knowledge and action",art:()=>day("happy"),steps:[
+    {w:"N",t:"Now Krishna tells Arjuna that this wisdom is very, very old."}]},
+  {art:()=>day("sad",`<circle cx="800" cy="200" r="130" fill="#ffd36b"/><g stroke="#ffd36b" stroke-width="10" stroke-linecap="round">${[0,45,90,135,180,225,270,315].map(a=>`<line x1="${800+160*Math.cos(a*Math.PI/180)}" y1="${200+160*Math.sin(a*Math.PI/180)}" x2="${800+200*Math.cos(a*Math.PI/180)}" y2="${200+200*Math.sin(a*Math.PI/180)}"/>`).join("")}</g>`),
+   steps:[
+    {w:"K",t:"Long ago, I taught this same yoga to Vivasvan, the sun god. He taught it to Manu, and Manu to King Ikshvaku. Over time, it was lost."},
+    {w:"A",t:"But Krishna, you were born only recently, and the sun god lived long ago. How could you have taught him?"},
+    {w:"K",t:"Arjuna, you and I have both been born many times. I remember all of those lives. You don't."}
+  ]},
+  {art:()=>S.light
+     ? svg(sky("#ffcf8a","#fff3dd",`<circle cx="800" cy="560" r="260" fill="#fff1c1"/>`)+hills("#9cc98a","#7fb36f")+krishna(800,800,1.05,{bless:true,glow:true}))
+     : svg(sky("#141026","#2a2448",`<g fill="#fff" opacity=".6"><circle cx="200" cy="120" r="3"/><circle cx="1250" cy="140" r="3"/><circle cx="980" cy="60" r="2"/></g>`)+`<rect y="660" width="1600" height="240" fill="#1a1530"/>`),
+   steps:[
+    {w:"K",t:"And whenever goodness fades in the world, I come back."},
+    {w:"K",t:V("Bhagavad Gita 4.7–8","यदा यदा हि धर्मस्य ग्लानिर्भवति भारत।<br>अभ्युत्थानमधर्मस्य तदात्मानं सृजाम्यहम्॥<br>परित्राणाय साधूनां विनाशाय च दुष्कृताम्।<br>धर्मसंस्थापनार्थाय सम्भवामि युगे युगे॥","Yada yada hi dharmasya, glanir bhavati bharata. Abhyutthanam adharmasya, tadatmanam srijamy aham. Paritranaya sadhunam, vinashaya cha dushkritam. Dharma samsthapanarthaya, sambhavami yuge yuge.","Whenever goodness declines and wrongdoing rises, I appear. To protect the good, to end wrongdoing and to restore what is right, I come, age after age.")},
+    {act:"dawn",w:"N",q:"The world on screen has gone dark. Bring back the light.",
+     on:()=>[{w:"N",t:"When things feel dark, this verse reminds people that darkness never has the last word."}]}
+  ]},
+  {art:()=>day("happy"),steps:[
+    {w:"K",t:"How do you find this knowledge, Arjuna? Learn it from people who have seen the truth."},
+    {w:"K",t:V("Bhagavad Gita 4.34","तद्विद्धि प्रणिपातेन परिप्रश्नेन सेवया।<br>उपदेक्ष्यन्ति ते ज्ञानं ज्ञानिनस्तत्त्वदर्शिनः॥","Tad viddhi pranipatena, pariprashnena sevaya. Upadekshyanti te jnanam, jnaninas tattva darshinah.","Learn it by approaching the wise with humility, honest questions and service. Those who have seen the truth will teach you.")},
+    {act:"choice",w:"N",q:"Who could <em>you</em> learn from?",opts:[["A teacher or elder","elder"],["A book or scripture","book"],["A friend who's been through it","friend"],["Someone at work","work"]],
+     on:()=>[{w:"N",t:"Krishna's three keys for learning from them: be humble, ask honest questions, and help out."}]}
+  ]},
+  {art:()=>{const tangle=`<g fill="none" stroke="#6d5f80" stroke-width="7" stroke-linecap="round" opacity="${S.cut?.25:1}"><path d="M330 300 C420 180 540 420 620 300 S760 180 700 330 S520 470 450 360 S600 220 680 260"/><path d="M360 380 C470 260 560 470 640 380"/></g>`;
+     const blade=S.cut?`<g transform="translate(520 330) rotate(-35)"><rect x="-8" y="-230" width="16" height="320" rx="8" fill="#e8f1f8" stroke="#9fb3c8" stroke-width="3"/><rect x="-40" y="90" width="80" height="16" rx="6" fill="#f4c430"/><rect x="-9" y="106" width="18" height="60" rx="6" fill="#8b4a1c"/></g>`:"";
+     const word=S.doubt?`<text x="520" y="540" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="700" font-size="44" fill="#2b2140" opacity="${S.cut?.3:1}">${esc(S.doubt).slice(0,32)}</text>`:"";
+     return svg(sky("#e6dcf0","#fbf7fd")+hills("#b6c9a6","#9cb58a")+tangle+word+blade+arjuna(1060,790,.9,{mood:S.cut?"firm":"sad",bow:!!S.cut}));},
+   steps:[
+    {w:"K",t:"Arjuna, the real problem now is doubt. A doubting mind finds no peace, here or anywhere."},
+    {act:"cut",w:"N",q:"Type one doubt that holds you back.",ph:"e.g. I'm not good enough for this job",
+     on:()=>[{w:"K",t:V("Bhagavad Gita 4.42","तस्मादज्ञानसम्भूतं हृत्स्थं ज्ञानासिनात्मनः।<br>छित्त्वैनं संशयं योगमातिष्ठोत्तिष्ठ भारत॥","Tasmad ajnana sambhutam, hrit stham jnanasinatmanah. Chhittvainam samshayam yogam, atishthottishtha bharata.","So with the sword of knowledge, cut through this doubt in your heart that comes from not knowing. Take up yoga, and stand up, Arjuna!")},
+      {w:"N",t:"Knowledge doesn't answer every question. It lets you stand up and act anyway."}]}
+  ]},
+  {art:()=>day("firm"),steps:[
+    {act:"write",w:"K",q:"What's one thing you'll learn this week to cut through a doubt?",ph:"e.g. One AWS topic, or how to cook one new dish",
+     ref:"Bhagavad Gita 4.38 · Nothing in this world purifies like knowledge",rom:"Na hi jnanena sadrisham pavitram iha vidyate",card:v=>`To cut my doubt, this week I'll learn: <strong>${v}</strong>`,
+     on:()=>[{w:"N",t:"<em>Gyaan se darr kam hota hai.</em> Knowledge makes fear smaller."}]}
+  ]}];})(),
+
+ /* ===== Chapter 6: Meditation ===== */
+ 6:(()=>{
+  const day=(mA)=>svg(sky("#bfe3f2","#eef8fd")+hills("#9cc98a","#7fb36f")+krishna(1060,780,.95,{bless:true})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const night=(inner)=>svg(sky("#1d1b3a","#4a3a6a",`<g fill="#fff" opacity=".7"><circle cx="200" cy="120" r="3"/><circle cx="420" cy="80" r="2"/><circle cx="1250" cy="140" r="3"/><circle cx="1450" cy="90" r="2"/></g>`)+`<rect y="700" width="1600" height="200" fill="#2a2246"/>`+inner);
+  return [
+  {title:"Dhyana Yoga",sub:"Chapter 6 · Meditation and the mind",art:()=>day("happy"),steps:[
+    {w:"N",t:"Arjuna has learnt how to act well. Now Krishna teaches him how to steady his mind."}]},
+  {art:()=>day(S.friend===false?"sad":"happy"),steps:[
+    {w:"K",t:"It starts with how you treat yourself."},
+    {w:"K",t:V("Bhagavad Gita 6.5","उद्धरेदात्मनात्मानं नात्मानमवसादयेत्।<br>आत्मैव ह्यात्मनो बन्धुरात्मैव रिपुरात्मनः॥","Uddhared atmanatmanam, natmanam avasadayet. Atmaiva hyatmano bandhur, atmaiva ripur atmanah.","Lift yourself up by your own mind; do not pull yourself down. Your mind can be your best friend, or your worst enemy.")},
+    {act:"choice",w:"N",q:"You've made a mistake. Which voice is a friend?",opts:[["“I always mess everything up.”","enemy"],["“I made a mistake, and I can learn from it.”","friend"]],
+     on:k=>{S.friend=k==="friend";return [{w:"N",t:k==="friend"?"Yes. That's the voice Krishna wants you to use with yourself.":"That voice pulls you down. Try the other one next time; it's still you talking."}];}}
+  ]},
+  {art:()=>{const b=S.breaths||0,wob=(3-b)*9;
+     return night(`<g stroke="#b9adc9" stroke-width="5" stroke-linecap="round" opacity="${(3-b)/3}"><path d="M200 520 q60 -20 120 0 t120 0"/><path d="M160 600 q60 -20 120 0 t120 0"/><path d="M240 440 q50 -16 100 0"/></g>`
+      +`<g transform="translate(620 720) scale(1.6)"><circle cy="-60" r="${70+b*15}" fill="#ffd36b" opacity=".25"/><path d="M-80 0 Q0 60 80 0 Z" fill="#d9622b"/><path d="M-80 0 Q0 25 80 0" stroke="#f4c430" stroke-width="5" fill="none"/><g transform="rotate(${wob})" style="transform-origin:0 0"><path d="M0 -80 C34 -40 28 0 0 4 C-28 0 -34 -40 0 -80Z" fill="#ffd36b"/><path d="M0 -50 C14 -30 12 -6 0 -2 C-12 -6 -14 -30 0 -50Z" fill="#fff6d6"/></g></g>`
+      +krishna(1150,800,.9,{glow:b>=3}));},
+   steps:[
+    {w:"K",t:"Find a quiet, clean place. Sit comfortably, not too high and not too low, with your back straight and your body still."},
+    {w:"K",t:V("Bhagavad Gita 6.19","यथा दीपो निवातस्थो नेङ्गते सोपमा स्मृता।<br>योगिनो यतचित्तस्य युञ्जतो योगमात्मनः॥","Yatha dipo nivata stho, nengate sopama smrita. Yogino yata chittasya, yunjato yogam atmanah.","Like a lamp in a place without wind, which does not flicker: that is how the steady mind of a meditator is described.")},
+    {act:"breath",w:"N",q:"The wind is making the lamp flicker. Hold the button and breathe in, let go and breathe out. Three times.",
+     on:()=>[{w:"N",t:"The lamp is still now. That is what a calm mind feels like."}]}
+  ]},
+  {art:()=>{const left=["Phone","Work","Dinner","That argument","Tomorrow"].filter(x=>!(S.popped||[]).includes(x));
+     const pos=[[260,260],[520,170],[360,420],[700,330],[180,520]];
+     return night(left.map(x=>{const i=["Phone","Work","Dinner","That argument","Tomorrow"].indexOf(x),p=pos[i];
+       return `<g transform="translate(${p[0]} ${p[1]})"><ellipse rx="${x.length*15+60}" ry="56" fill="#fff" opacity=".92"/><text y="14" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="700" font-size="40" fill="#4a3a6a">${x}</text></g>`;}).join("")
+       +`<g transform="translate(560 720)"><path d="M-80 0 Q0 60 80 0 Z" fill="#d9622b"/><path d="M0 -80 C34 -40 28 0 0 4 C-28 0 -34 -40 0 -80Z" fill="#ffd36b"/></g>`+krishna(1150,800,.9,{glow:left.length===0}));},
+   steps:[
+    {w:"K",t:"Your mind will wander, Arjuna. That's normal."},
+    {w:"K",t:V("Bhagavad Gita 6.26","यतो यतो निश्चरति मनश्चञ्चलमस्थिरम्।<br>ततस्ततो नियम्यैतदात्मन्येव वशं नयेत्॥","Yato yato nishcharati, manash chanchalam asthiram. Tatas tato niyamyaitad, atmany eva vasham nayet.","Wherever the restless, unsteady mind wanders off to, bring it back from there, and settle it within yourself.")},
+    {act:"pop",w:"N",q:"Thoughts are popping up. Tap each one to gently bring your mind back.",opts:["Phone","Work","Dinner","That argument","Tomorrow"],
+     on:()=>[{w:"N",t:"Every time you came back, <em>that</em> was meditation. Not the perfect stillness, but the coming back."}]}
+  ]},
+  {art:()=>day("sad"),steps:[
+    {w:"A",t:"Krishna, what about someone who tries, but whose mind slips and who fails? Are they lost, like a cloud torn apart?"},
+    {w:"K",t:V("Bhagavad Gita 6.40","पार्थ नैवेह नामुत्र विनाशस्तस्य विद्यते।<br>न हि कल्याणकृत्कश्चिद्दुर्गतिं तात गच्छति॥","Partha naiveha namutra, vinashas tasya vidyate. Na hi kalyana krit kashchid, durgatim tata gachchhati.","Arjuna, they are never lost, in this world or the next. No one who does good, my friend, ever comes to a bad end.")},
+    {w:"N",t:"No effort is wasted. Whatever good you begin stays with you."}
+  ]},
+  {art:()=>day("firm"),steps:[
+    {act:"write",w:"K",q:"When could you sit quietly for just 2 minutes each day?",ph:"e.g. Before breakfast, or after work",
+     ref:"Bhagavad Gita 6.26",rom:"Yato yato nishcharati manash chanchalam asthiram",card:v=>`Every day, <strong>${v}</strong>, I'll sit quietly for 2 minutes and bring my mind back.`,
+     on:()=>[{w:"N",t:"<em>Roz thoda abhyaas.</em> A little practice, every day."}]}
+  ]}];})(),
+
+};
+const scenes=ALL[CH];
+
+/* ---------- engine ---------- */
+const $=id=>document.getElementById(id);
+const stage=$("stage"), who=$("who"), say=$("say"), act=$("act"), nextB=$("next"), backB=$("back"), dots=$("dots"), tts=$("tts"), cardHost=$("cardHost");
+const synth=("speechSynthesis" in window)?window.speechSynthesis:null;
+const NAMES={K:"Krishna",A:"Arjuna",N:"Story"};
+let sc=0, queue=[], pos=-1, waiting=false;
+
+scenes.forEach(()=>dots.appendChild(document.createElement("span")));
+
+function draw(){
+  stage.innerHTML=scenes[sc].art()+(scenes[sc].title?`<div class="titlecard"><div class="t">${scenes[sc].title===true?"Arjuna ka Dukh,<br>Krishna ka Gyaan":scenes[sc].title}</div><div class="s">${scenes[sc].sub||"An interactive Bhagavad Gita story"}</div></div>`:"");
+  [...dots.children].forEach((d,i)=>{d.className=i<sc?"done":i===sc?"on":"";});
+  const b=document.getElementById("bowOnGround"); if(b) b.addEventListener("click",e=>{e.stopPropagation();liftBow();});
+}
+function speak(html){
+  if(!synth) return; try{synth.cancel();}catch(e){}
+  if(!tts.checked) return;
+  const t=html.replace(/<[^>]+>/g,""); try{const u=new SpeechSynthesisUtterance(t);u.rate=.95;const v=synth.getVoices().find(v=>/en-IN|hi-IN/i.test(v.lang));if(v)u.voice=v;synth.speak(u);}catch(e){}
+}
+function show(step){
+  const t=typeof step.t==="function"?step.t():(step.t||step.q);
+  who.textContent=NAMES[step.w]; who.className="who "+step.w;
+  say.innerHTML=t; speak(t);
+}
+function startScene(i){
+  sc=i; queue=scenes[i].steps.slice(); pos=-1; waiting=false; act.innerHTML="";
+  draw(); advance();
+}
+function advance(){
+  if(waiting) return;
+  if(pos>=queue.length-1){ if(sc<scenes.length-1) startScene(sc+1); else finish(); return; }
+  pos++; const st=queue[pos]; act.innerHTML="";
+  show(st);
+  if(st.act){ waiting=true; nextB.disabled=true; ACTS[st.act](st); }
+  else nextB.disabled=false;
+  backB.disabled=(sc===0&&pos===0);
+}
+function done(st,arg){
+  act.innerHTML=""; waiting=false; nextB.disabled=false;
+  const extra=st.on?st.on(arg):[];
+  queue.splice(pos+1,0,...extra);
+  draw(); advance();
+}
+function finish(){
+  nextB.disabled=true; act.innerHTML="";
+  const b=document.createElement("button"); b.textContent="Play again"; b.onclick=()=>storyOne(CH);
+  act.appendChild(b);
+  try{localStorage.setItem("gs-story-"+CH,"done");}catch(e){}
+  const c=document.createElement("button"); c.type="button"; c.className="ghost"; c.textContent="Back to chapters"; c.onclick=()=>chapters(); act.appendChild(c);
+}
+function btn(label,cls,fn){const b=document.createElement("button");b.type="button";b.className=cls||"opt";b.innerHTML=label;b.onclick=fn;act.appendChild(b);return b;}
+
+const ACTS={
+
+  still(st){const b=btn("Start","",()=>{b.disabled=true;let n=10;b.textContent="Do nothing… 10";const iv=setInterval(()=>{n--;if(n<=0){clearInterval(iv);b.remove();done(st);}else b.textContent="Do nothing… "+n;},1000);});},
+  chain(st){let i=0;const b=btn(st.chain[0],"opt",()=>{S.flame=(S.flame||0)+1;draw();i++;if(i>=st.chain.length){b.remove();setTimeout(()=>done(st),900);}else b.innerHTML=st.chain[i];});},
+  dawn(st){btn("Bring back the light","",function(){this.remove();S.light=true;draw();setTimeout(()=>done(st),1200);});},
+  cut(st){const wrap=document.createElement("div");wrap.className="field";wrap.innerHTML=`<input id="doubtIn" type="text" maxlength="40" placeholder="${st.ph}" aria-label="Your doubt"><button type="button" id="doubtGo">Put it into words</button>`;act.appendChild(wrap);
+    const go=()=>{const v=$("doubtIn").value.trim();if(!v){$("doubtIn").focus();return;}S.doubt=v;draw();act.innerHTML="";say.innerHTML="There it is, tangled up. Now cut through it.";
+      btn("Cut it with the sword of knowledge","",function(){this.remove();S.cut=true;draw();setTimeout(()=>done(st),1000);});};
+    $("doubtGo").onclick=go;$("doubtIn").addEventListener("keydown",e=>{if(e.key==="Enter"){e.stopPropagation();go();}});},
+  pop(st){S.popped=[];st.opts.forEach(o=>{btn(o+" · come back","opt",function(){this.remove();S.popped.push(o);draw();if(S.popped.length>=st.opts.length)setTimeout(()=>done(st),700);});});},
+  write(st){const wrap=document.createElement("div");wrap.className="field";wrap.innerHTML=`<input id="wIn" type="text" maxlength="90" placeholder="${st.ph}" aria-label="Your answer"><button type="button" id="wGo">Make my card</button>`;act.appendChild(wrap);
+    const go=()=>{const v=$("wIn").value.trim();if(!v){$("wIn").focus();return;}
+      cardHost.innerHTML=`<div class="blessing"><div class="v">${st.rom}</div><div class="m">${st.card(esc(v))}</div><div class="f">${st.ref}</div><div><button type="button" id="copyCard" class="opt">Copy my card</button></div></div>`;
+      $("copyCard").onclick=function(){const b=this;const txt=cardHost.querySelector(".m").innerText+"\n"+st.ref;try{navigator.clipboard.writeText(txt).then(()=>b.textContent="Copied",()=>b.textContent="Select the text above to copy");}catch(e){b.textContent="Select the text above to copy";}};
+      done(st);};
+    $("wGo").onclick=go;$("wIn").addEventListener("keydown",e=>{if(e.key==="Enter"){e.stopPropagation();go();}});},
+  choice(st){ st.opts.forEach(([label,key])=>btn(label,"opt",()=>{ if(st.q.includes("Arjuna feels")) done(st,key==="all"?"all":label.toLowerCase()); else done(st,key); })); },
+  breath(st){
+    const b=document.createElement("button"); b.type="button"; b.className="hold"; b.innerHTML="<i></i><span>Hold and breathe in</span>"; act.appendChild(b);
+    const fill=b.querySelector("i"), lab=b.querySelector("span"); let t0=0,raf=0,full=false;
+    const tick=()=>{const p=Math.min(1,(performance.now()-t0)/3000); fill.style.width=(p*100)+"%"; if(p>=1){full=true;lab.textContent="Now let go, breathe out";return;} raf=requestAnimationFrame(tick);};
+    const down=e=>{e.preventDefault(); full=false; t0=performance.now(); lab.textContent="Breathing in…"; raf=requestAnimationFrame(tick);};
+    const up=()=>{if(!t0) return; t0=0; cancelAnimationFrame(raf); fill.style.width="0";
+      if(full){ S.breaths++; draw(); if(S.breaths>=3){ setTimeout(()=>done(st),700); return;} lab.textContent=`Good. Again (${S.breaths} of 3)`; }
+      else lab.textContent=S.breaths?`Hold a little longer (${S.breaths} of 3)`:"Hold a little longer"; full=false; };
+    b.addEventListener("pointerdown",down); b.addEventListener("pointerup",up); b.addEventListener("pointerleave",up); b.addEventListener("pointercancel",up);
+    b.addEventListener("keydown",e=>{if((e.key===" "||e.key==="Enter")&&!e.repeat)down(e);}); b.addEventListener("keyup",e=>{if(e.key===" "||e.key==="Enter")up();});
+  },
+  farm(st){
+    const plant=btn("Plant a seed (0 of 3)","",()=>{
+      if(S.seeds>=3) return; S.seeds++; draw(); plant.innerHTML=`Plant a seed (${S.seeds} of 3)`;
+      if(S.seeds>=3){ plant.remove();
+        who.textContent="Story"; who.className="who N"; say.innerHTML="Well done. Now, can you make it rain?";
+        const r=btn("Make it rain","opt",()=>{ r.remove();
+          who.textContent="Krishna"; who.className="who K"; say.innerHTML="<em>Arey!</em> That is not in your hands. Just wait…"; speak(say.innerHTML);
+          setTimeout(()=>{S.rained=true; draw(); setTimeout(()=>done(st),1600);},1600); });
+      }
+    });
+  },
+  winds(st){
+    const send=(word,color,key)=>{
+      S[key]=true; const g=stage.querySelector("#words"); if(!g) return;
+      const y=key==="praise"?330:420;
+      g.insertAdjacentHTML("beforeend",`<text class="floatword" x="0" y="${y}" font-family="Baloo 2,sans-serif" font-weight="800" font-size="70" fill="${color}" stroke="#fff" stroke-width="3" paint-order="stroke">${word}</text>`);
+      if(S.praise&&S.crit) setTimeout(()=>done(st),2600);
+    };
+    btn("Send praise: <em>“Wah! Shabash!”</em>","opt",function(){this.disabled=true;send("Wah! Shabash!","#2f9e5a","praise");});
+    btn("Send criticism: <em>“Bekaar!”</em>","opt",function(){this.disabled=true;send("Bekaar!","#d9534f","crit");});
+  },
+  bow(st){ btn("Pick up the bow","",()=>liftBow()); ACTS._bowSt=st; },
+  duty(st){
+    const wrap=document.createElement("div"); wrap.className="field";
+    wrap.innerHTML=`<input id="dutyIn" type="text" maxlength="90" placeholder="e.g. Study for one hour, or call Dadi"><button type="button" id="dutyGo">Make my card</button>`;
+    act.appendChild(wrap);
+    const go=()=>{const v=$("dutyIn").value.trim(); if(!v){$("dutyIn").focus();return;} S.duty=v; makeCard(); done(st);};
+    $("dutyGo").onclick=go; $("dutyIn").addEventListener("keydown",e=>{if(e.key==="Enter"){e.stopPropagation();go();}});
+    setTimeout(()=>{try{$("dutyIn").focus();}catch(e){}},50);
+  }
+};
+function liftBow(){ if(S.bowUp||!ACTS._bowSt) return; S.bowUp=true; draw(); const st=ACTS._bowSt; ACTS._bowSt=null; setTimeout(()=>done(st),900); }
+function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function makeCard(){
+  cardHost.innerHTML=`<div class="blessing"><div class="v">Karmanye vadhikaraste, ma phaleshu kadachana</div>
+   <div class="m">Today, with my full heart, I will:<br><strong>${esc(S.duty)}</strong></div>
+   <div class="f">The effort is mine. The result is the rain. · Bhagavad Gita 2.47</div>
+   <div><button type="button" id="copyCard" class="opt">Copy my card</button></div></div>`;
+  $("copyCard").onclick=function(){const txt=`Karmanye vadhikaraste, ma phaleshu kadachana\nToday, with my full heart, I will: ${S.duty}\nThe effort is mine. The result is the rain. (Bhagavad Gita 2.47)`;
+    const b=this; const ok=()=>{b.textContent="Copied";};
+    try{navigator.clipboard.writeText(txt).then(ok,()=>{b.textContent="Select and copy the text above";});}catch(e){b.textContent="Select and copy the text above";}};
+}
+
+nextB.onclick=advance;
+backB.onclick=()=>{ if(pos<=0&&sc>0) startScene(sc-1); else startScene(sc); };
+stage.addEventListener("click",()=>{ if(!waiting) advance(); });
+if(window.__sk)document.removeEventListener("keydown",window.__sk);window.__sk=e=>{if(!document.getElementById("next"))return; if(e.target.tagName==="INPUT"||e.target.tagName==="BUTTON") return; if(e.key==="ArrowRight"||e.key===" "){e.preventDefault(); if(!waiting) advance();} };document.addEventListener("keydown",window.__sk);
+tts.onchange=()=>{ if(tts.checked) speak(say.innerHTML); else if(synth) try{synth.cancel();}catch(e){} };
+
+startScene(0);
+}
+
+mainHome();
+})();
+</script>
+</body>
+</html>
