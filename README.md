@@ -37,9 +37,11 @@ All 18 chapters are listed as levels. Progress is saved on the device.
 | 1–2 Arjuna ka Dukh, Krishna ka Gyaan | Playable | 2.47, 2.48 |
 | 3 Karma Yoga | Playable | 3.5, 3.21, 3.37 |
 | 4 Gyaan aur Karma | Playable | 4.7–8, 4.34, 4.42 |
-| 5 | Coming soon | |
+| 5 Karma Sanyasa Yoga | Playable | 5.2, 5.10, 5.18, 5.29 |
 | 6 Dhyana Yoga | Playable | 6.5, 6.19, 6.26, 6.40 |
-| 7–18 | Coming soon | |
+| 7 Gyaan aur Vigyaan | Playable | 7.7, 7.8, 7.16 |
+| 8 Akshara Brahma Yoga | Playable | 8.6, 8.7 |
+| 9–18 | Coming soon | |
 
 ## How to run it
 

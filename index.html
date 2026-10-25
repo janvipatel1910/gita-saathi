@@ -351,9 +351,9 @@ const CHAPTERS=[
  ["Daivasura Sampad Vibhaga Yoga","Divine and harmful qualities"],["Shraddhatraya Vibhaga Yoga","Three kinds of faith"],["Moksha Sanyasa Yoga","Freedom by letting go"]];
 const isDone=n=>{try{return localStorage.getItem("gs-story-"+n)==="done";}catch(e){return false;}};
 const storyDone=()=>isDone(1);
-const PLAYABLE=[1,3,4,6];
-const doneCount=()=>(isDone(1)?2:0)+[3,4,6].filter(isDone).length;
-const CHTITLE={1:"Chapters 1–2 · Arjuna ka Dukh, Krishna ka Gyaan",3:"Chapter 3 · Karma Yoga",4:"Chapter 4 · Gyaan aur Karma",6:"Chapter 6 · Dhyana Yoga"};
+const PLAYABLE=[1,3,4,5,6,7,8];
+const doneCount=()=>(isDone(1)?2:0)+PLAYABLE.filter(n=>n>1&&isDone(n)).length;
+const CHTITLE={1:"Chapters 1–2 · Arjuna ka Dukh, Krishna ka Gyaan",3:"Chapter 3 · Karma Yoga",4:"Chapter 4 · Gyaan aur Karma",5:"Chapter 5 · Karma Sanyasa Yoga",6:"Chapter 6 · Dhyana Yoga",7:"Chapter 7 · Gyaan aur Vigyaan",8:"Chapter 8 · Akshara Brahma Yoga"};
 const HOME_HELP=`<div class="help quiet">Gita Saathi shares the Gita's wisdom. It isn't a replacement for talking to someone. If things feel very heavy, call <strong>Samaritans 116 123</strong> (UK) or <strong>Tele-MANAS 14416</strong> (India).</div>`;
 function stopVoice(){try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}}
 function mainHome(msg){
@@ -685,6 +685,137 @@ const ALL={1:[
      on:()=>[{w:"N",t:"<em>Gyaan se darr kam hota hai.</em> Knowledge makes fear smaller."}]}
   ]}];})(),
 
+ /* ===== Chapter 5: Letting go while acting ===== */
+ 5:(()=>{
+  const day=(mA,bless)=>svg(sky("#bfe3f2","#eef8fd",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#9cc98a","#7fb36f")+krishna(1060,780,.95,{bless:bless!==false})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const person=(robe,book)=>`<path d="M-40 0 L-30 -150 H30 L40 0Z" fill="${robe}"/><circle cy="-190" r="34" fill="#c98a5e"/><path d="M-34 -196 Q-34 -232 0 -232 Q34 -232 34 -196 Q24 -214 0 -214 Q-24 -214 -34 -196Z" fill="#1c1c2e"/>${book?`<rect x="-28" y="-120" width="56" height="40" rx="4" fill="#8b4a1c"/><line x1="0" y1="-120" x2="0" y2="-80" stroke="#f6eedf" stroke-width="3"/>`:""}`;
+  const FIG={
+   "A learned priest":person("#f4a81d",true),
+   "A cow":`<g fill="#f4f0ea" stroke="#d8cfc2" stroke-width="3"><rect x="-90" y="-130" width="170" height="80" rx="36"/><rect x="-70" y="-60" width="16" height="60"/><rect x="-35" y="-60" width="16" height="60"/><rect x="25" y="-60" width="16" height="60"/><rect x="55" y="-60" width="16" height="60"/><ellipse cx="96" cy="-138" rx="32" ry="26"/></g><ellipse cx="-35" cy="-105" rx="24" ry="16" fill="#8b5a2b"/><ellipse cx="30" cy="-95" rx="16" ry="12" fill="#8b5a2b"/><path d="M80 -160 l-10 -22 M112 -160 l10 -22" stroke="#b5651d" stroke-width="6" stroke-linecap="round"/><circle cx="104" cy="-140" r="4" fill="#2b2140"/>`,
+   "An elephant":`<g fill="#8f97a3"><ellipse cy="-115" rx="110" ry="75"/><rect x="-80" y="-60" width="34" height="60" rx="8"/><rect x="40" y="-60" width="34" height="60" rx="8"/><circle cx="100" cy="-150" r="56"/></g><ellipse cx="78" cy="-146" rx="30" ry="46" fill="#7a838f"/><path d="M140 -128 Q172 -70 150 -20" stroke="#8f97a3" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="118" cy="-160" r="5" fill="#2b2140"/>`,
+   "A dog":`<g fill="#a0673a"><ellipse cy="-62" rx="56" ry="28"/><rect x="-42" y="-40" width="12" height="40"/><rect x="28" y="-40" width="12" height="40"/><circle cx="58" cy="-90" r="26"/></g><ellipse cx="50" cy="-98" rx="10" ry="20" fill="#7a4a24"/><path d="M-54 -70 q-30 -20 -24 -44" stroke="#a0673a" stroke-width="10" fill="none" stroke-linecap="round"/><circle cx="66" cy="-94" r="4" fill="#2b2140"/>`,
+   "Someone others ignore":person("#8a8f99",false)};
+  const names=Object.keys(FIG), xs=[150,400,660,910,1130];
+  return [
+  {title:"Karma Sanyasa Yoga",sub:"Chapter 5 · Letting go while acting",art:()=>day("happy"),steps:[
+    {w:"N",t:"Arjuna has heard about giving up action, and about doing action. Now he's mixed up."}]},
+  {art:()=>day("sad"),steps:[
+    {w:"A",t:"Krishna, first you praise giving things up, then you praise doing your work. Tell me clearly. Which one is better?"},
+    {w:"K",t:V("Bhagavad Gita 5.2","संन्यासः कर्मयोगश्च निःश्रेयसकरावुभौ।<br>तयोस्तु कर्मसंन्यासात्कर्मयोगो विशिष्यते॥","Sannyasah karma yogash cha, nihshreyasa karav ubhau. Tayos tu karma sannyasat, karma yogo vishishyate.","Giving up action and the yoga of action both lead to the highest good. But of the two, the yoga of action is better than giving up action.")},
+    {w:"N",t:"In other words, you don't need to run away from your life. Stay in it, and change how you hold it."}
+  ]},
+  {art:()=>{const n=S.drops||0;let beads="";for(let i=0;i<n;i++)beads+=`<g class="grow"><ellipse cx="${330+i*90}" cy="${770+i*12}" rx="${40+i*10}" ry="10" fill="none" stroke="#e6f6fc" stroke-width="3"/><circle cx="${330+i*90}" cy="${760+i*12}" r="9" fill="#e6f6fc"/></g>`;
+     return svg(sky("#bfe3f2","#eef8fd")+`<rect y="580" width="1600" height="320" fill="#5e9cc4"/>`+beads
+      +`<g transform="translate(640 640)"><ellipse rx="260" ry="70" fill="#3e8a4a"/><g stroke="#2f6e39" stroke-width="5">${[-60,-30,0,30,60].map(a=>`<line x1="0" y1="0" x2="${240*Math.cos(a*Math.PI/180)}" y2="${-62*Math.sin(a*Math.PI/180)+20}"/>`).join("")}<line x1="0" y1="0" x2="-240" y2="0"/></g>${n?`<circle cx="150" cy="-30" r="14" fill="#e6f6fc" class="pulse"/>`:""}</g>`
+      +`<g transform="translate(1010 650)" fill="#f28cb1"><path d="M0 -110 C40 -60 34 -10 0 0 C-34 -10 -40 -60 0 -110Z"/><path d="M-10 0 C-90 -10 -110 -60 -90 -70 C-50 -60 -20 -30 -10 0Z" opacity=".9"/><path d="M10 0 C90 -10 110 -60 90 -70 C50 -60 20 -30 10 0Z" opacity=".9"/></g>`
+      +krishna(1330,840,.85,{bless:true}));},
+   steps:[
+    {w:"K",t:"Look at the lotus leaf, Arjuna. It lives in water all its life."},
+    {act:"tapcount",key:"drops",n:3,w:"N",q:"Pour some water on the leaf and watch what happens.",label:i=>`Pour water (${i} of 3)`,
+     on:()=>[{w:"N",t:"Every drop rolled straight off. The leaf sits in the water, but the water doesn't stick to it."},
+      {w:"K",t:V("Bhagavad Gita 5.10","ब्रह्मण्याधाय कर्माणि सङ्गं त्यक्त्वा करोति यः।<br>लिप्यते न स पापेन पद्मपत्रमिवाम्भसा॥","Brahmany adhaya karmani, sangam tyaktva karoti yah. Lipyate na sa papena, padma patram ivambhasa.","Whoever acts while offering their work to the divine and letting go of attachment is not stained by wrong, just as a lotus leaf is not wet by water.")},
+      {w:"N",t:"Do your work fully. Let praise, blame and worry roll off like water. <em>Kamal ke patte jaisa bano.</em>"}]}
+  ]},
+  {art:()=>{const seen=S.seen||[];
+     return svg(sky("#ffe2b8","#fff6e6")+hills("#b6d39a","#9cc07f")
+      +names.map((nm,i)=>`<g transform="translate(${xs[i]} 790) scale(.82)">${FIG[nm]}</g>`+(seen.includes(nm)?`<g transform="translate(${xs[i]} 548)" class="grow"><circle r="46" fill="#ffd36b" opacity=".35" class="pulse"/><path d="M0 -40 C18 -18 14 2 0 4 C-14 2 -18 -18 0 -40Z" fill="#f4a81d"/><path d="M0 -24 C7 -14 6 -2 0 0 C-6 -2 -7 -14 0 -24Z" fill="#fff1c9"/></g>`:"")).join("")
+      +krishna(1430,860,.72,{bless:true,glow:seen.length>=names.length}));},
+   steps:[
+    {w:"K",t:"And a wise person sees the world differently."},
+    {act:"collect",key:"seen",opts:names,w:"N",q:"Look at each one with Krishna's eyes. Tap them all.",
+     on:()=>[{w:"N",t:"The same light shone in every one of them."},
+      {w:"K",t:V("Bhagavad Gita 5.18","विद्याविनयसम्पन्ने ब्राह्मणे गवि हस्तिनि।<br>शुनि चैव श्वपाके च पण्डिताः समदर्शिनः॥","Vidya vinaya sampanne, brahmane gavi hastini. Shuni chaiva shvapake cha, panditah sama darshinah.","The wise see with an equal eye a learned and humble priest, a cow, an elephant, a dog, and a person society treats as an outcast.")},
+      {w:"N",t:"<em>Sab mein wahi roshni hai.</em> Status, money and looks are on the outside. The light inside is the same."}]}
+  ]},
+  {art:()=>day("firm"),steps:[
+    {w:"K",t:V("Bhagavad Gita 5.29","भोक्तारं यज्ञतपसां सर्वलोकमहेश्वरम्।<br>सुहृदं सर्वभूतानां ज्ञात्वा मां शान्तिमृच्छति॥","Bhoktaram yajna tapasam, sarva loka maheshvaram. Suhridam sarva bhutanam, jnatva mam shantim richchhati.","Knowing Me as the one who receives all offerings and efforts, the great Lord of all the worlds, and the friend of all beings, a person finds peace.")},
+    {w:"N",t:"<em>Suhridam sarva bhutanam</em>: the friend of all beings. That includes you."},
+    {act:"write",w:"K",q:"Who is one person you'll try to see with an equal eye this week?",ph:"e.g. the cleaner at work, or a difficult neighbour",
+     ref:"Bhagavad Gita 5.18",rom:"Panditah sama darshinah",card:v=>`This week I'll see the same light in: <strong>${v}</strong>`,
+     on:()=>[{w:"N",t:"<em>Kaam bhi karo, aur dil bhi saaf rakho.</em> Do your work, and keep your heart clear."}]}
+  ]}];})(),
+
+ /* ===== Chapter 7: Knowing the divine ===== */
+ 7:(()=>{
+  const day=(mA,glow)=>svg(sky("#f9d9a8","#fff3dd",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#a6c97e","#86b062")+krishna(1060,780,.95,{bless:true,glow:!!glow})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  return [
+  {title:"Gyaan aur Vigyaan",sub:"Chapter 7 · Knowing the divine",art:()=>day("happy"),steps:[
+    {w:"K",t:"Arjuna, now I'll tell you how to know Me fully. Not just with knowledge, but through experience."}]},
+  {art:()=>{const n=S.pearls||0,pts=[];
+     for(let i=0;i<7;i++){const t=(i+1)/8,x=(1-t)*(1-t)*200+2*(1-t)*t*800+t*t*1400,y=(1-t)*(1-t)*300+2*(1-t)*t*560+t*t*300;pts.push([x,y]);}
+     return svg(sky("#3a2a5a","#7a5a8a",`<g fill="#fff" opacity=".6"><circle cx="200" cy="100" r="3"/><circle cx="1450" cy="90" r="2"/><circle cx="1000" cy="70" r="2"/></g>`)+`<rect y="760" width="1600" height="140" fill="#2a1d3d"/>`
+      +`<path d="M200 300 Q800 820 1400 300" stroke="#f4c430" stroke-width="5" fill="none"/>`
+      +pts.slice(0,n).map(([x,y])=>`<g class="grow"><circle cx="${x}" cy="${y}" r="36" fill="#fdf8f0"/><circle cx="${x-11}" cy="${y-12}" r="9" fill="#fff" opacity=".9"/><circle cx="${x}" cy="${y}" r="36" fill="none" stroke="#e6dccf" stroke-width="3"/></g>`).join("")
+      +krishna(800,900,.62,{bless:true,glow:n>=7}));},
+   steps:[
+    {w:"K",t:"Everything in this world is connected to Me."},
+    {act:"tapcount",key:"pearls",n:7,w:"N",q:"Make a mala. Add seven pearls to the golden thread.",label:i=>`Add a pearl (${i} of 7)`,
+     on:()=>[{w:"K",t:V("Bhagavad Gita 7.7","मत्तः परतरं नान्यत्किञ्चिदस्ति धनञ्जय।<br>मयि सर्वमिदं प्रोतं सूत्रे मणिगणा इव॥","Mattah parataram nanyat, kinchid asti dhananjaya. Mayi sarvam idam protam, sutre mani gana iva.","There is nothing higher than Me, Arjuna. Everything is strung on Me, like pearls on a thread.")},
+      {w:"N",t:"The pearls all look separate, but one thread holds them together. We do too."}]}
+  ]},
+  {art:()=>{const f=S.found||[],ring=(x,y,r,k,up)=>f.includes(k)?`<g class="grow"><circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="#f4c430" stroke-width="8" class="pulse"/><text x="${x}" y="${up?y-r-22:y+r+46}" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="700" font-size="40" fill="#2b2140">Main hoon</text></g>`:"";
+     return svg(sky("#2f3f6a","#f2b37a")+hills("#8aa86f","#6f9258")
+      +`<circle cx="250" cy="190" r="70" fill="#f6f1e1"/><circle cx="280" cy="170" r="62" fill="#3d4a73"/>`+ring(250,190,105,"Light of the moon")
+      +`<circle cx="1360" cy="200" r="80" fill="#ffd36b"/>`+ring(1360,200,115,"Light of the sun")
+      +`<ellipse cx="650" cy="780" rx="190" ry="50" fill="#5e9cc4"/><ellipse cx="610" cy="770" rx="60" ry="10" fill="#bfe3f2"/>`+ring(650,750,120,"Taste of water",true)
+      +arjuna(1100,800,.6,{bow:true,mood:"firm"})+ring(1120,640,140,"Strength in people",true));},
+   steps:[
+    {w:"A",t:"But Krishna, where can I find You in everyday life?"},
+    {act:"collect",key:"found",opts:["Taste of water","Light of the moon","Light of the sun","Strength in people"],w:"N",q:"Krishna is hiding in four places. Tap each one to find Him.",wait:1400,
+     on:()=>[{w:"K",t:V("Bhagavad Gita 7.8","रसोऽहमप्सु कौन्तेय प्रभास्मि शशिसूर्ययोः।<br>प्रणवः सर्ववेदेषु शब्दः खे पौरुषं नृषु॥","Raso 'ham apsu kaunteya, prabhasmi shashi suryayoh. Pranavah sarva vedeshu, shabdah khe paurusham nrishu.","I am the taste in water, Arjuna, and the light of the moon and the sun. I am Om in all the Vedas, the sound in space, and the strength in people.")},
+      {w:"N",t:"So the next time you drink a cool glass of water or see the moon, <em>Krishna wahin hain.</em>"}]}
+  ]},
+  {art:()=>day("happy",true),steps:[
+    {w:"K",t:"Different people come to Me for different reasons, Arjuna."},
+    {w:"K",t:V("Bhagavad Gita 7.16","चतुर्विधा भजन्ते मां जनाः सुकृतिनोऽर्जुन।<br>आर्तो जिज्ञासुरर्थार्थी ज्ञानी च भरतर्षभ॥","Chatur vidha bhajante mam, janah sukritino 'rjuna. Arto jijnasur artharthi, jnani cha bharatarshabha.","Four kinds of good people turn to Me, Arjuna: the one in distress, the one who is curious, the one who wants something, and the one who is wise.")},
+    {act:"choice",w:"N",q:"Be honest. What brings <em>you</em> here today?",opts:[["I'm going through something hard","arto"],["I'm curious to learn","jijnasu"],["I'm hoping for something","artharthi"],["I want to understand life","jnani"]],
+     on:()=>[{w:"K",t:"<em>Swagat hai.</em> Every one of these four is welcome. I don't turn anyone away."}]}
+  ]},
+  {art:()=>day("firm",true),steps:[
+    {act:"write",w:"K",q:"Where did you notice something good, beautiful or strong today?",ph:"e.g. my mum's cooking, the sunrise, a kind stranger",
+     ref:"Bhagavad Gita 7.8",rom:"Raso 'ham apsu kaunteya, prabhasmi shashi suryayoh",card:v=>`Today I saw Krishna's light in: <strong>${v}</strong>`,
+     on:()=>[{w:"N",t:"<em>Dhoondho, toh har jagah milenge.</em> Look for Him, and you'll find Him everywhere."}]}
+  ]}];})(),
+
+ /* ===== Chapter 8: What we remember ===== */
+ 8:(()=>{
+  const day=(mA)=>svg(sky("#c9e4f5","#f2f9fd",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#9cc98a","#7fb36f")+krishna(1060,780,.95,{bless:true})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const SEEDS={gratitude:"Gratitude",kindness:"Kindness",naam:"Krishna's name",worry:"Worry"};
+  return [
+  {title:"Akshara Brahma Yoga",sub:"Chapter 8 · What we remember",art:()=>svg(sky("#c9e4f5","#f2f9fd")+hills("#9cc98a","#7fb36f")+krishna(1060,780,.95,{bless:true})+arjuna(620,780,.95,{mood:"sad"})
+      +[[470,330],[560,250],[680,220],[800,260],[860,350],[420,420],[760,420]].map(([x,y],i)=>`<text x="${x}" y="${y}" font-family="Baloo 2,sans-serif" font-weight="800" font-size="${60+i*4}" fill="#d9534f" class="bob" style="animation-delay:${i*.3}s">?</text>`).join("")),
+   steps:[
+    {w:"N",t:"Arjuna has so many questions now. He asks Krishna seven of them, all in one breath."},
+    {w:"A",t:"What is the eternal? What is the self? What is karma? … And Krishna, how can a person remember You at the very end of life?"},
+    {w:"K",t:"That last question is the most important one, Arjuna. Listen."}]},
+  {art:()=>svg(sky("#1d1b3a","#4a3a6a",`<g fill="#fff" opacity=".7"><circle cx="200" cy="120" r="3"/><circle cx="420" cy="80" r="2"/><circle cx="1250" cy="140" r="3"/><circle cx="1450" cy="90" r="2"/></g>`)+`<rect y="700" width="1600" height="200" fill="#2a2246"/>`
+      +`<g transform="translate(560 720) scale(1.4)"><circle cy="-60" r="80" fill="#ffd36b" opacity=".25" class="pulse"/><path d="M-80 0 Q0 60 80 0 Z" fill="#d9622b"/><path d="M0 -80 C34 -40 28 0 0 4 C-28 0 -34 -40 0 -80Z" fill="#ffd36b" class="flick"/></g>`+krishna(1100,800,.9,{glow:true,bless:true})),
+   steps:[
+    {w:"K",t:V("Bhagavad Gita 8.6","यं यं वापि स्मरन्भावं त्यजत्यन्ते कलेवरम्।<br>तं तमेवैति कौन्तेय सदा तद्भावभावितः॥","Yam yam vapi smaran bhavam, tyajaty ante kalevaram. Tam tam evaiti kaunteya, sada tad bhava bhavitah.","Whatever a person remembers at the very end of life, that is where they go, Arjuna, because that is what they always thought about.")},
+    {w:"N",t:"So the real practice isn't one special moment. It's every ordinary day. What we think about again and again slowly becomes who we are."}
+  ]},
+  {art:()=>{const w=S.water||0,bad=S.seed==="worry",h=w*36;
+     const plant=w===0?"":bad
+       ?`<g class="grow"><path d="M0 0 V${-h}" stroke="#6d6a62" stroke-width="10"/>${Array.from({length:w},(_,i)=>`<path d="M0 ${-30-i*34} l${i%2?34:-34} -18" stroke="#6d6a62" stroke-width="6"/><path d="M${i%2?34:-34} ${-48-i*34} l${i%2?8:-8} -10" stroke="#6d6a62" stroke-width="4"/>`).join("")}</g>`
+       :`<g class="grow"><path d="M0 0 V${-h}" stroke="#3e7d3a" stroke-width="10"/>${Array.from({length:w},(_,i)=>`<ellipse cx="${i%2?30:-30}" cy="${-30-i*34}" rx="30" ry="13" fill="#4f9a48"/>`).join("")}${w>=5?`<g transform="translate(0 ${-h-20})"><circle r="40" fill="#f28cb1"/><circle r="16" fill="#f4c430"/></g>`:""}</g>`;
+     return svg(sky("#c9e4f5","#f2f9fd",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#9cc98a","#7fb36f")
+      +`<g transform="translate(640 760)">${plant}<path d="M-110 0 L-85 120 H85 L110 0Z" fill="#c0622f"/><rect x="-120" y="-14" width="240" height="26" rx="8" fill="#d9773f"/>${S.seed?`<text y="80" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="700" font-size="34" fill="#fff6e6">${SEEDS[S.seed]}</text>`:""}</g>`
+      +krishna(1150,800,.9,{bless:true}));},
+   steps:[
+    {act:"choice",w:"N",q:"Think of your mind as a garden. Which seed will you water every day?",opts:[["Gratitude","gratitude"],["Kindness","kindness"],["Krishna's name","naam"],["Worry","worry"]],
+     on:k=>{S.seed=k;return [{w:"N",t:k==="worry"?"Interesting choice. Let's see what grows.":"Lovely choice. Let's see what grows."}];}},
+    {act:"tapcount",key:"water",n:5,w:"N",q:"Water it every day for five days.",label:i=>`Water it (day ${i+1} of 5)`,
+     on:()=>[{w:"N",t:()=>S.seed==="worry"?"Worry grew too, all thorns and no flowers. Whatever we water, grows. Next time, try a different seed.":"Five days of watering, and look: a flower. Whatever we water, grows."}]}
+  ]},
+  {art:()=>svg(sky("#ffcf8a","#fff3dd",`<circle cx="800" cy="380" r="140" fill="#fff1c1"/>`)+hills("#9bb08f","#7c9a6c")+krishna(1080,800,.95,{bless:true})+arjuna(600,800,.95,{bow:true,mood:"firm"})),
+   steps:[
+    {w:"K",t:V("Bhagavad Gita 8.7","तस्मात्सर्वेषु कालेषु मामनुस्मर युध्य च।<br>मय्यर्पितमनोबुद्धिर्मामेवैष्यस्यसंशयः॥","Tasmat sarveshu kaleshu, mam anusmara yudhya cha. Mayy arpita mano buddhir, mam evaishyasy asamshayah.","So at all times, remember Me, and fight. With your mind and understanding given to Me, you will surely come to Me.")},
+    {w:"N",t:"Notice the words <em>“anusmara yudhya cha”</em>: remember Me, <em>and</em> fight. Krishna doesn't ask Arjuna to leave his work to remember God. He asks him to do both together."},
+    {act:"write",w:"K",q:"What's one good thought you'll come back to every day?",ph:"e.g. I am doing my best, and that is enough",
+     ref:"Bhagavad Gita 8.7",rom:"Mam anusmara yudhya cha",card:v=>`Every day I'll water this thought: <strong>${v}</strong>`,
+     on:()=>[{w:"N",t:"<em>Jo roz sochoge, wahi banoge.</em> What you think every day, you become."}]}
+  ]}];})(),
+
  /* ===== Chapter 6: Meditation ===== */
  6:(()=>{
   const day=(mA)=>svg(sky("#bfe3f2","#eef8fd")+hills("#9cc98a","#7fb36f")+krishna(1060,780,.95,{bless:true})+arjuna(620,780,.95,{mood:mA||"happy"}));
@@ -786,6 +917,9 @@ function finish(){
 function btn(label,cls,fn){const b=document.createElement("button");b.type="button";b.className=cls||"opt";b.innerHTML=label;b.onclick=fn;act.appendChild(b);return b;}
 
 const ACTS={
+
+  tapcount(st){S[st.key]=0;const b=btn(st.label(0),"",()=>{S[st.key]++;draw();if(S[st.key]>=st.n){b.remove();setTimeout(()=>done(st),st.wait||900);}else b.innerHTML=st.label(S[st.key]);});},
+  collect(st){S[st.key]=[];st.opts.forEach(o=>btn(o,"opt",function(){this.remove();S[st.key].push(o);draw();if(S[st.key].length>=st.opts.length)setTimeout(()=>done(st),st.wait||900);}));},
 
   still(st){const b=btn("Start","",()=>{b.disabled=true;let n=10;b.textContent="Do nothing… 10";const iv=setInterval(()=>{n--;if(n<=0){clearInterval(iv);b.remove();done(st);}else b.textContent="Do nothing… "+n;},1000);});},
   chain(st){let i=0;const b=btn(st.chain[0],"opt",()=>{S.flame=(S.flame||0)+1;draw();i++;if(i>=st.chain.length){b.remove();setTimeout(()=>done(st),900);}else b.innerHTML=st.chain[i];});},
