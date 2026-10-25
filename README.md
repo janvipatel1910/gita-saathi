@@ -54,11 +54,30 @@ All 18 chapters are playable as levels. Progress is saved on the device.
 
 \* Chapter 13 is numbered one lower in some editions, so the app shows both numbers.
 
+## Languages
+
+Choose **English**, **हिन्दी (Hindi)** or **ગુજરાતી (Gujarati)** from the top of the home page. The choice is remembered on the device.
+
+- In Hindi, the Sanskrit verses are shown in Devanagari. In Gujarati, they are shown in Gujarati script.
+- Translations live in their own files, so they can be checked or corrected without touching the app code:
+  - `lang/hi.js` for Hindi
+  - `lang/gu.js` for Gujarati
+- Each line is `"English text": "translation"`. To fix a translation, change only the text on the right.
+
+| Part of the app | Hindi | Gujarati |
+|---|---|---|
+| Home page, menus, chapter list | Done | Done |
+| Mann ghabraya hai? (all 9 feelings) | Done | Done |
+| Verse meanings in the chapters | Done | Done |
+| Chapter stories | In progress (shown in English until done) | In progress (shown in English until done) |
+
+The translations still need checking by native speakers before the app is shared widely.
+
 ## How to run it
 
-The whole app is a single file, `index.html`, with no build step and no server needed.
+The app is `index.html` plus two language files in `lang/`, with no build step and no server needed.
 
-- **On your computer:** download `index.html` and open it in any browser.
+- **On your computer:** download the repository (Code → Download ZIP), unzip it, and open `index.html` in any browser.
 - **Online:** turn on GitHub Pages for this repository (Settings → Pages → Deploy from branch → `main`, folder `/ (root)`).
 
 ## Built with
