@@ -351,9 +351,9 @@ const CHAPTERS=[
  ["Daivasura Sampad Vibhaga Yoga","Divine and harmful qualities"],["Shraddhatraya Vibhaga Yoga","Three kinds of faith"],["Moksha Sanyasa Yoga","Freedom by letting go"]];
 const isDone=n=>{try{return localStorage.getItem("gs-story-"+n)==="done";}catch(e){return false;}};
 const storyDone=()=>isDone(1);
-const PLAYABLE=[1,3,4,5,6,7,8,9,10,11];
+const PLAYABLE=[1,3,4,5,6,7,8,9,10,11,12,13,14];
 const doneCount=()=>(isDone(1)?2:0)+PLAYABLE.filter(n=>n>1&&isDone(n)).length;
-const CHTITLE={1:"Chapters 1–2 · Arjuna ka Dukh, Krishna ka Gyaan",3:"Chapter 3 · Karma Yoga",4:"Chapter 4 · Gyaan aur Karma",5:"Chapter 5 · Karma Sanyasa Yoga",6:"Chapter 6 · Dhyana Yoga",7:"Chapter 7 · Gyaan aur Vigyaan",8:"Chapter 8 · Akshara Brahma Yoga",9:"Chapter 9 · Raja Vidya",10:"Chapter 10 · Vibhuti Yoga",11:"Chapter 11 · Vishwarupa Darshana"};
+const CHTITLE={1:"Chapters 1–2 · Arjuna ka Dukh, Krishna ka Gyaan",3:"Chapter 3 · Karma Yoga",4:"Chapter 4 · Gyaan aur Karma",5:"Chapter 5 · Karma Sanyasa Yoga",6:"Chapter 6 · Dhyana Yoga",7:"Chapter 7 · Gyaan aur Vigyaan",8:"Chapter 8 · Akshara Brahma Yoga",9:"Chapter 9 · Raja Vidya",10:"Chapter 10 · Vibhuti Yoga",11:"Chapter 11 · Vishwarupa Darshana",12:"Chapter 12 · Bhakti Yoga",13:"Chapter 13 · Kshetra aur Kshetragya",14:"Chapter 14 · Teen Gun"};
 const HOME_HELP=`<div class="help quiet">Gita Saathi shares the Gita's wisdom. It isn't a replacement for talking to someone. If things feel very heavy, call <strong>Samaritans 116 123</strong> (UK) or <strong>Tele-MANAS 14416</strong> (India).</div>`;
 function stopVoice(){try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}}
 function mainHome(msg){
@@ -944,6 +944,118 @@ const ALL={1:[
      on:()=>[{w:"N",t:"Go there more often. <em>Wahi aapka mandir hai.</em> That's your temple."}]}
   ]}];})(),
 
+ /* ===== Chapter 12: Devotion ===== */
+ 12:(()=>{
+  const day=(mA,glow)=>svg(sky("#ffd6e2","#fff3f6",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#a9d19a","#8bbd7a")+krishna(1060,780,.95,{bless:true,glow:!!glow,flute:!glow})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const LV=[
+   {t:"First, Krishna says: <em>“Fix your mind on Me completely.”</em> (12.8)",yes:"I can try this",reply:"Then keep your mind on Me, and you'll live in Me. No doubt about it."},
+   {t:"<em>“If you can't keep your mind on Me steadily, then practise. A little every day.”</em> (12.9)",yes:"I can practise a little",reply:"Wonderful. Small daily practice is how every great devotee began."},
+   {t:"<em>“If even practice is hard, then simply do your work for My sake.”</em> (12.10)",yes:"I can do my work for Krishna",reply:"That's enough to reach Me. Your everyday work becomes your worship."},
+   {t:"<em>“And if even that is too much, just do your best and let go of the results.”</em> (12.11)",yes:"Yes, I can do this",reply:"Then you're still on My path. There is always a step you can take."}];
+  const Q=["Friendly","Kind","Forgiving","Humble","Calm in ups and downs"];
+  return [
+  {title:"Bhakti Yoga",sub:"Chapter 12 · The path of love",art:()=>day("happy"),steps:[
+    {w:"N",t:"This is one of the shortest chapters, and one of the most loved. It's all about bhakti: love for God."}]},
+  {art:()=>day("happy",true),steps:[
+    {w:"A",t:"Krishna, some people love You in this form, and some meditate on the formless, unseen truth. Who is better?"},
+    {w:"K",t:"Those who fix their minds on Me with love and faith are the most connected to Me. The formless path is much harder for people with a body."},
+    {w:"K",t:V("Bhagavad Gita 12.8","मय्येव मन आधत्स्व मयि बुद्धिं निवेशय।<br>निवसिष्यसि मय्येव अत ऊर्ध्वं न संशयः॥","Mayy eva mana adhatsva, mayi buddhim niveshaya. Nivasishyasi mayy eva, ata urdhvam na samshayah.","Keep your mind on Me alone, and rest your understanding in Me. Then you will live in Me. There is no doubt.")}
+  ]},
+  {art:()=>{const r=S.rung||0,ys=[260,420,580,740];
+     return svg(sky("#ffd6e2","#fff3f6")+hills("#a9d19a","#8bbd7a")
+      +`<g stroke="#8b4a1c" stroke-width="16" stroke-linecap="round"><line x1="560" y1="880" x2="700" y2="180"/><line x1="760" y1="880" x2="900" y2="180"/></g>`
+      +ys.map((y,i)=>{const x1=560+(880-y)/700*140,x2=x1+200;return `<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${i===r?"#f4a81d":"#a8763e"}" stroke-width="${i===r?18:12}" stroke-linecap="round"/>`;}).join("")
+      +arjuna(560+(880-ys[r])/700*140+100,ys[r],.42,{mood:"happy"})
+      +krishna(1150,820,.9,{bless:true,glow:true})
+      +`<text x="1150" y="140" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="700" font-size="40" fill="#6d5f80">Krishna's ladder</text>`);},
+   steps:[
+    {w:"N",t:"Then Krishna does something beautiful. He gives a ladder of steps, so that <em>everyone</em> can find one they can manage."},
+    {act:"ladder",levels:LV,w:"K",q:"",on:L=>[{w:"K",t:L.reply},{w:"N",t:"Notice that Krishna never says “give up”. There's always a step for you. <em>Har kisi ke liye ek seedhi hai.</em>"}]}
+  ]},
+  {art:()=>{const g=S.garland||[];let f="";
+     g.forEach((q,i)=>{const t=(i+1)/(Q.length+1),x=380+t*840,y=180+Math.sin(t*Math.PI)*330;
+       f+=`<g class="grow" transform="translate(${x} ${y})"><g fill="${["#f28cb1","#f4a81d","#e05a47","#c38cf2","#f6eedf"][i]}"><circle cy="-20" r="20"/><circle cx="-19" cy="-6" r="20"/><circle cx="19" cy="-6" r="20"/><circle cx="-12" cy="16" r="20"/><circle cx="12" cy="16" r="20"/></g><circle r="11" fill="#f4c430"/><text y="66" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="700" font-size="28" fill="#2b2140" stroke="#fff3f6" stroke-width="8" paint-order="stroke">${q}</text></g>`;});
+     return svg(sky("#ffd6e2","#fff3f6")+hills("#a9d19a","#8bbd7a")+`<path d="M380 180 Q800 840 1220 180" stroke="#3e8a4a" stroke-width="5" fill="none"/>`+f+krishna(800,900,.62,{bless:true,glow:g.length>=Q.length}));},
+   steps:[
+    {w:"K",t:"And here are the qualities of the people who are most dear to Me."},
+    {act:"collect",key:"garland",opts:Q,w:"N",q:"Make Krishna a garland. Tap each quality to add a flower.",
+     on:()=>[{w:"K",t:V("Bhagavad Gita 12.13","अद्वेष्टा सर्वभूतानां मैत्रः करुण एव च।<br>निर्ममो निरहङ्कारः समदुःखसुखः क्षमी॥","Adveshta sarva bhutanam, maitrah karuna eva cha. Nirmamo nirahankarah, sama duhkha sukhah kshami.","One who hates no living being, who is friendly and kind, not possessive, without ego, steady in pain and pleasure, and forgiving…")},
+      {w:"K",t:"…<em>sa me priyah</em>: that person is dear to Me. (12.13–14)"}]}
+  ]},
+  {art:()=>day("firm",true),steps:[
+    {act:"write",w:"K",q:"Which flower from the garland will you practise this week? How?",ph:"e.g. Forgiving: I'll let go of last week's argument",
+     ref:"Bhagavad Gita 12.13–14",rom:"Maitrah karuna eva cha … sa me priyah",card:v=>`This week, for Krishna: <strong>${v}</strong>`,
+     on:()=>[{w:"N",t:"<em>Pyaar hi sabse seedha raasta hai.</em> Love is the most direct path."}]}
+  ]}];})(),
+
+ /* ===== Chapter 13: The field and the knower ===== */
+ 13:(()=>{
+  const day=(mA)=>svg(sky("#c9e4f5","#f2f9fd",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#9cc98a","#7fb36f")+krishna(1060,780,.95,{bless:true})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const P=["Tired body","Worried thoughts","Old memories","Today's pain"];
+  const pl=[[190,470],[590,470],[150,650],[590,650]];
+  const R=(n)=>`Bhagavad Gita 13.${n} <span style="text-transform:none;letter-spacing:0">(13.${n-1} in some editions)</span>`;
+  return [
+  {title:"Kshetra aur Kshetragya",sub:"Chapter 13 · The field and the knower",art:()=>day("happy"),steps:[
+    {w:"A",t:"Krishna, I want to understand. What is the field, and who is the one who knows the field?"}]},
+  {art:()=>{const n=S.noticed||[];
+     return svg(sky("#c9e4f5","#f2f9fd")+`<circle cx="560" cy="160" r="${n.length?90+n.length*14:70}" fill="#ffe28a"/>${n.length?`<circle cx="560" cy="160" r="${130+n.length*20}" fill="#ffe28a" opacity=".3" class="pulse"/>`:""}`
+      +`<rect y="400" width="1600" height="500" fill="#9cc98a"/>`
+      +P.map((p,i)=>{const [x,y]=pl[i],on=n.includes(p);
+        return `<g transform="translate(${x} ${y})">${on?`<path d="M${370-x+80} ${160-y+60} L0 0 L360 0 Z" fill="#fff3b0" opacity=".35"/>`:""}<rect width="360" height="150" rx="10" fill="${on?"#c7e3a8":"#8a6a3a"}" stroke="#6b4a2c" stroke-width="4"/>${[30,70,110].map(yy=>`<path d="M20 ${yy} H340" stroke="${on?"#7fb36f":"#6b4a2c"}" stroke-width="6" stroke-dasharray="14 10"/>`).join("")}<rect x="35" y="48" width="290" height="54" rx="27" fill="#fff6e6"/><text x="180" y="85" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="700" font-size="30" fill="#2b2140">${p}</text></g>`;}).join("")
+      +arjuna(1250,860,.85,{mood:n.length>=P.length?"firm":"happy"}));},
+   steps:[
+    {w:"K",t:V(R(2),"इदं शरीरं कौन्तेय क्षेत्रमित्यभिधीयते।<br>एतद्यो वेत्ति तं प्राहुः क्षेत्रज्ञ इति तद्विदः॥","Idam shariram kaunteya, kshetram ity abhidhiyate. Etad yo vetti tam prahuh, kshetrajna iti tad vidah.","This body is called the field, Arjuna. The one who knows it is called the knower of the field.")},
+    {w:"N",t:"Your body, thoughts and feelings are like a field. Things grow in it, change, and pass. But who is watching the field?"},
+    {act:"collect",key:"noticed",opts:P,w:"N",q:"Shine the light of awareness on each part of your field. Tap each one, and just notice it.",
+     on:()=>[{w:"N",t:"Did you notice? You could <em>see</em> the tiredness, the worry and the pain. So you aren't only those things. You are the one who notices them."},
+      {w:"K",t:"That knower, Arjuna, is your true self. And I am the knower in every field."}]}
+  ]},
+  {art:()=>day("happy"),steps:[
+    {w:"K",t:"Then Krishna lists what true knowledge looks like in a person."},
+    {w:"K",t:V(R(8),"अमानित्वमदम्भित्वमहिंसा क्षान्तिरार्जवम्।<br>आचार्योपासनं शौचं स्थैर्यमात्मविनिग्रहः॥","Amanitvam adambhitvam, ahimsa kshantir arjavam. Acharyopasanam shaucham, sthairyam atma vinigrahah.","Humility, no showing off, not harming, patience, honesty, respect for one's teacher, cleanliness, steadiness and self-control.")},
+    {act:"choice",w:"N",q:"Which one would you most like to grow in yourself?",opts:[["Humility","humility"],["Patience","patience"],["Honesty","honesty"],["Steadiness","steadiness"]],
+     on:k=>[{w:"N",t:{humility:"Humility isn't thinking less of yourself. It's thinking of yourself less.",patience:"Patience grows one pause at a time. Even one deep breath before reacting counts.",honesty:"Honesty starts inside: being truthful with yourself about how you really feel.",steadiness:"Steadiness is coming back again and again, even after you wobble."}[k]}]}
+  ]},
+  {art:()=>day("firm"),steps:[
+    {w:"K",t:V(R(28),"समं सर्वेषु भूतेषु तिष्ठन्तं परमेश्वरम्।<br>विनश्यत्स्वविनश्यन्तं यः पश्यति स पश्यति॥","Samam sarveshu bhuteshu, tishthantam parameshvaram. Vinashyatsv avinashyantam, yah pashyati sa pashyati.","Whoever sees the Supreme Lord living equally in all beings, the undying within the dying, truly sees.")},
+    {act:"write",w:"K",q:"Name one hard feeling you'll watch this week, like weather passing over a field.",ph:"e.g. stress before my shift",
+     ref:R(2),rom:"Kshetrajna: the knower of the field",card:v=>`When <strong>${v}</strong> comes, I'll remember: I am the one who notices it, not the feeling itself.`,
+     on:()=>[{w:"N",t:"<em>Mausam badalta hai, aasmaan wahi rehta hai.</em> The weather changes; the sky stays the same."}]}
+  ]}];})(),
+
+ /* ===== Chapter 14: The three qualities ===== */
+ 14:(()=>{
+  const day=(mA)=>svg(sky("#d8eef0","#f4fbfb",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#9cc98a","#7fb36f")+krishna(1060,780,.95,{bless:true})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const ITEMS=[["A calm walk in the morning","sattva","It leaves you clear and light."],
+    ["Scrolling your phone until 2am","tamas","It feels easy, but leaves you heavy and foggy."],
+    ["Rushing to win, whatever the cost","rajas","Lots of energy, but full of wanting and stress."],
+    ["Helping someone without wanting praise","sattva","Pure and peaceful, with nothing to prove."],
+    ["Always busy, never resting","rajas","Restless activity that never feels finished."],
+    ["Eating junk and staying in bed all day","tamas","Dullness and heaviness, with no energy to do good."]];
+  const jar=(x,g,n,label,sub)=>{const fill=g==="sattva"?"#bfe8f7":g==="rajas"?"#f29a7a":"#8a6a4a",lvl=40+n*55;
+    const fx=g==="rajas"?Array.from({length:n*2},(_,i)=>`<circle cx="${-50+(i*37)%100}" cy="${-20-(i*29)%Math.max(lvl-20,20)}" r="8" fill="#fff" opacity=".6" class="bob" style="animation-delay:${i*.2}s"/>`).join(""):g==="sattva"&&n?`<circle cx="-30" cy="${-lvl+20}" r="6" fill="#fff"/><circle cx="25" cy="${-lvl+40}" r="4" fill="#fff"/>`:"";
+    return `<g transform="translate(${x} 760)"><rect x="-90" y="-${lvl}" width="180" height="${lvl}" fill="${fill}"/>${fx}<path d="M-95 -260 V0 H95 V-260" fill="none" stroke="#6d5f80" stroke-width="7"/><rect x="-110" y="-280" width="220" height="24" rx="10" fill="#6d5f80"/><text y="60" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="800" font-size="40" fill="#2b2140">${label}</text><text y="98" text-anchor="middle" font-family="Mukta,sans-serif" font-size="28" fill="#6d5f80">${sub}</text></g>`;};
+  return [
+  {title:"Teen Gun",sub:"Chapter 14 · The three qualities",art:()=>day("happy"),steps:[
+    {w:"K",t:"Arjuna, everything in nature, including your own mind, is a mix of three qualities, called gunas."}]},
+  {art:()=>{const c=S.counts||{sattva:0,rajas:0,tamas:0};
+     return svg(sky("#d8eef0","#f4fbfb")+hills("#9cc98a","#7fb36f")+jar(330,"sattva",c.sattva,"Sattva","calm and clear")+jar(800,"rajas",c.rajas,"Rajas","restless and busy")+jar(1270,"tamas",c.tamas,"Tamas","heavy and dull"));},
+   steps:[
+    {w:"K",t:V("Bhagavad Gita 14.5","सत्त्वं रजस्तम इति गुणाः प्रकृतिसम्भवाः।<br>निबध्नन्ति महाबाहो देहे देहिनमव्ययम्॥","Sattvam rajas tama iti, gunah prakriti sambhavah. Nibadhnanti mahabaho, dehe dehinam avyayam.","Sattva, rajas and tamas: these three qualities come from nature, and they tie the eternal soul to the body.")},
+    {w:"N",t:"Think of them like water. <strong>Sattva</strong> is clear, still water. <strong>Rajas</strong> is boiling water. <strong>Tamas</strong> is muddy water."},
+    {act:"sort",items:ITEMS,w:"N",q:"",
+     on:()=>[{w:"K",t:V("Bhagavad Gita 14.17","सत्त्वात्सञ्जायते ज्ञानं रजसो लोभ एव च।<br>प्रमादमोहौ तमसो भवतोऽज्ञानमेव च॥","Sattvat sanjayate jnanam, rajaso lobha eva cha. Pramada mohau tamaso, bhavato 'jnanam eva cha.","From sattva comes wisdom. From rajas comes greed. From tamas come carelessness, confusion and not knowing.")},
+      {w:"N",t:"We all have all three, every day. The idea isn't to feel guilty. It's to notice which one is in charge, and gently choose more sattva."}]}
+  ]},
+  {art:()=>svg(sky("#ffd9a8","#fff3dd",`<circle cx="800" cy="360" r="150" fill="#fff1c1"/>`)+hills("#a6c97e","#86b062")+krishna(1060,780,.95,{bless:true,glow:true})+arjuna(620,780,.95,{mood:"firm"})),
+   steps:[
+    {w:"A",t:"Krishna, how can a person rise above all three?"},
+    {w:"K",t:V("Bhagavad Gita 14.26","मां च योऽव्यभिचारेण भक्तियोगेन सेवते।<br>स गुणान्समतीत्यैतान्ब्रह्मभूयाय कल्पते॥","Mam cha yo 'vyabhicharena, bhakti yogena sevate. Sa gunan samatityaitan, brahma bhuyaya kalpate.","Whoever serves Me with steady, unwavering love rises above these three qualities and becomes ready to be one with the eternal.")},
+    {act:"write",w:"K",q:"What's one small sattva habit you'll start this week?",ph:"e.g. no phone after 11pm, or a 10-minute morning walk",
+     ref:"Bhagavad Gita 14.17",rom:"Sattvat sanjayate jnanam",card:v=>`My sattva habit this week: <strong>${v}</strong>`,
+     on:()=>[{w:"N",t:"<em>Saaf paani jaisa mann.</em> A mind like clear water."}]}
+  ]}];})(),
+
  /* ===== Chapter 6: Meditation ===== */
  6:(()=>{
   const day=(mA)=>svg(sky("#bfe3f2","#eef8fd")+hills("#9cc98a","#7fb36f")+krishna(1060,780,.95,{bless:true})+arjuna(620,780,.95,{mood:mA||"happy"}));
@@ -1045,6 +1157,16 @@ function finish(){
 function btn(label,cls,fn){const b=document.createElement("button");b.type="button";b.className=cls||"opt";b.innerHTML=label;b.onclick=fn;act.appendChild(b);return b;}
 
 const ACTS={
+
+  ladder(st){S.rung=0;const show=()=>{act.innerHTML="";const L=st.levels[S.rung];who.textContent="Krishna";who.className="who K";say.innerHTML=L.t;draw();
+    btn(L.yes,"",()=>{act.innerHTML="";done(st,L);});
+    if(S.rung<st.levels.length-1)btn("That's too hard for me right now","opt",()=>{S.rung++;show();});};show();},
+  sort(st){S.counts={sattva:0,rajas:0,tamas:0};let i=0;const N={sattva:"Sattva",rajas:"Rajas",tamas:"Tamas"};
+    const show=()=>{act.innerHTML="";const it=st.items[i];who.textContent="Story";who.className="who N";
+      say.innerHTML=`Which water is this? <strong>“${it[0]}”</strong> <span class="tiny">(${i+1} of ${st.items.length})</span>`;
+      ["sattva","rajas","tamas"].forEach(g=>btn(N[g],"opt",()=>{act.innerHTML="";S.counts[it[1]]++;draw();
+        say.innerHTML=(g===it[1]?"Yes! It's ":"Good guess, but it's actually ")+`<strong>${N[it[1]]}</strong>. ${it[2]}`;i++;
+        btn(i<st.items.length?"Next":"See what Krishna says","",()=>{if(i<st.items.length)show();else done(st);});}));};show();},
 
   tapcount(st){S[st.key]=0;const b=btn(st.label(0),"",()=>{S[st.key]++;draw();if(S[st.key]>=st.n){b.remove();setTimeout(()=>done(st),st.wait||900);}else b.innerHTML=st.label(S[st.key]);});},
   collect(st){S[st.key]=[];st.opts.forEach(o=>btn(o,"opt",function(){this.remove();S[st.key].push(o);draw();if(S[st.key].length>=st.opts.length)setTimeout(()=>done(st),st.wait||900);}));},

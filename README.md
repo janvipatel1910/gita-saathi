@@ -44,7 +44,12 @@ All 18 chapters are listed as levels. Progress is saved on the device.
 | 9 Raja Vidya | Playable | 9.22, 9.26, 9.27, 9.31 |
 | 10 Vibhuti Yoga | Playable | 10.20, 10.25–37, 10.41 |
 | 11 Vishwarupa Darshana | Playable | 11.8, 11.12, 11.45, 11.54 |
-| 12–18 | Coming soon | |
+| 12 Bhakti Yoga | Playable | 12.8, 12.9–11, 12.13–14 |
+| 13 Kshetra aur Kshetragya | Playable | 13.2, 13.8, 13.28 * |
+| 14 Teen Gun | Playable | 14.5, 14.17, 14.26 |
+| 15–18 | Coming soon | |
+
+\* Chapter 13 is numbered differently in some editions (one lower), so the app shows both numbers.
 
 ## How to run it
 
