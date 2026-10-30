@@ -105,6 +105,31 @@ button[disabled]{opacity:.4;cursor:default;transform:none}
 @keyframes bob{50%{transform:translateY(-8px)}}
 @keyframes flick{50%{transform:scaleY(1.12) scaleX(.92)}}
 @keyframes drift{to{transform:translate(1300px,-160px);opacity:0}}
+
+/* livelier scenes */
+.chr .mo{opacity:0}
+.stage.talking[data-talk="K"] .chrK .mo,.stage.talking[data-talk="A"] .chrA .mo{animation:mouthO .36s steps(1) infinite}
+.stage.talking[data-talk="K"] .chrK .mc,.stage.talking[data-talk="A"] .chrA .mc{animation:mouthC .36s steps(1) infinite}
+@keyframes mouthO{0%{opacity:1}50%{opacity:0}}
+@keyframes mouthC{0%{opacity:0}50%{opacity:1}}
+.stage[data-talk="K"] .chrK,.stage[data-talk="A"] .chrA{filter:drop-shadow(0 0 14px rgba(255,236,160,.95))}
+.eyes{animation:blink 5.5s infinite;transform-origin:center;transform-box:fill-box}
+.chrA .eyes{animation-delay:-2.3s}
+@keyframes blink{0%,95%,100%{transform:scaleY(1)}97%{transform:scaleY(.12)}}
+.breathe{animation:breathe 4.2s ease-in-out infinite;transform-origin:50% 100%;transform-box:fill-box}
+@keyframes breathe{50%{transform:scaleY(1.018)}}
+.stage.enter svg{animation:sceneIn .55s ease-out}
+@keyframes sceneIn{from{opacity:.25;transform:scale(1.03)}to{opacity:1;transform:none}}
+.say.in{animation:lineIn .35s ease-out}
+@keyframes lineIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.box.story{position:relative}
+.box.story.has-tail::before,.box.story.has-tail::after{content:"";position:absolute;left:var(--tail,40px);width:0;height:0;border:12px solid transparent;border-top:0}
+.box.story.has-tail::before{top:-13px;border-bottom:13px solid var(--line)}
+.box.story.has-tail::after{top:-10px;border-bottom:12px solid var(--card)}
+.box.story:has(.who.K){border-color:#b9d0ef}
+.box.story:has(.who.K).has-tail::before{border-bottom-color:#b9d0ef}
+.box.story:has(.who.A){border-color:#efc4c2}
+.box.story:has(.who.A).has-tail::before{border-bottom-color:#efc4c2}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 .who.A{background:var(--rose)} .who.N{background:var(--peacock)}
@@ -479,15 +504,14 @@ function face(mood,talk){
     eyes=`<path d="M-27 -290 q9 -10 18 0 M9 -290 q9 -10 18 0" stroke="${ink}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
     mouth=`<path d="M-17 -268 q17 16 34 0" stroke="${ink}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
   }
-  if(talk) mouth=`<ellipse cx="0" cy="-264" rx="15" ry="11" fill="#6a1f2b"/>`;
-  return `${eyes}${mouth}${extra}<circle cx="-32" cy="-274" r="9" fill="#ff8fa3" opacity=".45"/><circle cx="32" cy="-274" r="9" fill="#ff8fa3" opacity=".45"/>`;
+  return `<g class="eyes">${eyes}</g><g class="mc">${mouth}</g><g class="mo"><ellipse cx="0" cy="-264" rx="15" ry="11" fill="#6a1f2b"/><ellipse cx="0" cy="-259" rx="8" ry="4" fill="#e8788a"/></g>${extra}<circle cx="-32" cy="-274" r="9" fill="#ff8fa3" opacity=".45"/><circle cx="32" cy="-274" r="9" fill="#ff8fa3" opacity=".45"/>`;
 }
 function krishna(x,y,s,o){
   o=o||{};
   const armR=o.bless
     ? `<path d="M40 -215 Q85 -240 92 -290" stroke="${SKIN_K}" stroke-width="22" stroke-linecap="round" fill="none"/><circle cx="92" cy="-300" r="15" fill="${SKIN_K}"/>`
     : `<path d="M40 -215 Q70 -170 60 -135" stroke="${SKIN_K}" stroke-width="22" stroke-linecap="round" fill="none"/>`;
-  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'bob'}">
+  return `<g class="chr chrK" transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'bob'}">
   ${o.glow?`<circle cy="-220" r="200" fill="#fff3b0" class="pulse"/>`:""}
   <path d="M-52 0 L-42 -140 H42 L52 0Z" fill="#f7c948"/>
   <path d="M-52 0 L-46 -40 H46 L52 0Z" fill="#e8a317"/>
@@ -519,7 +543,7 @@ function arjuna(x,y,s,o){
     : (o.mood==="sad"
       ? `<path d="M40 -215 Q60 -170 30 -145" stroke="${SKIN_A}" stroke-width="22" stroke-linecap="round" fill="none"/>`
       : `<path d="M40 -215 Q70 -170 60 -135" stroke="${SKIN_A}" stroke-width="22" stroke-linecap="round" fill="none"/>`);
-  return `<g transform="translate(${x} ${y}) scale(${s})">
+  return `<g class="chr chrA" transform="translate(${x} ${y}) scale(${s})"><g class="breathe">
   ${legs}
   <g transform="translate(0 ${lift})">
     <rect x="-46" y="-150" width="92" height="18" rx="8" fill="#d9534f"/>
@@ -536,7 +560,7 @@ function arjuna(x,y,s,o){
       <circle cy="-356" r="9" fill="#2fb3a0"/>
       ${face(o.mood||"happy",TALK==="A")}
     </g>
-  </g></g>`;
+  </g></g></g>`;
 }
 function chariot(x,y,s,inner){
   return `<g transform="translate(${x} ${y}) scale(${s})">
@@ -589,7 +613,7 @@ const ALL={1:[
     {w:"A",t:"Krishna, take my chariot between the two armies. I want to see who I am fighting."},
     {w:"K",t:"<em>Jaisi tumhari ichha</em>, Arjuna. Dekho."}
  ]},
- { art:()=>svg(sky("#a7b8d6","#e7dfe9")+hills("#9bb08f","#86a07c")+krishna(1060,780,.95,{mood:"happy"})+arjuna(620,780,.95,{sit:true,mood:"sad"})+`<g transform="translate(400 770) rotate(-80)"><path d="M0 -130 Q80 0 0 130" fill="none" stroke="#8b4a1c" stroke-width="10" stroke-linecap="round"/><line x1="0" y1="-130" x2="0" y2="130" stroke="#5a3a20" stroke-width="2"/></g>`),
+ { art:()=>svg(sky("#a7b8d6","#e7dfe9")+hills("#9bb08f","#86a07c")+krishna(1070,850,1.12,{mood:"happy"})+arjuna(600,850,1.12,{sit:true,mood:"sad"})+`<g transform="translate(400 770) rotate(-80)"><path d="M0 -130 Q80 0 0 130" fill="none" stroke="#8b4a1c" stroke-width="10" stroke-linecap="round"/><line x1="0" y1="-130" x2="0" y2="130" stroke="#5a3a20" stroke-width="2"/></g>`),
    steps:[
     {w:"N",t:"Arjuna looks across and sees his grandfather Bhishma, his teacher Dronacharya, his cousins, his friends."},
     {w:"A",t:"<em>Yeh toh mere apne hain…</em> Krishna, <em>main yeh nahi kar sakta.</em>"},
@@ -673,7 +697,7 @@ const ALL={1:[
 
  /* ===== Chapter 3: Karma Yoga ===== */
  3:(()=>{
-  const day=(mA,extra,bless)=>svg(sky("#8fd0f2","#e6f6fc",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#7cc576","#5aa85a")+(extra||"")+krishna(1060,780,.95,{bless:bless!==false})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const day=(mA,extra,bless)=>svg(sky("#8fd0f2","#e6f6fc",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#7cc576","#5aa85a")+(extra||"")+krishna(1070,850,1.12,{bless:bless!==false})+arjuna(600,850,1.12,{mood:mA||"happy"}));
   return [
   {title:"Karma Yoga",sub:"Chapter 3 · The path of action",art:()=>day("happy"),steps:[
     {w:"N",t:"In Chapter 2, Krishna praised wisdom and a steady mind. Now Arjuna is confused."}]},
@@ -711,7 +735,7 @@ const ALL={1:[
 
  /* ===== Chapter 4: Knowledge and action ===== */
  4:(()=>{
-  const day=(mA,top)=>svg(sky("#9fd4f0","#eef8fd",top||`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#7cc576","#5aa85a")+krishna(1060,780,.95,{bless:true})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const day=(mA,top)=>svg(sky("#9fd4f0","#eef8fd",top||`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#7cc576","#5aa85a")+krishna(1070,850,1.12,{bless:true})+arjuna(600,850,1.12,{mood:mA||"happy"}));
   return [
   {title:"Gyaan aur Karma",sub:"Chapter 4 · Knowledge and action",art:()=>day("happy"),steps:[
     {w:"N",t:"Now Krishna tells Arjuna that this wisdom is very, very old."}]},
@@ -754,7 +778,7 @@ const ALL={1:[
 
  /* ===== Chapter 5: Letting go while acting ===== */
  5:(()=>{
-  const day=(mA,bless)=>svg(sky("#bfe3f2","#eef8fd",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#9cc98a","#7fb36f")+krishna(1060,780,.95,{bless:bless!==false})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const day=(mA,bless)=>svg(sky("#bfe3f2","#eef8fd",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#9cc98a","#7fb36f")+krishna(1070,850,1.12,{bless:bless!==false})+arjuna(600,850,1.12,{mood:mA||"happy"}));
   const person=(robe,book)=>`<path d="M-40 0 L-30 -150 H30 L40 0Z" fill="${robe}"/><circle cy="-190" r="34" fill="#c98a5e"/><path d="M-34 -196 Q-34 -232 0 -232 Q34 -232 34 -196 Q24 -214 0 -214 Q-24 -214 -34 -196Z" fill="#1c1c2e"/>${book?`<rect x="-28" y="-120" width="56" height="40" rx="4" fill="#8b4a1c"/><line x1="0" y1="-120" x2="0" y2="-80" stroke="#f6eedf" stroke-width="3"/>`:""}`;
   const FIG={
    "A learned priest":person("#f4a81d",true),
@@ -804,7 +828,7 @@ const ALL={1:[
 
  /* ===== Chapter 7: Knowing the divine ===== */
  7:(()=>{
-  const day=(mA,glow)=>svg(sky("#f9d9a8","#fff3dd",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#a6c97e","#86b062")+krishna(1060,780,.95,{bless:true,glow:!!glow})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const day=(mA,glow)=>svg(sky("#f9d9a8","#fff3dd",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#a6c97e","#86b062")+krishna(1070,850,1.12,{bless:true,glow:!!glow})+arjuna(600,850,1.12,{mood:mA||"happy"}));
   return [
   {title:"Gyaan aur Vigyaan",sub:"Chapter 7 · Knowing the divine",art:()=>day("happy"),steps:[
     {w:"K",t:"Arjuna, now I'll tell you how to know Me fully. Not just with knowledge, but through experience."}]},
@@ -846,10 +870,10 @@ const ALL={1:[
 
  /* ===== Chapter 8: What we remember ===== */
  8:(()=>{
-  const day=(mA)=>svg(sky("#c9e4f5","#f2f9fd",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#9cc98a","#7fb36f")+krishna(1060,780,.95,{bless:true})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const day=(mA)=>svg(sky("#c9e4f5","#f2f9fd",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#9cc98a","#7fb36f")+krishna(1070,850,1.12,{bless:true})+arjuna(600,850,1.12,{mood:mA||"happy"}));
   const SEEDS={gratitude:"Gratitude",kindness:"Kindness",naam:"Krishna's name",worry:"Worry"};
   return [
-  {title:"Akshara Brahma Yoga",sub:"Chapter 8 · What we remember",art:()=>svg(sky("#c9e4f5","#f2f9fd")+hills("#9cc98a","#7fb36f")+krishna(1060,780,.95,{bless:true})+arjuna(620,780,.95,{mood:"sad"})
+  {title:"Akshara Brahma Yoga",sub:"Chapter 8 · What we remember",art:()=>svg(sky("#c9e4f5","#f2f9fd")+hills("#9cc98a","#7fb36f")+krishna(1070,850,1.12,{bless:true})+arjuna(600,850,1.12,{mood:"sad"})
       +[[470,330],[560,250],[680,220],[800,260],[860,350],[420,420],[760,420]].map(([x,y],i)=>`<text x="${x}" y="${y}" font-family="Baloo 2,sans-serif" font-weight="800" font-size="${60+i*4}" fill="#d9534f" class="bob" style="animation-delay:${i*.3}s">?</text>`).join("")),
    steps:[
     {w:"N",t:"Arjuna has so many questions now. He asks Krishna seven of them, all in one breath."},
@@ -885,7 +909,7 @@ const ALL={1:[
 
  /* ===== Chapter 9: The royal secret ===== */
  9:(()=>{
-  const day=(mA,glow)=>svg(sky("#ffe2b8","#fff6e6",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#b6d39a","#9cc07f")+krishna(1060,780,.95,{bless:true,glow:!!glow})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const day=(mA,glow)=>svg(sky("#ffe2b8","#fff6e6",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#b6d39a","#9cc07f")+krishna(1070,850,1.12,{bless:true,glow:!!glow})+arjuna(600,850,1.12,{mood:mA||"happy"}));
   const ITEM={leaf:`<path d="M-60 0 Q0 -90 60 0 Q0 30 -60 0Z" fill="#4f9a48"/><path d="M-50 0 Q0 -10 55 -2" stroke="#2f6e39" stroke-width="4" fill="none"/>`,
     flower:`<g fill="#f28cb1"><circle cx="0" cy="-40" r="22"/><circle cx="-26" cy="-22" r="22"/><circle cx="26" cy="-22" r="22"/><circle cx="-16" cy="6" r="22"/><circle cx="16" cy="6" r="22"/></g><circle cy="-14" r="14" fill="#f4c430"/>`,
     fruit:`<circle cy="-30" r="42" fill="#f08a24"/><path d="M0 -72 q6 -20 22 -24" stroke="#5a3a20" stroke-width="6" fill="none"/><ellipse cx="22" cy="-94" rx="16" ry="8" fill="#4f9a48"/>`,
@@ -931,7 +955,7 @@ const ALL={1:[
 
  /* ===== Chapter 10: Krishna's glories ===== */
  10:(()=>{
-  const day=(mA,glow)=>svg(sky("#d6c3ec","#f6effc",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#a9c99a","#8fb47f")+krishna(1060,780,.95,{bless:true,glow:!!glow})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const day=(mA,glow)=>svg(sky("#d6c3ec","#f6effc",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#a9c99a","#8fb47f")+krishna(1070,850,1.12,{bless:true,glow:!!glow})+arjuna(600,850,1.12,{mood:mA||"happy"}));
   const G=[["Among mountains","the Himalaya","10.25",`<path d="M-50 20 L0 -50 L50 20Z" fill="#8fa9c9"/><path d="M-16 -28 L0 -50 L16 -28 L6 -22 L0 -30 L-6 -22Z" fill="#fff"/>`],
     ["Among rivers","the Ganga","10.31",`<path d="M-50 -20 q25 -18 50 0 t50 0 M-50 4 q25 -18 50 0 t50 0" stroke="#3f7fd0" stroke-width="9" fill="none" stroke-linecap="round"/>`],
     ["Among trees","the peepal tree","10.26",`<rect x="-7" y="-10" width="14" height="34" fill="#8b4a1c"/><circle cy="-26" r="34" fill="#4f9a48"/>`],
@@ -965,7 +989,7 @@ const ALL={1:[
 
  /* ===== Chapter 11: The universal form ===== */
  11:(()=>{
-  const day=(mA,glow)=>svg(sky("#bfe3f2","#eef8fd",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#9cc98a","#7fb36f")+krishna(1060,780,.95,{bless:true,glow:!!glow,flute:!glow})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const day=(mA,glow)=>svg(sky("#bfe3f2","#eef8fd",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#9cc98a","#7fb36f")+krishna(1070,850,1.12,{bless:true,glow:!!glow,flute:!glow})+arjuna(600,850,1.12,{mood:mA||"happy"}));
   const stars=n=>{let g="";for(let i=0;i<n;i++){const x=(i*397)%1600,y=(i*233)%900,r=1+(i%3);g+=`<circle cx="${x}" cy="${y}" r="${r}" fill="#fff" opacity="${.4+(i%5)/10}"/>`;}return g;};
   function cosmic(suns){
     const arms=[[-180,-400],[-230,-310],[-230,-210],[-185,-120],[180,-400],[230,-310],[230,-210],[185,-120]];
@@ -1013,7 +1037,7 @@ const ALL={1:[
 
  /* ===== Chapter 12: Devotion ===== */
  12:(()=>{
-  const day=(mA,glow)=>svg(sky("#ffd6e2","#fff3f6",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#a9d19a","#8bbd7a")+krishna(1060,780,.95,{bless:true,glow:!!glow,flute:!glow})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const day=(mA,glow)=>svg(sky("#ffd6e2","#fff3f6",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#a9d19a","#8bbd7a")+krishna(1070,850,1.12,{bless:true,glow:!!glow,flute:!glow})+arjuna(600,850,1.12,{mood:mA||"happy"}));
   const LV=[
    {t:"First, Krishna says: <em>“Fix your mind on Me completely.”</em> (12.8)",yes:"I can try this",reply:"Then keep your mind on Me, and you'll live in Me. No doubt about it."},
    {t:"<em>“If you can't keep your mind on Me steadily, then practise. A little every day.”</em> (12.9)",yes:"I can practise a little",reply:"Wonderful. Small daily practice is how every great devotee began."},
@@ -1057,7 +1081,7 @@ const ALL={1:[
 
  /* ===== Chapter 13: The field and the knower ===== */
  13:(()=>{
-  const day=(mA)=>svg(sky("#c9e4f5","#f2f9fd",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#9cc98a","#7fb36f")+krishna(1060,780,.95,{bless:true})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const day=(mA)=>svg(sky("#c9e4f5","#f2f9fd",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#9cc98a","#7fb36f")+krishna(1070,850,1.12,{bless:true})+arjuna(600,850,1.12,{mood:mA||"happy"}));
   const P=["Tired body","Worried thoughts","Old memories","Today's pain"];
   const pl=[[190,470],[590,470],[150,650],[590,650]];
   const R=(n)=>`Bhagavad Gita 13.${n} <span style="text-transform:none;letter-spacing:0">(13.${n-1} in some editions)</span>`;
@@ -1092,7 +1116,7 @@ const ALL={1:[
 
  /* ===== Chapter 14: The three qualities ===== */
  14:(()=>{
-  const day=(mA)=>svg(sky("#d8eef0","#f4fbfb",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#9cc98a","#7fb36f")+krishna(1060,780,.95,{bless:true})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const day=(mA)=>svg(sky("#d8eef0","#f4fbfb",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#9cc98a","#7fb36f")+krishna(1070,850,1.12,{bless:true})+arjuna(600,850,1.12,{mood:mA||"happy"}));
   const ITEMS=[["A calm walk in the morning","sattva","It leaves you clear and light."],
     ["Scrolling your phone until 2am","tamas","It feels easy, but leaves you heavy and foggy."],
     ["Rushing to win, whatever the cost","rajas","Lots of energy, but full of wanting and stress."],
@@ -1114,7 +1138,7 @@ const ALL={1:[
      on:()=>[{w:"K",t:V("Bhagavad Gita 14.17","सत्त्वात्सञ्जायते ज्ञानं रजसो लोभ एव च।<br>प्रमादमोहौ तमसो भवतोऽज्ञानमेव च॥","Sattvat sanjayate jnanam, rajaso lobha eva cha. Pramada mohau tamaso, bhavato 'jnanam eva cha.","From sattva comes wisdom. From rajas comes greed. From tamas come carelessness, confusion and not knowing.")},
       {w:"N",t:"We all have all three, every day. The idea isn't to feel guilty. It's to notice which one is in charge, and gently choose more sattva."}]}
   ]},
-  {art:()=>svg(sky("#ffd9a8","#fff3dd",`<circle cx="800" cy="360" r="150" fill="#fff1c1"/>`)+hills("#a6c97e","#86b062")+krishna(1060,780,.95,{bless:true,glow:true})+arjuna(620,780,.95,{mood:"firm"})),
+  {art:()=>svg(sky("#ffd9a8","#fff3dd",`<circle cx="800" cy="360" r="150" fill="#fff1c1"/>`)+hills("#a6c97e","#86b062")+krishna(1070,850,1.12,{bless:true,glow:true})+arjuna(600,850,1.12,{mood:"firm"})),
    steps:[
     {w:"A",t:"Krishna, how can a person rise above all three?"},
     {w:"K",t:V("Bhagavad Gita 14.26","मां च योऽव्यभिचारेण भक्तियोगेन सेवते।<br>स गुणान्समतीत्यैतान्ब्रह्मभूयाय कल्पते॥","Mam cha yo 'vyabhicharena, bhakti yogena sevate. Sa gunan samatityaitan, brahma bhuyaya kalpate.","Whoever serves Me with steady, unwavering love rises above these three qualities and becomes ready to be one with the eternal.")},
@@ -1125,7 +1149,7 @@ const ALL={1:[
 
  /* ===== Chapter 15: The supreme person ===== */
  15:(()=>{
-  const day=(mA,glow)=>svg(sky("#c9e4f5","#f2f9fd",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#9cc98a","#7fb36f")+krishna(1060,780,.95,{bless:true,glow:!!glow})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const day=(mA,glow)=>svg(sky("#c9e4f5","#f2f9fd",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#9cc98a","#7fb36f")+krishna(1070,850,1.12,{bless:true,glow:!!glow})+arjuna(600,850,1.12,{mood:mA||"happy"}));
   const BR=["Needing approval","Chasing money","Comparing myself","Holding grudges"];
   const ends=[[240,620],[490,740],[770,740],[1010,620]];
   return [
@@ -1163,7 +1187,7 @@ const ALL={1:[
 
  /* ===== Chapter 16: Divine and harmful qualities ===== */
  16:(()=>{
-  const day=(mA,glow)=>svg(sky("#ffe2b8","#fff6e6",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#b6d39a","#9cc07f")+krishna(1060,780,.95,{bless:true,glow:!!glow})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const day=(mA,glow)=>svg(sky("#ffe2b8","#fff6e6",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#b6d39a","#9cc07f")+krishna(1070,850,1.12,{bless:true,glow:!!glow})+arjuna(600,850,1.12,{mood:mA||"happy"}));
   const GATES=["Kaam: selfish desire","Krodh: anger","Lobh: greed"];
   return [
   {title:"Daivi aur Asuri",sub:"Chapter 16 · Divine and harmful qualities",art:()=>day("happy"),steps:[
@@ -1193,7 +1217,7 @@ const ALL={1:[
 
  /* ===== Chapter 17: Three kinds of faith ===== */
  17:(()=>{
-  const day=(mA,glow)=>svg(sky("#d8eef0","#f4fbfb",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#9cc98a","#7fb36f")+krishna(1060,780,.95,{bless:true,glow:!!glow})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const day=(mA,glow)=>svg(sky("#d8eef0","#f4fbfb",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#9cc98a","#7fb36f")+krishna(1070,850,1.12,{bless:true,glow:!!glow})+arjuna(600,850,1.12,{mood:mA||"happy"}));
   const FOOD=[["Fresh fruit, and dal with rice","sattva","Fresh, light and nourishing. It keeps the mind calm."],
     ["Extra-spicy, very salty fried snacks","rajas","Very hot, salty and sharp. It stirs the mind up."],
     ["Food left out overnight that's gone stale","tamas","Stale food makes us feel heavy and dull."],
@@ -1227,7 +1251,7 @@ const ALL={1:[
 
  /* ===== Chapter 18: Freedom by letting go ===== */
  18:(()=>{
-  const day=(mA,glow)=>svg(sky("#ffd9a8","#fff3dd",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#a6c97e","#86b062")+krishna(1060,780,.95,{bless:true,glow:!!glow})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const day=(mA,glow)=>svg(sky("#ffd9a8","#fff3dd",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#a6c97e","#86b062")+krishna(1070,850,1.12,{bless:true,glow:!!glow})+arjuna(600,850,1.12,{mood:mA||"happy"}));
   const diya=(x,y,lit)=>`<g transform="translate(${x} ${y})">${lit?`<circle cy="-30" r="44" fill="#ffd36b" opacity=".3"/>`:""}<path d="M-40 0 Q0 30 40 0 Z" fill="#d9622b"/>${lit?`<path class="flick" d="M0 -44 C18 -22 15 0 0 2 C-15 0 -18 -22 0 -44Z" fill="#ffd36b"/>`:`<line x1="0" y1="0" x2="0" y2="-14" stroke="#5a3a20" stroke-width="4"/>`}</g>`;
   return [
   {title:"Moksha Sanyasa",sub:"Chapter 18 · Freedom by letting go",art:()=>day("happy"),steps:[
@@ -1274,7 +1298,7 @@ const ALL={1:[
 
  /* ===== Chapter 6: Meditation ===== */
  6:(()=>{
-  const day=(mA)=>svg(sky("#bfe3f2","#eef8fd")+hills("#9cc98a","#7fb36f")+krishna(1060,780,.95,{bless:true})+arjuna(620,780,.95,{mood:mA||"happy"}));
+  const day=(mA)=>svg(sky("#bfe3f2","#eef8fd")+hills("#9cc98a","#7fb36f")+krishna(1070,850,1.12,{bless:true})+arjuna(600,850,1.12,{mood:mA||"happy"}));
   const night=(inner)=>svg(sky("#1d1b3a","#4a3a6a",`<g fill="#fff" opacity=".7"><circle cx="200" cy="120" r="3"/><circle cx="420" cy="80" r="2"/><circle cx="1250" cy="140" r="3"/><circle cx="1450" cy="90" r="2"/></g>`)+`<rect y="700" width="1600" height="200" fill="#2a2246"/>`+inner);
   return [
   {title:"Dhyana Yoga",sub:"Chapter 6 · Meditation and the mind",art:()=>day("happy"),steps:[
@@ -1333,20 +1357,43 @@ function draw(){
   stage.innerHTML=scenes[sc].art()+(scenes[sc].title?`<div class="titlecard"><div class="t">${T(scenes[sc].title===true?"Arjuna ka Dukh,<br>Krishna ka Gyaan":scenes[sc].title)}</div><div class="s">${T(scenes[sc].sub||"An interactive Bhagavad Gita story")}</div></div>`:"");
   [...dots.children].forEach((d,i)=>{d.className=i<sc?"done":i===sc?"on":"";});
   const b=document.getElementById("bowOnGround"); if(b) b.addEventListener("click",e=>{e.stopPropagation();liftBow();});
+  if(typeof pointTo==="function"&&stage.dataset.talk) pointTo(stage.dataset.talk);
 }
 function speak(html){
   if(!synth) return; try{synth.cancel();}catch(e){}
   if(!tts.checked) return;
   const t=html.replace(/<[^>]+>/g,""); try{const u=new SpeechSynthesisUtterance(t);u.rate=.95;const want=LANG==="gu"?/gu-IN/i:LANG==="hi"?/hi-IN/i:/en-IN|en-GB/i;u.lang=LANG==="gu"?"gu-IN":LANG==="hi"?"hi-IN":"en-IN";const v=synth.getVoices().find(v=>want.test(v.lang));if(v)u.voice=v;synth.speak(u);}catch(e){}
 }
+let talkTimer=0;
+function talk(w,text){
+  clearTimeout(talkTimer);
+  stage.dataset.talk=(w==="K"||w==="A")?w:"";
+  stage.classList.toggle("talking",w==="K"||w==="A");
+  const plain=String(text||"").replace(/<[^>]+>/g,"");
+  talkTimer=setTimeout(()=>stage.classList.remove("talking"),Math.min(6000,Math.max(1200,plain.length*55)));
+  pointTo(w);
+}
+function pointTo(w){
+  const box=say.closest(".box");
+  requestAnimationFrame(()=>{
+    const el=(w==="K"||w==="A")?stage.querySelector(".chr"+w):null;
+    if(!el||!box){box&&box.classList.remove("has-tail");return;}
+    const r=el.getBoundingClientRect(), b=box.getBoundingClientRect();
+    if(!r.width||!b.width){box.classList.remove("has-tail");return;}
+    const x=Math.min(b.width-34,Math.max(22,r.left+r.width/2-b.left));
+    box.style.setProperty("--tail",x+"px"); box.classList.add("has-tail");
+  });
+}
 function show(step){
   const t=T(typeof step.t==="function"?step.t():(step.t||step.q));
   who.textContent=T(NAMES[step.w]); who.className="who "+step.w;
-  say.innerHTML=t; speak(t);
+  say.innerHTML=t; say.classList.remove("in"); void say.offsetWidth; say.classList.add("in");
+  talk(step.w,t); speak(t);
 }
 function startScene(i){
   sc=i; queue=scenes[i].steps.slice(); pos=-1; waiting=false; act.innerHTML="";
-  draw(); advance();
+  draw(); stage.classList.remove("enter"); void stage.offsetWidth; stage.classList.add("enter");
+  advance();
 }
 function advance(){
   if(waiting) return;
@@ -1374,7 +1421,7 @@ function btn(label,cls,fn){const b=document.createElement("button");b.type="butt
 
 const ACTS={
 
-  ladder(st){S.rung=0;const show=()=>{act.innerHTML="";const L=st.levels[S.rung];who.textContent=T("Krishna");who.className="who K";say.innerHTML=T(L.t);draw();
+  ladder(st){S.rung=0;const show=()=>{act.innerHTML="";const L=st.levels[S.rung];who.textContent=T("Krishna");who.className="who K";say.innerHTML=T(L.t);draw();talk("K",L.t);
     btn(L.yes,"",()=>{act.innerHTML="";done(st,L);});
     if(S.rung<st.levels.length-1)btn("That's too hard for me right now","opt",()=>{S.rung++;show();});};show();},
   sort(st){S.counts={sattva:0,rajas:0,tamas:0};let i=0;const N={sattva:"Sattva",rajas:"Rajas",tamas:"Tamas"};
