@@ -69,7 +69,7 @@ Choose **English**, **हिन्दी (Hindi)** or **ગુજરાતી (G
 | Home page, menus, chapter list | Done | Done |
 | Mann ghabraya hai? (all 9 feelings) | Done | Done |
 | Verse meanings in the chapters | Done | Done |
-| Chapter stories | In progress (shown in English until done) | In progress (shown in English until done) |
+| All 18 chapter stories | Done | Done |
 
 The translations still need checking by native speakers before the app is shared widely.
 

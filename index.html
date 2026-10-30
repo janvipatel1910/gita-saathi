@@ -620,7 +620,7 @@ const ALL={1:[
     {w:"N",t:"His hands shake. His bow falls to the ground."},
     {act:"choice",w:"N",q:"How do you think Arjuna feels right now?",
      opts:[["Scared","scared"],["Confused","confused"],["Sad","sad"],["All of these","all"]],
-     on:k=>{S.feel=k; return [{w:"N",t:(k==="all"?"All of these, at once. ":"Yes, "+k+", and more. ")+"Even the greatest archer of his time felt this. Feeling it doesn't make you weak."}];}}
+     on:k=>{S.feel=k; return [{w:"N",t:{all:"All of these, at once. Even the greatest archer of his time felt this. Feeling it doesn't make you weak.",scared:"Yes, scared, and more. Even the greatest archer of his time felt this. Feeling it doesn't make you weak.",confused:"Yes, confused, and more. Even the greatest archer of his time felt this. Feeling it doesn't make you weak.",sad:"Yes, sad, and more. Even the greatest archer of his time felt this. Feeling it doesn't make you weak."}[k]}];}}
  ]},
  { art:()=>{
      const keys=Object.keys(WORRY); let g="";
@@ -633,7 +633,7 @@ const ALL={1:[
     {act:"choice",w:"K",q:"What makes <em>your mann ghabraye</em> these days?",
      opts:Object.keys(WORRY).map(k=>[WORRY[k][0],k]),
      on:k=>{S.worry=k;S.worryLabel=WORRY[k][0];return [
-       {w:"K",t:"<em>Samajh gaya.</em> Then "+WORRY[k][0].toLowerCase()+" is your Kurukshetra, <em>mere dost</em>."},
+       {w:"K",t:{exam:"<em>Samajh gaya.</em> Then exams and studies are your Kurukshetra, <em>mere dost</em>.",work:"<em>Samajh gaya.</em> Then work and finding a job are your Kurukshetra, <em>mere dost</em>.",family:"<em>Samajh gaya.</em> Then family and relationships are your Kurukshetra, <em>mere dost</em>.",health:"<em>Samajh gaya.</em> Then your health is your Kurukshetra, <em>mere dost</em>.",decision:"<em>Samajh gaya.</em> Then this big decision is your Kurukshetra, <em>mere dost</em>.",other:"<em>Samajh gaya.</em> Then whatever you're facing is your Kurukshetra, <em>mere dost</em>."}[k]},
        {w:"K",t:"Let's hear what I told Arjuna. It's for you too."}];}}
  ]},
  { art:()=>{
@@ -665,7 +665,7 @@ const ALL={1:[
     {act:"farm",w:"N",q:"Be the farmer. Plant three seeds.",
      on:()=>[
       {w:"K",t:"The farmer's job is the seed. The rain comes in its own time."},
-      {w:"K",t:()=>"For you, with "+S.worryLabel.toLowerCase()+": "+(S.worry?WORRY[S.worry][1]:WORRY.other[1])},
+      {w:"K",t:()=>T("For you, then: {v}").split("{v}").join(T(S.worry?WORRY[S.worry][1]:WORRY.other[1]))},
       {w:"N",t:"<em>Apna kaam poori lagan se karo, phal ki chinta chhod do.</em>"}]}
  ]},
  { art:()=>svg(sky("#ffd6c0","#cfe8f5")+`<path d="M0 470 L280 330 L520 440 L780 300 L1040 430 L1300 320 L1600 470Z" fill="#8fa9c9"/><rect y="470" width="1600" height="430" fill="#5e9cc4"/>`
@@ -1448,7 +1448,7 @@ const ACTS={
       $("copyCard").onclick=function(){const b=this;const txt=cardHost.querySelector(".m").innerText+"\n"+cardHost.querySelector(".f").innerText;try{navigator.clipboard.writeText(txt).then(()=>b.textContent=T("Copied"),()=>b.textContent=T("Select the text above to copy"));}catch(e){b.textContent=T("Select the text above to copy");}};
       done(st);};
     $("wGo").onclick=go;$("wIn").addEventListener("keydown",e=>{if(e.key==="Enter"){e.stopPropagation();go();}});},
-  choice(st){ st.opts.forEach(([label,key])=>btn(label,"opt",()=>{ if(st.q.includes("Arjuna feels")) done(st,key==="all"?"all":label.toLowerCase()); else done(st,key); })); },
+  choice(st){ st.opts.forEach(([label,key])=>btn(label,"opt",()=>{ done(st,key); })); },
   breath(st){
     const b=document.createElement("button"); b.type="button"; b.className="hold"; b.innerHTML="<i></i><span>"+T("Hold and breathe in")+"</span>"; act.appendChild(b);
     const fill=b.querySelector("i"), lab=b.querySelector("span"); let t0=0,raf=0,full=false;
