@@ -145,6 +145,10 @@ button[disabled]{opacity:.4;cursor:default;transform:none}
 .install b{font-family:var(--display);font-size:1.05rem}
 .install span{color:var(--soft);font-size:.92rem;line-height:1.35}
 @media (max-width:420px){.install{grid-template-columns:auto 1fr}.install button{grid-column:1/-1}}
+
+.soundbtn{position:fixed;right:max(14px,calc(env(safe-area-inset-right,0px) + 10px));bottom:calc(env(safe-area-inset-bottom,0px) + 14px);z-index:20;width:48px;height:48px;padding:0;border-radius:50%;display:grid;place-items:center;background:var(--card);color:var(--peacock);border:2px solid var(--line);box-shadow:0 6px 18px rgba(43,33,64,.15)}
+.soundbtn[aria-pressed="true"]{background:var(--peacock);color:#fff;border-color:var(--peacock)}
+body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 .who.A{background:var(--rose)} .who.N{background:var(--peacock)}
@@ -216,6 +220,73 @@ function T(s){
   return s;
 }
 function TF(s,v){return T(s).split("{v}").join(v);}
+
+/* ---------- gentle sounds (made in the browser, off by default) ---------- */
+const Sound=(()=>{
+  let ctx=null, master=null, on=false, timers=[], started=false;
+  try{on=localStorage.getItem("gs-sound")==="on";}catch(e){}
+  const SA=146.83; // D3 as Sa
+  const R={sa:1,re:9/8,ga:5/4,pa:3/2,dha:5/3};
+  function ensure(){
+    if(ctx) return true;
+    const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return false;
+    ctx=new AC(); master=ctx.createGain(); master.gain.value=0; master.connect(ctx.destination);
+    return true;
+  }
+  function pluck(freq,t,vol){ // tanpura-like string: rich tone, slow decay
+    const g=ctx.createGain(), f=ctx.createBiquadFilter(); f.type="lowpass"; f.frequency.value=1800; f.Q.value=.7;
+    [0,-3,4].forEach(det=>{const o=ctx.createOscillator(); o.type="sawtooth"; o.frequency.value=freq; o.detune.value=det; o.connect(f); o.start(t); o.stop(t+4.2);});
+    g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+.02); g.gain.exponentialRampToValueAtTime(.0008,t+4);
+    f.connect(g); g.connect(master);
+  }
+  function flute(freq,t,dur,vol){ // soft breathy sine with vibrato
+    const o=ctx.createOscillator(), g=ctx.createGain(), lfo=ctx.createOscillator(), lg=ctx.createGain();
+    o.type="sine"; o.frequency.value=freq; lfo.frequency.value=5; lg.gain.value=freq*.006; lfo.connect(lg); lg.connect(o.frequency);
+    const n=ctx.createOscillator(), ng=ctx.createGain(); n.type="sine"; n.frequency.value=freq*2; ng.gain.value=.12; n.connect(ng); ng.connect(g);
+    g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+.18); g.gain.setValueAtTime(vol,t+dur-.25); g.gain.linearRampToValueAtTime(0,t+dur);
+    o.connect(g); g.connect(master); [o,lfo,n].forEach(x=>{x.start(t); x.stop(t+dur+.05);});
+  }
+  function bell(freqs,vol){
+    if(!on||!ensure()) return; const t=ctx.currentTime+.01;
+    freqs.forEach((fq,k)=>[1,2.76,5.4].forEach((m,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type="sine";o.frequency.value=fq*m;
+      const st=t+k*.16; g.gain.setValueAtTime(0,st); g.gain.linearRampToValueAtTime(vol/(i*2+1),st+.01); g.gain.exponentialRampToValueAtTime(.0005,st+1.6-i*.4);
+      o.connect(g); g.connect(master); o.start(st); o.stop(st+1.7);}));
+  }
+  // short phrases in Raag Bhupali (Sa Re Ga Pa Dha)
+  const PHRASES=[["sa","re","ga","pa","ga"],["pa","dha","pa","ga","re","sa"],["ga","pa","dha","sa2","dha","pa"],["re","ga","re","sa"]];
+  function drone(){
+    if(!on) return;
+    const t=ctx.currentTime+.05;
+    [[SA*R.pa,0],[SA*2,1.1],[SA*2,2.2],[SA,3.3]].forEach(([fq,d])=>pluck(fq,t+d,.05)); // Pa, Sa', Sa', Sa
+    timers.push(setTimeout(drone,4400));
+  }
+  function melody(){
+    if(!on) return;
+    const ph=PHRASES[Math.floor(Math.random()*PHRASES.length)]; let t=ctx.currentTime+.1;
+    ph.forEach((n,i)=>{const fq=(n==="sa2"?SA*2:SA*R[n])*2; const d=i===ph.length-1?1.6:.55+Math.random()*.25; flute(fq,t,d,.045); t+=d;});
+    timers.push(setTimeout(melody,(t-ctx.currentTime)*1000+9000+Math.random()*6000));
+  }
+  function start(){
+    if(!ensure()) return; if(ctx.resume) ctx.resume();
+    if(started) return; started=true;
+    master.gain.cancelScheduledValues(ctx.currentTime); master.gain.setTargetAtTime(.9,ctx.currentTime,.8);
+    drone(); timers.push(setTimeout(melody,2500));
+  }
+  function stop(){
+    timers.forEach(clearTimeout); timers=[]; started=false;
+    if(ctx&&master) master.gain.setTargetAtTime(0,ctx.currentTime,.25);
+  }
+  function set(v){on=v; try{localStorage.setItem("gs-sound",v?"on":"off");}catch(e){} v?start():stop(); paint();}
+  function paint(){const b=document.getElementById("soundBtn"); if(!b) return;
+    b.setAttribute("aria-pressed",on); b.setAttribute("aria-label",T(on?"Sound on":"Sound off")); b.title=T(on?"Sound on":"Sound off");
+    b.innerHTML=on
+      ?'<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>'
+      :'<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16.5 9.5l5 5M21.5 9.5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';}
+  document.addEventListener("visibilitychange",()=>{ if(document.hidden) stop(); else if(on) start(); });
+  // a saved "on" choice needs one tap before the browser allows sound
+  document.addEventListener("pointerdown",()=>{ if(on&&!started) start(); },{capture:true});
+  return {toggle(){set(!on);}, paint, chime(){bell([SA*4,SA*4*R.pa],.06);}, card(){bell([SA*4,SA*4*R.ga,SA*4*R.pa],.07);}, get on(){return on;}};
+})();
 /* ---------- install as an app ---------- */
 let installEvt=null;
 const isStandalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;}catch(e){return false;}};
@@ -405,6 +476,7 @@ function step(n){
   if(n===3){who("N");setSay(F.act.q);setAct("");ACT[F.act.type]();}
 }
 function finish(val){
+  Sound.card();
   const html=F.act.card(esc(val||""));
   const card={id:F.id,ref:F.ref,html,when:Date.now()}; cards.push(card); saveCards(cards);
   who("N");setSay("Shabash. Keep this card and come back to it whenever you need.");setAct("");
@@ -462,7 +534,7 @@ function stopVoice(){try{if(window.speechSynthesis)speechSynthesis.cancel();}cat
 const ORDER=[1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18];
 function nextChapter(){return ORDER.find(n=>!isDone(n));}
 function langBar(){return `<div class="langs" role="group" aria-label="${T("Language")}">${LANGS.map(([k,l])=>`<button type="button" class="lang${k===LANG?" on":""}" data-lang="${k}" aria-pressed="${k===LANG}" lang="${k}">${l}</button>`).join("")}</div>`;}
-function bindLang(redraw){app.querySelectorAll(".lang").forEach(b=>b.onclick=()=>{LANG=b.dataset.lang;try{localStorage.setItem("gs-lang",LANG);}catch(e){}setLangAttr();redraw();});}
+function bindLang(redraw){app.querySelectorAll(".lang").forEach(b=>b.onclick=()=>{LANG=b.dataset.lang;try{localStorage.setItem("gs-lang",LANG);}catch(e){}setLangAttr();redraw();Sound.paint();});}
 function mainHome(msg){
   stopVoice();
   const n=window.mgCards?window.mgCards().length:0, dc=doneCount(), nx=nextChapter();
@@ -1435,7 +1507,7 @@ function advance(){
   backB.disabled=(sc===0&&pos===0);
 }
 function done(st,arg){
-  act.innerHTML=""; waiting=false; nextB.disabled=false;
+  act.innerHTML=""; waiting=false; nextB.disabled=false; Sound.chime();
   const extra=st.on?st.on(arg):[];
   queue.splice(pos+1,0,...extra);
   draw(); advance();
@@ -1474,7 +1546,7 @@ const ACTS={
   pop(st){S.popped=[];st.opts.forEach(o=>{btn(T(o)+" · "+T("come back"),"opt",function(){this.remove();S.popped.push(o);draw();if(S.popped.length>=st.opts.length)setTimeout(()=>done(st),700);});});},
   write(st){const wrap=document.createElement("div");wrap.className="field";wrap.innerHTML=`<input id="wIn" type="text" maxlength="90" placeholder="${T(st.ph)}" aria-label="${T("Your answer")}"><button type="button" id="wGo">${T("Make my card")}</button>`;act.appendChild(wrap);
     const go=()=>{const v=$("wIn").value.trim();if(!v){$("wIn").focus();return;}
-      cardHost.innerHTML=`<div class="blessing">${LANG==="en"?`<div class="v">${st.rom}</div>`:""}<div class="m">${st.card(esc(v))}</div><div class="f">${TR(st.ref)}</div><div><button type="button" id="copyCard" class="opt">${T("Copy my card")}</button></div></div>`;
+      Sound.card();cardHost.innerHTML=`<div class="blessing">${LANG==="en"?`<div class="v">${st.rom}</div>`:""}<div class="m">${st.card(esc(v))}</div><div class="f">${TR(st.ref)}</div><div><button type="button" id="copyCard" class="opt">${T("Copy my card")}</button></div></div>`;
       $("copyCard").onclick=function(){const b=this;const txt=cardHost.querySelector(".m").innerText+"\n"+cardHost.querySelector(".f").innerText;try{navigator.clipboard.writeText(txt).then(()=>b.textContent=T("Copied"),()=>b.textContent=T("Select the text above to copy"));}catch(e){b.textContent=T("Select the text above to copy");}};
       done(st);};
     $("wGo").onclick=go;$("wIn").addEventListener("keydown",e=>{if(e.key==="Enter"){e.stopPropagation();go();}});},
@@ -1542,6 +1614,7 @@ tts.onchange=()=>{ if(tts.checked) speak(say.innerHTML); else if(synth) try{synt
 startScene(0);
 }
 
+(function(){const b=document.createElement("button");b.type="button";b.id="soundBtn";b.className="soundbtn";b.onclick=()=>Sound.toggle();document.body.appendChild(b);Sound.paint();})();
 mainHome();
 })();
 </script>

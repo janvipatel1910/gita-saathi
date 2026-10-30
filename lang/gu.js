@@ -734,4 +734,6 @@ I18N.gu={
  "Opens like an app, and works without internet.": "તે ઍપની જેમ ખૂલે છે, અને ઇન્ટરનેટ વગર પણ ચાલે છે.",
  "Install": "ઇન્સ્ટૉલ કરો",
  "In Safari, tap the Share button, then “Add to Home Screen”.": "Safariમાં ‘શેર’ બટન દબાવો, પછી “Add to Home Screen” પસંદ કરો.",
+ "Sound on": "અવાજ ચાલુ",
+ "Sound off": "અવાજ બંધ",
 };

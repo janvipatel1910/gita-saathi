@@ -73,6 +73,15 @@ Choose **English**, **हिन्दी (Hindi)** or **ગુજરાતી (G
 
 The translations still need checking by native speakers before the app is shared widely.
 
+## Gentle sounds
+
+Tap the round speaker button in the bottom corner to turn sound on or off. It is **off by default**, and the choice is remembered on the device.
+
+- A soft tanpura-style drone, with an occasional short flute phrase in Raag Bhupali
+- A small chime when you finish an activity, and a bell when you make a card
+- All sounds are generated in the browser with the Web Audio API, so there are no audio files to download and no copyrighted recordings
+- Sound pauses automatically when you switch away from the app
+
 ## Install it as a phone app
 
 Gita Saathi can be added to a phone's home screen. It then opens full-screen with its own icon, and works without internet after the first visit.
@@ -98,6 +107,7 @@ The app is `index.html`, two language files in `lang/`, and the install files (`
 - Inline SVG for the illustrations, all original drawings
 - `localStorage` to save cards, chapter progress and the chosen language on the device
 - A web app manifest and service worker for installing and offline use
+- The Web Audio API for the generated music and chimes
 - Google Fonts: Baloo 2, Mukta and Tiro Devanagari Sanskrit
 
 ## A note on the content
