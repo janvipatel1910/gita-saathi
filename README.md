@@ -1,18 +1,38 @@
 # Gita Saathi
 
-An interactive Bhagavad Gita companion, in English mixed with Hindi.
+An interactive Bhagavad Gita companion for Indian families living abroad, in English, Hindi and Gujarati.
 
-When someone feels stressed, they can open Gita Saathi, say what they're feeling, and hear what Krishna said about it in the Gita. They can also play through the Gita chapter by chapter as a short story, making choices and doing small calming actions along the way.
+When someone feels stressed, they can tell Gita Saathi what's on their mind and hear what Krishna said about it in the Gita. Families can also play through the whole Gita together as a short story, in two languages side by side, making choices and doing small calming actions along the way.
 
 ## Features
 
+### Tell Krishna
+
+A box on the home page where you describe what's on your mind, in English, Hindi, Gujarati or Hinglish (for example "I miss my mum back in India" or "મને ખૂબ ચિંતા થાય છે"). The app finds the most fitting verse and practice, and suggests others.
+
+- It works offline by matching words. There is no AI, and nothing typed is sent anywhere or saved.
+- If the words suggest someone may be in danger, helplines are shown first.
+
+### Today's practice and My Gita diary
+
+- One small practice each day, linked to a verse (14 practices that rotate), with an "I did it today" button and a gentle view of the last 7 days. There is no streak to lose.
+- **My Gita diary** keeps every card made in the app, plus your own dated notes. Everything stays on the device.
+
+### Family mode
+
+A switch on the home page for reading together:
+- Every story line, feeling and verse meaning is shown in a second language underneath, for example Gujarati with English
+- Bigger text
+- A short summary for children at the start of each chapter
+- A question for the family to talk about at the end of each chapter
+
 ### Mann ghabraya hai? (What's troubling you?)
 
-The user picks one of 9 feelings. Each one shows:
+The user picks one of 12 feelings. Each one shows:
 
 1. A short line of story context
 2. Krishna's verse in Devanagari, then in English letters, then its meaning, with the chapter and verse number
-3. A simple explanation in English and Hindi
+3. A simple explanation
 4. A small action, such as breathing, writing or letting a feeling float away
 5. A card to keep, saved on the device
 
@@ -27,6 +47,9 @@ The user picks one of 9 feelings. Each one shows:
 | Restless mind, overthinking | 6.35 |
 | Tired, burnt out | 6.17 |
 | Alone, everything is too much | 18.66 |
+| Don't know what to do | 2.7 (Arjuna's words) |
+| Homesick, far from family | 6.30 |
+| Guilt over a mistake | 4.36 |
 
 ### Gita ki kahani (The Gita story)
 
@@ -67,7 +90,8 @@ Choose **English**, **हिन्दी (Hindi)** or **ગુજરાતી (G
 | Part of the app | Hindi | Gujarati |
 |---|---|---|
 | Home page, menus, chapter list | Done | Done |
-| Mann ghabraya hai? (all 9 feelings) | Done | Done |
+| Mann ghabraya hai? (all 12 feelings) | Done | Done |
+| Tell Krishna, daily practice, diary, Family mode | Done | Done |
 | Verse meanings in the chapters | Done | Done |
 | All 18 chapter stories | Done | Done |
 
