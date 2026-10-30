@@ -193,6 +193,30 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
 .ditem .del{align-self:flex-start;font-size:.85rem;padding:.3em .9em}
 .ditem .del.danger{border-color:var(--rose);color:var(--rose)}
 .empty{background:var(--card);border:2px dashed var(--line);border-radius:14px;padding:14px;color:var(--soft);margin:0}
+
+.famcard{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px 18px;display:flex;flex-direction:column;gap:8px}
+.famcard p{margin:0;color:var(--soft);line-height:1.45}
+.famtop{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.famcard h2{color:var(--krishna)}
+.switch{width:58px;height:32px;padding:3px;border-radius:99px;background:var(--line);position:relative;flex:none}
+.switch i{position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.2);transition:left .2s}
+.switch[aria-checked="true"]{background:var(--krishna)}
+.switch[aria-checked="true"] i{left:29px}
+.famlangs{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.famlangs span{color:var(--soft);font-size:.92rem;margin-right:4px}
+.famlangs .lang{border:2px solid var(--line)}
+.second{display:block;margin-top:.4em;padding-top:.4em;border-top:1px dashed var(--line);color:var(--krishna);font-size:.95em}
+.mean .second{font-size:.95em}
+html.family body{font-size:18px}
+html.family .say{font-size:clamp(1.2rem,3.2vw,1.45rem)}
+html.family .verse .mean,html.family .mean{font-size:1.15rem}
+html.family button{font-size:1.08rem}
+.kids{background:#fff3d6;border:2px solid var(--marigold);border-radius:16px;padding:12px 16px}
+.kids b{font-family:var(--display);color:#b9720a}
+.kids p{margin:.3em 0 0;line-height:1.5}
+.talk{background:#e8f0fb;border:2px solid #b9d0ef;border-radius:16px;padding:12px 16px;margin-top:12px}
+.talk b{font-family:var(--display);color:var(--krishna)}
+.talk p{margin:.3em 0 0;line-height:1.5;font-size:1.1rem}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 .who.A{background:var(--rose)} .who.N{background:var(--peacock)}
@@ -532,14 +556,14 @@ function draw(){
     +el+krishna(1120,840,1,{bless:true,glow:!!st.glow}));
 }
 function who(k){const w=document.getElementById("who");w.textContent=T(k==="K"?"Krishna's words":k==="A"?"Arjuna's words":"Story");w.className="who"+(k==="K"?" K":k==="A"?" A":"");}
-function setSay(h){document.getElementById("say").innerHTML=T(h);}
+function setSay(h){document.getElementById("say").innerHTML=bil(h);}
 function setAct(h){const a=document.getElementById("act");a.innerHTML=h||"";return a;}
 function nextBtn(label,fn){const a=document.getElementById("act");const b=document.createElement("button");b.type="button";b.textContent=T(label);b.onclick=fn;a.appendChild(b);setTimeout(()=>{try{b.focus({preventScroll:true});}catch(e){}},30);return b;}
 
 function step(n){
   if(n===0){who("N");setSay(F.open);setAct("");nextBtn("Hear Krishna's words",()=>step(1));}
   if(n===1){st.glow=true;draw();who(F.speaker||"K");
-    document.getElementById("say").innerHTML=`<div class="verse"><span class="ref">${TR(F.ref)}</span><div class="dev" lang="sa">${SCR(F.dev)}</div>${LANG==="en"?`<div class="rom">${F.rom}</div>`:""}<div class="mean">${T(F.mean)}</div></div>`;
+    document.getElementById("say").innerHTML=`<div class="verse"><span class="ref">${TR(F.ref)}</span><div class="dev" lang="sa">${SCR(F.dev)}</div>${LANG==="en"?`<div class="rom">${F.rom}</div>`:""}<div class="mean" data-k="${encodeURIComponent(F.mean)}">${T(F.mean)}</div></div>`;bilVerses(document.getElementById("say"));
     setAct("");nextBtn("What does it mean for me?",()=>step(2));}
   if(n===2){who("N");setSay(F.simple);setAct("");nextBtn("Let's try something",()=>step(3));}
   if(n===3){who("N");setSay(F.act.q);setAct("");ACT[F.act.type]();}
@@ -732,6 +756,43 @@ function diary(){
   };
   window.scrollTo(0,0);
 }
+
+/* ---------- family mode: two languages together, bigger text, kids' summaries, talk questions ---------- */
+let FAM=(()=>{try{return JSON.parse(localStorage.getItem("gs-family")||"null");}catch(e){return null;}})()||{on:false,second:null};
+function saveFam(){try{localStorage.setItem("gs-family",JSON.stringify(FAM));}catch(e){} document.documentElement.classList.toggle("family",!!FAM.on);}
+document.documentElement.classList.toggle("family",!!FAM.on);
+function famSecond(){let x=FAM.second; if(!x||x===LANG) x=LANG==="en"?"gu":"en"; return x;}
+function TL(s,lang){
+  if(s==null||lang==="en") return s;
+  s=String(s); const d=I18N[lang]||{}; if(d[s]!=null) return d[s];
+  const nums=[]; const k=s.replace(/\d+/g,m=>{nums.push(m);return "{"+(nums.length-1)+"}";});
+  if(nums.length&&d[k]!=null) return d[k].replace(/\{(\d+)\}/g,(m,i)=>nums[+i]);
+  return null;
+}
+function bil(s){
+  const main=T(s); if(!FAM.on) return main;
+  const sec=famSecond(), other=TL(s,sec);
+  return (other&&other!==main)?`${main}<span class="second" lang="${sec==="en"?"en-GB":sec}">${other}</span>`:main;
+}
+function bilVerses(el){
+  if(!FAM.on||!el) return; const sec=famSecond();
+  el.querySelectorAll(".mean[data-k]").forEach(m=>{const o=TL(decodeURIComponent(m.dataset.k),sec); if(o&&o!==m.textContent) m.insertAdjacentHTML("beforeend",`<span class="second" lang="${sec==="en"?"en-GB":sec}">${o}</span>`);});
+}
+const KIDS={"1": "Arjuna was a brave archer. But before a big battle, he saw his own family on the other side and felt very sad and scared. His best friend Krishna helped him feel brave again.", "3": "Arjuna wanted to give up and do nothing. Krishna told him that everyone is always doing something, so do good things, and do them well.", "4": "Krishna told Arjuna that this wisdom is very, very old. Whenever the world gets dark and unkind, goodness always comes back.", "5": "Krishna showed Arjuna a lotus leaf. It sits in water but never gets wet. We can do our work without letting worries stick to us.", "6": "Krishna taught Arjuna how to sit quietly and calm his busy mind, like a lamp that doesn't flicker.", "7": "Krishna said He is everywhere: in the taste of water and in the light of the moon and the sun. Everything is joined together, like pearls on one string.", "8": "Arjuna asked lots of questions. Krishna said that whatever we think about every day, we slowly become.", "9": "Krishna said we don't need gold to show love. Even a leaf, a flower or some water, given with love, makes Him happy.", "10": "Krishna showed Arjuna that the best of everything comes from Him: the tallest mountains, the greatest rivers, and even Arjuna's own courage.", "11": "Krishna showed Arjuna His huge, shining form, brighter than a thousand suns! Arjuna got scared, so Krishna became his smiling friend again.", "12": "Krishna said the simplest way to reach Him is love. And if something feels too hard, there is always an easier step you can take.", "13": "Krishna said our body is like a field. Feelings grow and change in it, but the real you is the one who watches the field.", "14": "Krishna said our mind can be like clear water, boiling water or muddy water. Good habits help keep it clear.", "15": "Krishna talked about a magic upside-down tree whose branches tangle us up. When we stop wanting too much, we feel lighter.", "16": "Krishna said three doors lead to trouble: being greedy, getting angry, and wanting things only for ourselves. We can keep those doors closed.", "17": "Krishna said that what we eat, what we say and how we give all shape our mind. Kind words are like healthy food for everyone.", "18": "At the end, Arjuna's sadness was gone. He stood up tall and brave, ready to do the right thing, with his friend Krishna by his side."};
+const TALKQ={"1": "Have you ever felt scared before something big? Who helped you feel brave?", "3": "Who in our family do you learn from just by watching them? What have you learnt?", "4": "Who is a wise person you can ask when you have a big question?", "5": "What is something people say that you could let roll off you, like water off a lotus leaf?", "6": "Can we sit quietly together for one minute? How did it feel?", "7": "What beautiful thing did each of us notice today?", "8": "What good thought shall we each \"water\" this week?", "9": "What small thing could each of us give with love this week?", "10": "What is one special quality in each person in our family?", "11": "When do you feel closest to God, or most peaceful?", "12": "Which is easiest for you: being kind, forgiving, or staying calm? Which is hardest?", "13": "What feeling did you notice in yourself today? Did it change?", "14": "What is one habit that makes our home feel calm, like clear water?", "15": "Is there something you hold on to too tightly? How could you let go a little?", "16": "What helps you when you start to feel angry?", "17": "Can you remember a time when someone's kind words made you feel better?", "18": "What is the one lesson from the Gita our family wants to remember?"};
+function familyCard(){
+  const sec=famSecond();
+  return `<section class="famcard" aria-labelledby="famH">
+    <div class="famtop"><h2 id="famH">${T("Family mode")}</h2>
+      <button type="button" class="switch" id="famBtn" role="switch" aria-checked="${FAM.on}" aria-labelledby="famH"><i></i></button></div>
+    <p>${T("Read together: every line in two languages, bigger text, a short summary for children, and a question to talk about after each chapter.")}</p>
+    ${FAM.on?`<div class="famlangs"><span>${T("Also show in:")}</span>${LANGS.filter(([k])=>k!==LANG).map(([k,l])=>`<button type="button" class="lang${k===sec?" on":""}" data-sec="${k}" aria-pressed="${k===sec}" lang="${k}">${l}</button>`).join("")}</div>`:""}
+  </section>`;
+}
+function bindFamily(){
+  const b=document.getElementById("famBtn"); if(b) b.onclick=()=>{FAM.on=!FAM.on; if(FAM.on&&!FAM.second) FAM.second=famSecond(); saveFam(); mainHome();};
+  app.querySelectorAll("[data-sec]").forEach(x=>x.onclick=()=>{FAM.second=x.dataset.sec; saveFam(); mainHome();});
+}
 const HOME_HELP_EN=`<div class="help quiet">Gita Saathi shares the Gita's wisdom. It isn't a replacement for talking to someone. If things feel very heavy, call <strong>Samaritans 116 123</strong> (UK) or <strong>Tele-MANAS 14416</strong> (India).</div>`;
 const HOME_HELP_=()=>T(HOME_HELP_EN);
 function stopVoice(){try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}}
@@ -762,6 +823,7 @@ function mainHome(msg){
        <button type="button" id="goNext" class="cont">▶ ${cont}</button></div>
    </div>
    ${todayCard()}
+   ${familyCard()}
    <button type="button" class="door diary" id="goDiary"><span class="k">${T("My Gita diary")}</span><span class="d">${T("Your cards, your notes and your practice, all in one place.")}</span></button>
    <div id="installHost">${installCard()}</div>
    ${HOME_HELP_()}`;
@@ -771,7 +833,7 @@ function mainHome(msg){
   document.getElementById("askIn").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();document.getElementById("askForm").requestSubmit();}});
   document.getElementById("goGita").onclick=()=>chapters();
   document.getElementById("goNext").onclick=()=>nx?storyOne(nx):chapters();
-  bindToday(); document.getElementById("goDiary").onclick=()=>diary();
+  bindToday(); bindFamily(); document.getElementById("goDiary").onclick=()=>diary();
   window.scrollTo(0,0);
 }
 function chapters(){
@@ -793,6 +855,7 @@ function chapters(){
 function storyOne(CH){ CH=CH||1;
 app.innerHTML=`<div class="controls"><button class="ghost" id="toChapters" type="button">${T("‹ Chapters")}</button></div>
   <header class="shead"><h2>${T(CHTITLE[CH])}</h2><div class="dots" id="dots" aria-hidden="true"></div></header>
+  ${FAM.on&&KIDS[CH]?`<div class="kids"><b>${T("For children")}</b><p>${bil(KIDS[CH])}</p></div>`:""}
   ${LANG!=="en"&&!(I18N.done&&I18N.done[LANG]||[]).includes(CH)?`<p class="note-lang">${T("This chapter hasn't been translated yet, so it's shown in English for now.")}</p>`:""}
   <div class="stage story" id="stage" role="img" aria-label="${T("Story picture")}"></div>
   <div class="box story" aria-live="polite"><span class="who N" id="who">${T("Story")}</span><p class="say" id="say"></p><div class="act" id="act"></div></div>
@@ -908,7 +971,7 @@ const WORRY={
 };
 
 /* ---------- scenes ---------- */
-const V=(ref,dev,rom,mean)=>`<span class="verse"><span class="ref">${TR(ref)}</span><span class="dev" lang="sa">${SCR(dev)}</span>${LANG==="en"?`<span class="rom">${rom}</span>`:""}<span class="mean">${T(mean)}</span></span>`;
+const V=(ref,dev,rom,mean)=>`<span class="verse"><span class="ref">${TR(ref)}</span><span class="dev" lang="sa">${SCR(dev)}</span>${LANG==="en"?`<span class="rom">${rom}</span>`:""}<span class="mean" data-k="${encodeURIComponent(mean)}">${T(mean)}</span></span>`;
 const ALL={1:[
  { art:()=>svg(sky("#7fd3f0","#d8f3fb",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+hills("#7cc576","#5aa85a")+krishna(640,760,.95,{flute:true})+arjuna(960,760,.95,{})),
    title:true,
@@ -1696,9 +1759,9 @@ function pointTo(w){
   });
 }
 function show(step){
-  const t=T(typeof step.t==="function"?step.t():(step.t||step.q));
+  const raw=typeof step.t==="function"?step.t():(step.t||step.q), t=T(raw);
   who.textContent=T(NAMES[step.w]); who.className="who "+step.w;
-  say.innerHTML=t; say.classList.remove("in"); void say.offsetWidth; say.classList.add("in");
+  say.innerHTML=bil(raw); bilVerses(say); say.classList.remove("in"); void say.offsetWidth; say.classList.add("in");
   talk(step.w,t); speak(t);
 }
 function startScene(i){
@@ -1728,6 +1791,7 @@ function finish(){
   act.appendChild(b);
   try{localStorage.setItem("gs-story-"+CH,"done");}catch(e){}
   const c=document.createElement("button"); c.type="button"; c.className="ghost"; c.textContent=T("Back to chapters"); c.onclick=()=>chapters(); act.appendChild(c);
+  if(FAM.on&&TALKQ[CH]&&!document.getElementById("talkCard")) cardHost.insertAdjacentHTML("beforeend",`<div class="talk" id="talkCard"><b>${T("Talk about it together")}</b><p>${bil(TALKQ[CH])}</p></div>`);
 }
 function btn(label,cls,fn){const b=document.createElement("button");b.type="button";b.className=cls||"opt";b.innerHTML=T(label);b.onclick=fn;act.appendChild(b);return b;}
 
