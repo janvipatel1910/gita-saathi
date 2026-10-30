@@ -730,4 +730,8 @@ I18N.gu={
  "e.g. do my duty and let go of the worry about results": "જેમ કે, મારું કર્તવ્ય કરવું અને પરિણામની ચિંતા છોડવી",
  "The lesson I'll carry with me: <strong>{v}</strong>": "જે શીખ સાથે રહેશે: <strong>{v}</strong>",
  "<em>Jai Shri Krishna.</em> Come back whenever your mann ghabraye. Krishna is always here.": "<em>જય શ્રી કૃષ્ણ.</em> જ્યારે પણ મન ગભરાય, પાછા આવજો. શ્રીકૃષ્ણ હંમેશા અહીં છે.",
+ "Add Gita Saathi to your phone": "ગીતા સાથીને તમારા ફોન પર ઉમેરો",
+ "Opens like an app, and works without internet.": "તે ઍપની જેમ ખૂલે છે, અને ઇન્ટરનેટ વગર પણ ચાલે છે.",
+ "Install": "ઇન્સ્ટૉલ કરો",
+ "In Safari, tap the Share button, then “Add to Home Screen”.": "Safariમાં ‘શેર’ બટન દબાવો, પછી “Add to Home Screen” પસંદ કરો.",
 };

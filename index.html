@@ -28,6 +28,14 @@
 .note-lang{margin:0;background:#fff3d6;border:2px solid var(--marigold);border-radius:12px;padding:8px 12px;font-size:.95rem}
 </style>
 <title>Gita Saathi</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1f8a8a">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Gita Saathi">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Baloo+Bhai+2:wght@500;600;700;800&family=Hind+Vadodara:wght@400;600&family=Mukta:wght@400;600&family=Noto+Serif+Gujarati:wght@400;600&family=Tiro+Devanagari+Sanskrit&display=swap">
 <style>
 /* Layout: home = Krishna banner + 3x3 grid of feelings + my cards; feeling view = storybook stage, dialogue box, action, keepsake card. One bright look by choice. */
@@ -130,6 +138,13 @@ button[disabled]{opacity:.4;cursor:default;transform:none}
 .box.story:has(.who.K).has-tail::before{border-bottom-color:#b9d0ef}
 .box.story:has(.who.A){border-color:#efc4c2}
 .box.story:has(.who.A).has-tail::before{border-bottom-color:#efc4c2}
+
+.install{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;background:var(--card);border:2px dashed var(--peacock);border-radius:18px;padding:12px 16px}
+.install img{border-radius:12px;display:block}
+.install div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.install b{font-family:var(--display);font-size:1.05rem}
+.install span{color:var(--soft);font-size:.92rem;line-height:1.35}
+@media (max-width:420px){.install{grid-template-columns:auto 1fr}.install button{grid-column:1/-1}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 .who.A{background:var(--rose)} .who.N{background:var(--peacock)}
@@ -201,6 +216,20 @@ function T(s){
   return s;
 }
 function TF(s,v){return T(s).split("{v}").join(v);}
+/* ---------- install as an app ---------- */
+let installEvt=null;
+const isStandalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;}catch(e){return false;}};
+const isIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();installEvt=e;const h=document.getElementById("installHost");if(h)h.innerHTML=installCard();bindInstall();});
+window.addEventListener("appinstalled",()=>{installEvt=null;const h=document.getElementById("installHost");if(h)h.innerHTML="";});
+if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol)){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(()=>{});});}
+function installCard(){
+  if(isStandalone()) return "";
+  if(installEvt) return `<div class="install"><img src="icons/icon-192.png" alt="" width="44" height="44"><div><b>${T("Add Gita Saathi to your phone")}</b><span>${T("Opens like an app, and works without internet.")}</span></div><button type="button" id="installBtn">${T("Install")}</button></div>`;
+  if(isIOS()) return `<div class="install"><img src="icons/icon-192.png" alt="" width="44" height="44"><div><b>${T("Add Gita Saathi to your phone")}</b><span>${T("In Safari, tap the Share button, then “Add to Home Screen”.")}</span></div></div>`;
+  return "";
+}
+function bindInstall(){const b=document.getElementById("installBtn");if(b)b.onclick=async()=>{if(!installEvt)return;installEvt.prompt();try{await installEvt.userChoice;}catch(e){}installEvt=null;const h=document.getElementById("installHost");if(h)h.innerHTML="";};}
 const GITA={hi:"भगवद्गीता",gu:"ભગવદ્ ગીતા"};
 function TR(ref){
   if(LANG==="en"||!ref) return ref;
@@ -455,8 +484,9 @@ function mainHome(msg){
      <div class="verse"><span class="ref">${TR(V.ref)}</span><div class="dev" lang="sa">${SCR(V.dev)}</div>${LANG==="en"?`<div class="rom">${V.rom}</div>`:""}<div class="mean">${T(V.mean)}</div></div>
      <button type="button" class="opt" id="goToday">${T("Read more about this verse")}</button>
    </section>
+   <div id="installHost">${installCard()}</div>
    ${HOME_HELP_()}`;
-  bindLang(()=>mainHome());
+  bindLang(()=>mainHome()); bindInstall();
   document.getElementById("goFeel").onclick=()=>window.openFeelings();
   document.getElementById("goGita").onclick=()=>chapters();
   document.getElementById("goNext").onclick=()=>nx?storyOne(nx):chapters();

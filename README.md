@@ -73,9 +73,21 @@ Choose **English**, **हिन्दी (Hindi)** or **ગુજરાતી (G
 
 The translations still need checking by native speakers before the app is shared widely.
 
+## Install it as a phone app
+
+Gita Saathi can be added to a phone's home screen. It then opens full-screen with its own icon, and works without internet after the first visit.
+
+- **Android (Chrome):** open the site and tap **Install** on the home page, or use the browser menu → *Install app*.
+- **iPhone (Safari):** tap the **Share** button, then **Add to Home Screen**.
+
+How it works:
+- `manifest.json` gives the app its name, colours and icons (in `icons/`).
+- `sw.js` is a service worker that saves the app's files on the phone so it works offline. It always tries the internet first, so updates still arrive.
+- **When you change any app file, increase `VERSION` in `sw.js`** (for example `gs-v1` → `gs-v2`) so phones pick up the new version.
+
 ## How to run it
 
-The app is `index.html` plus two language files in `lang/`, with no build step and no server needed.
+The app is `index.html`, two language files in `lang/`, and the install files (`manifest.json`, `sw.js`, `icons/`). There is no build step. Opening `index.html` directly works, but install and offline mode only work when the site is served over the web (for example on GitHub Pages).
 
 - **On your computer:** download the repository (Code → Download ZIP), unzip it, and open `index.html` in any browser.
 - **Online:** turn on GitHub Pages for this repository (Settings → Pages → Deploy from branch → `main`, folder `/ (root)`).
@@ -84,7 +96,8 @@ The app is `index.html` plus two language files in `lang/`, with no build step a
 
 - HTML, CSS and plain JavaScript (no frameworks)
 - Inline SVG for the illustrations, all original drawings
-- `localStorage` to save cards and chapter progress on the device
+- `localStorage` to save cards, chapter progress and the chosen language on the device
+- A web app manifest and service worker for installing and offline use
 - Google Fonts: Baloo 2, Mukta and Tiro Devanagari Sanskrit
 
 ## A note on the content
