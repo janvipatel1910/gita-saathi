@@ -1,6 +1,6 @@
 // Gita Saathi service worker: lets the app open and work offline.
 // When you change any app file, bump VERSION so phones fetch the new files.
-const VERSION = "gs-v4";
+const VERSION = "gs-v5";
 const CORE = ["./", "index.html", "lang/hi.js", "lang/gu.js", "manifest.json",
   "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-512.png", "icons/icon-180.png", "icons/icon-32.png"];
 

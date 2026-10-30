@@ -165,6 +165,34 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .help.crisis{font-size:1.02rem;border-left-width:8px}
 .who.A{background:var(--rose)}
+
+.today .ptext{margin:0;font-family:var(--display);font-weight:700;font-size:1.25rem;line-height:1.3;color:var(--ink)}
+.today .verse .mean{color:var(--soft);font-size:1rem}
+.prow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pdone{font-family:var(--display);font-weight:700;color:var(--peacock);background:#e3f3f1;border-radius:99px;padding:.45em 1em}
+.week{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.dots{display:flex;gap:6px}
+.dots i{width:14px;height:14px;border-radius:50%;background:var(--line);display:block}
+.dots i.on{background:var(--marigold)}
+.dots i.now{outline:2px solid var(--peacock);outline-offset:2px}
+.door.diary{background:var(--card);color:var(--ink);border:2px solid var(--line);min-height:0}
+.door.diary .k{color:var(--rose);font-size:1.3rem}
+.door.diary .d{color:var(--soft)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stats div{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px;text-align:center;display:flex;flex-direction:column}
+.stats b{font-family:var(--display);font-size:1.6rem;color:var(--peacock);font-variant-numeric:tabular-nums}
+.stats span{color:var(--soft);font-size:.9rem}
+#noteForm textarea{font:400 1.05rem var(--body);padding:.6em .8em;border-radius:12px;border:2px solid var(--line);background:#fff;color:var(--ink);resize:vertical;min-width:0}
+#noteForm button{align-self:flex-start}
+.dlist{display:flex;flex-direction:column;gap:8px}
+.ditem{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 14px;display:flex;flex-direction:column;gap:4px}
+.ditem.note{border-left:6px solid var(--marigold)}
+.ditem.card{border-left:6px solid var(--peacock)}
+.ditem .when,.ditem .r{font-size:.82rem;color:var(--soft);text-transform:uppercase;letter-spacing:.04em}
+.ditem p{margin:0;line-height:1.5}
+.ditem .del{align-self:flex-start;font-size:.85rem;padding:.3em .9em}
+.ditem .del.danger{border-color:var(--rose);color:var(--rose)}
+.empty{background:var(--card);border:2px dashed var(--line);border-radius:14px;padding:14px;color:var(--soft);margin:0}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 .who.A{background:var(--rose)} .who.N{background:var(--peacock)}
@@ -454,7 +482,8 @@ const FEELINGS=[
 
 /* ---------- saved cards (this device only) ---------- */
 function loadCards(){try{return JSON.parse(localStorage.getItem("mgh-cards")||"[]");}catch(e){return [];}}
-function saveCards(c){try{localStorage.setItem("mgh-cards",JSON.stringify(c.slice(-30)));}catch(e){}}
+function saveCards(c){try{localStorage.setItem("mgh-cards",JSON.stringify(c.slice(-300)));}catch(e){}}
+function addCard(c){cards=loadCards();cards.push(Object.assign({when:Date.now()},c));saveCards(cards);}
 let cards=loadCards();
 const HELP_FULL_=()=>T(HELP_FULL_EN), HELP_QUIET_=()=>T(HELP_QUIET_EN);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -622,6 +651,87 @@ function askKrishna(text){
   app.querySelectorAll(".chips .opt").forEach(b=>b.onclick=()=>open(b.dataset.id));
   window.scrollTo(0,0);
 }
+
+/* ---------- daily practice + diary (saved only on this device) ---------- */
+const PRACTICES=[
+ {ref:"Bhagavad Gita 2.47",feel:"fear",text:"Do one task today with your full effort, without checking how it turns out.",mean:"You have a right to your work, but never to its results. Don't work only for the reward, and don't give up on your work either."},
+ {ref:"Bhagavad Gita 2.63",feel:"anger",text:"Before you reply when you're upset, take three slow breaths.",mean:"From anger comes confusion. Confusion clouds memory. When memory is lost, judgement is destroyed, and when judgement is destroyed, a person falls."},
+ {ref:"Bhagavad Gita 6.5",feel:"fail",text:"Say one kind sentence to yourself today, the way a good friend would.",mean:"Lift yourself up by your own mind; do not pull yourself down. Your own mind can be your best friend, or your worst enemy."},
+ {ref:"Bhagavad Gita 2.14",feel:"sad",text:"When a hard feeling comes today, tell yourself: this will pass.",mean:"Heat and cold, happiness and pain, come from our contact with the world. They come and they go; they do not last. Bear them patiently, Arjuna."},
+ {ref:"Bhagavad Gita 6.35",feel:"mind",text:"Sit quietly for two minutes. Each time your mind wanders, gently bring it back.",mean:"No doubt, mighty Arjuna, the mind is restless and hard to control. But with practice and letting go, it can be held steady."},
+ {ref:"Bhagavad Gita 6.30",feel:"homesick",text:"Call, message or send a voice note to someone in your family back home.",mean:"Whoever sees Me everywhere, and sees everything in Me, is never lost to Me, and I am never lost to them."},
+ {ref:"Bhagavad Gita 9.26",text:"Offer something small with love: water a plant, cook for someone, or light a diya.",mean:"Whoever offers Me a leaf, a flower, a fruit or water with love, I accept that offering of love from a pure heart."},
+ {ref:"Bhagavad Gita 3.21",text:"Do one good thing today that a child in your family could learn from.",mean:"Whatever a great person does, others follow. Whatever standard they set, the world follows it."},
+ {ref:"Bhagavad Gita 6.17",feel:"tired",text:"Go to bed 20 minutes earlier tonight.",mean:"For someone who is balanced in eating and relaxing, in effort at work, and in sleeping and waking, yoga takes away sorrow."},
+ {ref:"Bhagavad Gita 5.18",text:"Be kind to someone people usually ignore.",mean:"The wise see with an equal eye a learned and humble priest, a cow, an elephant, a dog, and a person society treats as an outcast."},
+ {ref:"Bhagavad Gita 7.8",text:"Notice one beautiful thing today: the moon, a cool glass of water, or a smile.",mean:"I am the taste in water, Arjuna, and the light of the moon and the sun. I am Om in all the Vedas, the sound in space, and the strength in people."},
+ {ref:"Bhagavad Gita 17.15",text:"For one hour, say only words that are true, kind and helpful.",mean:"Words that don't hurt others, that are true, kind and helpful, together with regular study of scripture: this is called discipline of speech."},
+ {ref:"Bhagavad Gita 3.35",feel:"compare",text:"Notice one moment when you compare yourself with someone, and come back to your own path.",mean:"It is better to follow your own path, even imperfectly, than to follow someone else's path perfectly. Living someone else's path is full of fear."},
+ {ref:"Bhagavad Gita 4.36",feel:"guilt",text:"If you've hurt someone, take one small step to put it right.",mean:"Even if you had done more wrong than anyone else, you would cross over all of it in the boat of knowledge."}
+];
+const dayKey=(d)=>{d=d||new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");};
+const dayNum=()=>{const d=new Date();return Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000);};
+function practiceDays(){try{return JSON.parse(localStorage.getItem("gs-practice")||"[]");}catch(e){return [];}}
+function savePracticeDays(a){try{localStorage.setItem("gs-practice",JSON.stringify(a));}catch(e){}}
+function loadNotes(){try{return JSON.parse(localStorage.getItem("gs-notes")||"[]");}catch(e){return [];}}
+function saveNotes(a){try{localStorage.setItem("gs-notes",JSON.stringify(a));}catch(e){}}
+const todayPractice=()=>PRACTICES[dayNum()%PRACTICES.length];
+function fmtDate(ms){try{return new Date(ms).toLocaleDateString(LANG==="hi"?"hi-IN":LANG==="gu"?"gu-IN":"en-GB",{day:"numeric",month:"short",year:"numeric"});}catch(e){return new Date(ms).toDateString();}}
+function weekDots(){
+  const done=new Set(practiceDays()), out=[];
+  for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);out.push(done.has(dayKey(d)));}
+  return out;
+}
+function todayCard(){
+  const P=todayPractice(), done=practiceDays().includes(dayKey()), total=practiceDays().length;
+  const dots=weekDots().map((x,i)=>`<i class="${x?"on":""}${i===6?" now":""}"></i>`).join("");
+  return `<section class="today" aria-labelledby="todayH">
+     <h2 id="todayH">${T("Today's practice")}</h2>
+     <p class="ptext">${T(P.text)}</p>
+     <div class="verse"><span class="ref">${TR(P.ref)}</span><div class="mean">${T(P.mean)}</div></div>
+     <div class="prow">
+       ${done?`<span class="pdone">✓ ${T("Done for today. Shabash!")}</span>`:`<button type="button" id="pDone">${T("I did it today")}</button>`}
+       ${P.feel?`<button type="button" class="opt" id="pMore">${T("Read more about this verse")}</button>`:""}
+     </div>
+     <div class="week" role="img" aria-label="${T(total===1?"1 day practised":`${total} days practised`)}"><span class="dots">${dots}</span><span class="tiny">${T("Last 7 days")} · ${T(total===1?"1 day practised":`${total} days practised`)}</span></div>
+   </section>`;
+}
+function bindToday(){
+  const P=todayPractice();
+  const b=document.getElementById("pDone"); if(b) b.onclick=()=>{const a=practiceDays();if(!a.includes(dayKey()))a.push(dayKey());savePracticeDays(a);Sound.card();mainHome();};
+  const m=document.getElementById("pMore"); if(m) m.onclick=()=>open(P.feel);
+}
+function diary(){
+  stopVoice();
+  const items=[...loadCards().map(c=>({k:"card",when:c.when||0,ref:c.ref,html:c.html})),...loadNotes().map((n,i)=>({k:"note",when:n.when,text:n.text,idx:i}))].sort((a,b)=>b.when-a.when);
+  const total=practiceDays().length;
+  app.innerHTML=`<div class="controls"><button class="ghost" id="toHome" type="button">${T("‹ Home")}</button></div>
+   <h1>${T("My Gita diary")}</h1>
+   <p class="lead">${T("Your cards, your notes and your practice, all in one place.")}</p>
+   <div class="stats"><div><b>${total}</b><span>${T(total===1?"day practised":"days practised")}</span></div><div><b>${loadCards().length}</b><span>${T("cards")}</span></div><div><b>${loadNotes().length}</b><span>${T("notes")}</span></div></div>
+   <form class="ask" id="noteForm" autocomplete="off">
+     <label for="noteIn">${T("Write a note")}</label>
+     <textarea id="noteIn" rows="3" maxlength="600" placeholder="${T("e.g. Today I stayed calm when my manager was rude. Breathing helped.")}"></textarea>
+     <button type="submit">${T("Save note")}</button>
+   </form>
+   ${items.length?`<div class="dlist">${items.map(it=>it.k==="card"
+      ?`<article class="ditem card"><span class="when">${fmtDate(it.when)} · ${T("Card")}</span><span class="r">${esc(TR(it.ref||""))}</span><div>${it.html}</div></article>`
+      :`<article class="ditem note"><span class="when">${fmtDate(it.when)} · ${T("Note")}</span><p>${esc(it.text).replace(/\n/g,"<br>")}</p><button type="button" class="ghost del" data-i="${it.idx}">${T("Delete")}</button></article>`).join("")}</div>
+     <button type="button" class="opt" id="copyDiary">${T("Copy my diary")}</button>`
+   :`<p class="empty">${T("Your diary is empty for now. Cards you make in the app, and notes you write here, will appear here.")}</p>`}
+   <p class="tiny">${T("Your diary is saved only on this phone. Nobody else can see it.")}</p>`;
+  document.getElementById("toHome").onclick=()=>mainHome();
+  document.getElementById("noteForm").addEventListener("submit",e=>{e.preventDefault();const v=document.getElementById("noteIn").value.trim();if(!v){document.getElementById("noteIn").focus();return;}const a=loadNotes();a.push({text:v,when:Date.now()});saveNotes(a);diary();});
+  app.querySelectorAll(".del").forEach(b=>b.onclick=()=>{
+    if(b.dataset.sure){const a=loadNotes();a.splice(+b.dataset.i,1);saveNotes(a);diary();}
+    else{b.dataset.sure="1";b.textContent=T("Yes, delete this note");b.classList.add("danger");}
+  });
+  const cp=document.getElementById("copyDiary"); if(cp) cp.onclick=function(){
+    const txt=items.map(it=>fmtDate(it.when)+" — "+(it.k==="card"?TR(it.ref||"")+": "+it.html.replace(/<[^>]+>/g,""):it.text)).join("\n\n");
+    const b=this; try{navigator.clipboard.writeText(txt).then(()=>b.textContent=T("Copied"),()=>b.textContent=T("Select the text to copy"));}catch(e){b.textContent=T("Select the text to copy");}
+  };
+  window.scrollTo(0,0);
+}
 const HOME_HELP_EN=`<div class="help quiet">Gita Saathi shares the Gita's wisdom. It isn't a replacement for talking to someone. If things feel very heavy, call <strong>Samaritans 116 123</strong> (UK) or <strong>Tele-MANAS 14416</strong> (India).</div>`;
 const HOME_HELP_=()=>T(HOME_HELP_EN);
 function stopVoice(){try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}}
@@ -651,11 +761,8 @@ function mainHome(msg){
        <span class="p">${T(`${dc} of 18 chapters done`)}</span>
        <button type="button" id="goNext" class="cont">▶ ${cont}</button></div>
    </div>
-   <section class="today" aria-labelledby="todayH">
-     <h2 id="todayH">${T("Today's verse")}</h2>
-     <div class="verse"><span class="ref">${TR(V.ref)}</span><div class="dev" lang="sa">${SCR(V.dev)}</div>${LANG==="en"?`<div class="rom">${V.rom}</div>`:""}<div class="mean">${T(V.mean)}</div></div>
-     <button type="button" class="opt" id="goToday">${T("Read more about this verse")}</button>
-   </section>
+   ${todayCard()}
+   <button type="button" class="door diary" id="goDiary"><span class="k">${T("My Gita diary")}</span><span class="d">${T("Your cards, your notes and your practice, all in one place.")}</span></button>
    <div id="installHost">${installCard()}</div>
    ${HOME_HELP_()}`;
   bindLang(()=>mainHome()); bindInstall();
@@ -664,7 +771,7 @@ function mainHome(msg){
   document.getElementById("askIn").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();document.getElementById("askForm").requestSubmit();}});
   document.getElementById("goGita").onclick=()=>chapters();
   document.getElementById("goNext").onclick=()=>nx?storyOne(nx):chapters();
-  document.getElementById("goToday").onclick=()=>open(V.id);
+  bindToday(); document.getElementById("goDiary").onclick=()=>diary();
   window.scrollTo(0,0);
 }
 function chapters(){
@@ -1649,7 +1756,7 @@ const ACTS={
   pop(st){S.popped=[];st.opts.forEach(o=>{btn(T(o)+" · "+T("come back"),"opt",function(){this.remove();S.popped.push(o);draw();if(S.popped.length>=st.opts.length)setTimeout(()=>done(st),700);});});},
   write(st){const wrap=document.createElement("div");wrap.className="field";wrap.innerHTML=`<input id="wIn" type="text" maxlength="90" placeholder="${T(st.ph)}" aria-label="${T("Your answer")}"><button type="button" id="wGo">${T("Make my card")}</button>`;act.appendChild(wrap);
     const go=()=>{const v=$("wIn").value.trim();if(!v){$("wIn").focus();return;}
-      Sound.card();cardHost.innerHTML=`<div class="blessing">${LANG==="en"?`<div class="v">${st.rom}</div>`:""}<div class="m">${st.card(esc(v))}</div><div class="f">${TR(st.ref)}</div><div><button type="button" id="copyCard" class="opt">${T("Copy my card")}</button></div></div>`;
+      Sound.card();addCard({ch:CH,ref:st.ref,html:st.card(esc(v))});cardHost.innerHTML=`<div class="blessing">${LANG==="en"?`<div class="v">${st.rom}</div>`:""}<div class="m">${st.card(esc(v))}</div><div class="f">${TR(st.ref)}</div><div><button type="button" id="copyCard" class="opt">${T("Copy my card")}</button></div></div>`;
       $("copyCard").onclick=function(){const b=this;const txt=cardHost.querySelector(".m").innerText+"\n"+cardHost.querySelector(".f").innerText;try{navigator.clipboard.writeText(txt).then(()=>b.textContent=T("Copied"),()=>b.textContent=T("Select the text above to copy"));}catch(e){b.textContent=T("Select the text above to copy");}};
       done(st);};
     $("wGo").onclick=go;$("wIn").addEventListener("keydown",e=>{if(e.key==="Enter"){e.stopPropagation();go();}});},
@@ -1691,7 +1798,7 @@ const ACTS={
     const wrap=document.createElement("div"); wrap.className="field";
     wrap.innerHTML=`<input id="dutyIn" type="text" maxlength="90" placeholder="${T("e.g. Study for one hour, or call Dadi")}"><button type="button" id="dutyGo">${T("Make my card")}</button>`;
     act.appendChild(wrap);
-    const go=()=>{const v=$("dutyIn").value.trim(); if(!v){$("dutyIn").focus();return;} S.duty=v; makeCard(); done(st);};
+    const go=()=>{const v=$("dutyIn").value.trim(); if(!v){$("dutyIn").focus();return;} S.duty=v; makeCard(); addCard({ch:1,ref:"Bhagavad Gita 2.47",html:T("Today, with my full heart, I will:")+" <strong>"+esc(v)+"</strong>"}); done(st);};
     $("dutyGo").onclick=go; $("dutyIn").addEventListener("keydown",e=>{if(e.key==="Enter"){e.stopPropagation();go();}});
     setTimeout(()=>{try{$("dutyIn").focus();}catch(e){}},50);
   }
