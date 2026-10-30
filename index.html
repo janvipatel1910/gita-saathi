@@ -539,7 +539,7 @@ function mainHome(msg){
   stopVoice();
   const n=window.mgCards?window.mgCards().length:0, dc=doneCount(), nx=nextChapter();
   const day=Math.floor(Date.now()/86400000), V=FEELINGS[day%FEELINGS.length];
-  const cont=nx?(nx===1?T("Start with Chapter 1"):T(`Continue: Chapter ${nx}`)):T("You've finished all 18 chapters. Play any chapter again");
+  const cont=nx?(nx===1&&dc===0?T("Start with Chapter 1"):T(`Continue: Chapter ${nx}`)):T("You've finished all 18 chapters. Play any chapter again");
   app.innerHTML=`
    <div class="topbar"><span class="brand">${T("Gita Saathi")}</span>${langBar()}</div>
    <div class="hero">${svg(sky("#fff6e6","#fff6e6")+`<circle cx="800" cy="520" r="330" fill="#ffe7a8"/>`+krishna(800,900,1.9,{flute:true}),"300 80 1000 820")}
@@ -1503,6 +1503,7 @@ function advance(){
   pos++; const st=queue[pos]; act.innerHTML="";
   show(st);
   if(st.act){ waiting=true; nextB.disabled=true; ACTS[st.act](st); }
+  else if(sc===scenes.length-1&&pos===queue.length-1) finish();
   else nextB.disabled=false;
   backB.disabled=(sc===0&&pos===0);
 }
