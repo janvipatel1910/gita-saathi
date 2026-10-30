@@ -149,6 +149,22 @@ button[disabled]{opacity:.4;cursor:default;transform:none}
 .soundbtn{position:fixed;right:max(14px,calc(env(safe-area-inset-right,0px) + 10px));bottom:calc(env(safe-area-inset-bottom,0px) + 14px);z-index:20;width:48px;height:48px;padding:0;border-radius:50%;display:grid;place-items:center;background:var(--card);color:var(--peacock);border:2px solid var(--line);box-shadow:0 6px 18px rgba(43,33,64,.15)}
 .soundbtn[aria-pressed="true"]{background:var(--peacock);color:#fff;border-color:var(--peacock)}
 body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+
+.ask{background:var(--card);border:2px solid var(--peacock);border-radius:20px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;box-shadow:0 8px 22px rgba(31,138,138,.12)}
+.ask label{font-family:var(--display);font-weight:800;font-size:1.25rem;color:var(--peacock)}
+.askrow{display:flex;gap:8px;align-items:stretch}
+.askrow textarea{flex:1;min-width:0;font:400 1.05rem var(--body);padding:.6em .8em;border-radius:12px;border:2px solid var(--line);background:#fff;color:var(--ink);resize:vertical}
+.askrow textarea:focus-visible{outline:3px solid var(--peacock);outline-offset:1px}
+.askrow button{align-self:stretch}
+.said{margin:0;background:#fff;border-left:5px solid var(--marigold);border-radius:12px;padding:10px 14px;font-size:1.05rem}
+.said span{color:var(--soft);font-size:.9rem;display:block}
+.answer{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.answer .lead b{color:var(--ink)}
+.answer .verse{display:flex;flex-direction:column;gap:6px}
+.answer button{align-self:flex-start}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.help.crisis{font-size:1.02rem;border-left-width:8px}
+.who.A{background:var(--rose)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 .who.A{background:var(--rose)} .who.N{background:var(--peacock)}
@@ -409,7 +425,31 @@ const FEELINGS=[
   rom:"Sarva dharman parityajya, mam ekam sharanam vraja. Aham tvam sarva papebhyo, mokshayishyami ma shuchah.",
   mean:"Set aside all other duties and take refuge in Me alone. I will free you from all wrongs. Do not grieve.",
   simple:"Krishna's last promise ends with two words: <em>ma shuchah</em>, do not grieve. You don't have to carry everything alone, and you're allowed to ask people for help too.",
-  act:{type:"write",q:"Who is one person you could message today? Just a 'hi' is enough.",ph:"e.g. my sister, or an old friend",card:v=>TF("Today I'll reach out to <strong>{v}</strong>. I am not alone.",v)}}
+  act:{type:"write",q:"Who is one person you could message today? Just a 'hi' is enough.",ph:"e.g. my sister, or an old friend",card:v=>TF("Today I'll reach out to <strong>{v}</strong>. I am not alone.",v)}},
+ {id:"confused",hi:"Kya karun, samajh nahi aata",en:"Don't know what to do",color:"#6a7fd9",sky:["#c9d3f2","#f1f4fd"],speaker:"A",
+  open:"Arjuna didn't know what to do either. In Chapter 2, before Krishna taught him anything, Arjuna said this.",
+  ref:"Bhagavad Gita 2.7",
+  dev:"कार्पण्यदोषोपहतस्वभावः पृच्छामि त्वां धर्मसम्मूढचेताः।<br>यच्छ्रेयः स्यान्निश्चितं ब्रूहि तन्मे शिष्यस्तेऽहं शाधि मां त्वां प्रपन्नम्॥",
+  rom:"Karpanya doshopahata svabhavah, prichchhami tvam dharma sammudha chetah. Yach chhreyah syan nishchitam bruhi tan me, shishyas te 'ham shadhi mam tvam prapannam.",
+  mean:"My heart is weighed down by weakness, and my mind is confused about what is right. I ask You: tell me clearly what is best for me. I am Your student, and I have come to You. Please guide me.",
+  simple:"The whole Gita begins because Arjuna admits he is lost and asks for help. Not knowing is not a weakness. Asking is the first step. <em>Poochhna hi pehla kadam hai.</em>",
+  act:{type:"write",q:"Write your question as clearly as you can, the way Arjuna asked Krishna.",ph:"e.g. Should I stay in this job or look for a new one?",card:v=>TF("My question: <strong>{v}</strong>. I'll take one small step, and ask someone I trust.",v)}},
+ {id:"homesick",hi:"Ghar ki yaad aati hai",en:"Homesick, far from family",color:"#e07a3f",sky:["#ffd9b0","#fff4e6"],
+  open:"Many of us live far from where we grew up, and far from the people we love. In Chapter 6, Krishna said this.",
+  ref:"Bhagavad Gita 6.30",
+  dev:"यो मां पश्यति सर्वत्र सर्वं च मयि पश्यति।<br>तस्याहं न प्रणश्यामि स च मे न प्रणश्यति॥",
+  rom:"Yo mam pashyati sarvatra, sarvam cha mayi pashyati. Tasyaham na pranashyami, sa cha me na pranashyati.",
+  mean:"Whoever sees Me everywhere, and sees everything in Me, is never lost to Me, and I am never lost to them.",
+  simple:"Home is far away, but the same sun rises over your family and over you. What you love is never truly lost. <em>Door hain, par alag nahi.</em>",
+  act:{type:"write",q:"Who or what from home are you missing most? Send them a message, a photo or a voice note today.",ph:"e.g. Mummy's chai, or my brother",card:v=>TF("Today I'll reach out to home: <strong>{v}</strong>. Far away, but never apart.",v)}},
+ {id:"guilt",hi:"Galti ka bojh",en:"Guilt over a mistake",color:"#7a8a3a",sky:["#dfe8c0","#f7faee"],
+  open:"Everyone makes mistakes. In Chapter 4, Krishna told Arjuna this.",
+  ref:"Bhagavad Gita 4.36",
+  dev:"अपि चेदसि पापेभ्यः सर्वेभ्यः पापकृत्तमः।<br>सर्वं ज्ञानप्लवेनैव वृजिनं सन्तरिष्यसि॥",
+  rom:"Api ched asi papebhyah, sarvebhyah papa krittamah. Sarvam jnana plavenaiva, vrijinam santarishyasi.",
+  mean:"Even if you had done more wrong than anyone else, you would cross over all of it in the boat of knowledge.",
+  simple:"Guilt is useful when it teaches you something, and harmful when it only keeps hurting you. Learn from it, put it right if you can, and move on. <em>Seekho, sudhaaro, aage badho.</em>",
+  act:{type:"write",q:"What is one thing you can do to put it right, or to do better next time?",ph:"e.g. say sorry to my sister",card:v=>TF("To put it right: <strong>{v}</strong>. The boat of knowledge will carry me across.",v)}}
 ];
 
 /* ---------- saved cards (this device only) ---------- */
@@ -462,14 +502,14 @@ function draw(){
   s.innerHTML=svg(sky(F.sky[0],F.sky[1])+(dark?`<g fill="#fff" opacity=".7"><circle cx="200" cy="120" r="3"/><circle cx="420" cy="80" r="2"/><circle cx="1250" cy="140" r="3"/><circle cx="980" cy="60" r="2"/></g><rect y="720" width="1600" height="180" fill="#2a2246"/>`:hills("#9cc98a","#7fb36f"))
     +el+krishna(1120,840,1,{bless:true,glow:!!st.glow}));
 }
-function who(k){const w=document.getElementById("who");w.textContent=T(k==="K"?"Krishna's words":"Story");w.className="who"+(k==="K"?" K":"");}
+function who(k){const w=document.getElementById("who");w.textContent=T(k==="K"?"Krishna's words":k==="A"?"Arjuna's words":"Story");w.className="who"+(k==="K"?" K":k==="A"?" A":"");}
 function setSay(h){document.getElementById("say").innerHTML=T(h);}
 function setAct(h){const a=document.getElementById("act");a.innerHTML=h||"";return a;}
 function nextBtn(label,fn){const a=document.getElementById("act");const b=document.createElement("button");b.type="button";b.textContent=T(label);b.onclick=fn;a.appendChild(b);setTimeout(()=>{try{b.focus({preventScroll:true});}catch(e){}},30);return b;}
 
 function step(n){
   if(n===0){who("N");setSay(F.open);setAct("");nextBtn("Hear Krishna's words",()=>step(1));}
-  if(n===1){st.glow=true;draw();who("K");
+  if(n===1){st.glow=true;draw();who(F.speaker||"K");
     document.getElementById("say").innerHTML=`<div class="verse"><span class="ref">${TR(F.ref)}</span><div class="dev" lang="sa">${SCR(F.dev)}</div>${LANG==="en"?`<div class="rom">${F.rom}</div>`:""}<div class="mean">${T(F.mean)}</div></div>`;
     setAct("");nextBtn("What does it mean for me?",()=>step(2));}
   if(n===2){who("N");setSay(F.simple);setAct("");nextBtn("Let's try something",()=>step(3));}
@@ -528,6 +568,60 @@ const storyDone=()=>isDone(1);
 const PLAYABLE=[1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18];
 const doneCount=()=>(isDone(1)?2:0)+PLAYABLE.filter(n=>n>1&&isDone(n)).length;
 const CHTITLE={1:"Chapters 1–2 · Arjuna ka Dukh, Krishna ka Gyaan",3:"Chapter 3 · Karma Yoga",4:"Chapter 4 · Gyaan aur Karma",5:"Chapter 5 · Karma Sanyasa Yoga",6:"Chapter 6 · Dhyana Yoga",7:"Chapter 7 · Gyaan aur Vigyaan",8:"Chapter 8 · Akshara Brahma Yoga",9:"Chapter 9 · Raja Vidya",10:"Chapter 10 · Vibhuti Yoga",11:"Chapter 11 · Vishwarupa Darshana",12:"Chapter 12 · Bhakti Yoga",13:"Chapter 13 · Kshetra aur Kshetragya",14:"Chapter 14 · Teen Gun",15:"Chapter 15 · Purushottama Yoga",16:"Chapter 16 · Daivi aur Asuri",17:"Chapter 17 · Shraddha",18:"Chapter 18 · Moksha Sanyasa"};
+
+/* ---------- Tell Krishna: offline matching of what someone types ---------- */
+const FEELKEYS={
+ fear:["worr","anxi","nervous","exam","test result","results","interview","scared of","what if","pressure","deadline","tension","chinta","darr","dar lag","ghabra","pareshan","चिंता","डर","घबरा","परीक्षा","नतीजा","रिज़ल्ट","इंटरव्यू","टेंशन","ચિંતા","ડર","ગભરા","પરીક્ષા","પરિણામ","ટેન્શન","ઇન્ટરવ્યૂ"],
+ anger:["angry","anger","furious","annoyed","irritat","shouted","shouting","argument","rage","hate","frustrat","gussa","krodh","chidchid","गुस्सा","ग़ुस्सा","क्रोध","चिढ़","झगड़","ગુસ્સ","ક્રોધ","ઝઘડ","ચીડ"],
+ sad:["sad","feeling low","feel low","down","unhappy","depress","crying","cry","upset","heartbroken","break up","broke up","breakup","empty","udaas","udas","dukhi","rona","उदास","दुखी","दुःख","रोना","रो रहा","रो रही","ઉદાસ","દુઃખ","રડ"],
+ fail:["failed","fail","failure","useless","not good enough","worthless","rejected","rejection","loser","stupid","haar gay","nakaam","bekaar","हार","असफल","नाकाम","बेकार","फेल","હાર","નિષ્ફળ","નાપાસ","ફેલ"],
+ compare:["compar","jealous","envy","better than me","everyone else","instagram","social media","others have","falling behind","doosr","jalan","तुलना","जलन","दूसरों","સરખામણી","ઈર્ષ્યા","ઈર્ષા","બીજા લોકો"],
+ grief:["died","death","dead","passed away","funeral","lost my","grief","grieving","mourning","guzar gay","nahi rahe","maut","मृत्यु","गुज़र","गुजर","निधन","नहीं रहे","मौत","खो दिया","મૃત્યુ","અવસાન","ગુજરી","ગુમાવ"],
+ mind:["overthink","can't stop thinking","cant stop thinking","racing","thoughts","can't sleep","cant sleep","insomnia","restless","focus","concentrat","distract","soch","neend","सोच","नींद","बेचैन","ध्यान नहीं","વિચાર","ઊંઘ","બેચેન"],
+ tired:["tired","exhaust","burnt out","burned out","burnout","no energy","drained","overwork","too much work","long shift","sleepy","thak","थक","થાક","થાકી"],
+ alone:["alone","lonely","loneliness","no one","nobody","isolat","too much","overwhelm","can't cope","cant cope","akela","akeli","अकेल","कोई नहीं","एकल","એકલ","કોઈ નથી"],
+ confused:["confus","don't know what","dont know what","what to do","what should i","should i","decide","decision","choice","unsure","stuck","no direction","kya karun","kya karu","samajh nahi","उलझन","क्या करूँ","क्या करूं","फ़ैसला","फैसला","निर्णय","समझ नहीं","મૂંઝવણ","શું કરું","નિર્ણય","સમજાતું નથી"],
+ homesick:["homesick","home sick","miss home","missing home","miss my family","miss my parents","miss my mum","miss my mom","miss my dad","far from home","far from family","abroad","back home","back in india","new country","moved to","desh","ghar ki yaad","ghar yaad","videsh","घर की याद","घर याद","विदेश","परिवार से दूर","ઘરની યાદ","ઘર યાદ","વિદેશ","પરિવારથી દૂર"],
+ guilt:["guilt","guilty","regret","ashamed","shame","my fault","messed up","mistake","hurt someone","i hurt","sorry","apologis","apologiz","galti","pachta","sharm","ग़लती","गलती","पछता","शर्म","अपराध","ભૂલ","પસ્તા","શરમ"]
+};
+const CRISIS=/suicid|kill myself|end my life|end it all|want to die|wanna die|don'?t want to live|dont want to be alive|self[- ]?harm|hurt myself|cut myself|no reason to live|marna chaht|jeena nahi|jina nahi|khudkushi|aatmhatya|atmahatya|आत्महत्या|मरना चाह|जीना नहीं|ख़ुद को नुक़सान|खुद को नुकसान|आपघात|આપઘાત|આત્મહત્યા|મરી જવું|જીવવું નથી/i;
+function matchFeelings(text){
+  const t=" "+String(text||"").toLowerCase().replace(/[’‘]/g,"'").replace(/\s+/g," ")+" ";
+  const out=[];
+  for(const id in FEELKEYS){let sc=0;
+    for(const k of FEELKEYS[id]){
+      const latin=/^[a-z' ]+$/.test(k);
+      const hit=latin?new RegExp("[^a-z]"+k.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).test(t):t.includes(k);
+      if(hit) sc+=k.includes(" ")?3:2;
+    }
+    if(sc) out.push({id,sc});
+  }
+  return out.sort((a,b)=>b.sc-a.sc);
+}
+function askKrishna(text){
+  stopVoice();
+  const crisis=CRISIS.test(text), m=matchFeelings(text);
+  const top=crisis?FEELINGS.find(f=>f.id==="alone"):(m[0]?FEELINGS.find(f=>f.id===m[0].id):null);
+  const others=m.filter(x=>!top||x.id!==top.id).slice(0,2).map(x=>FEELINGS.find(f=>f.id===x.id));
+  const verseBox=f=>`<div class="verse"><span class="ref">${TR(f.ref)}</span><div class="dev" lang="sa">${SCR(f.dev)}</div>${LANG==="en"?`<div class="rom">${f.rom}</div>`:""}<div class="mean">${T(f.mean)}</div></div>`;
+  app.innerHTML=`<div class="controls"><button class="ghost" id="toHome" type="button">${T("‹ Home")}</button></div>
+   <h1>${T("Krishna's words for you")}</h1>
+   <blockquote class="said"><span>${T("You said:")}</span> ${esc(text)}</blockquote>
+   ${crisis?`<div class="help crisis"><strong>${T("It sounds like you are going through something very painful. You don't have to face this alone.")}</strong><br>${T("Please talk to someone now. In the UK, call Samaritans free on <strong>116 123</strong>, any time. In India, call Tele-MANAS on <strong>14416</strong>. If you are in danger, call 999 (UK) or 112 (India).")}</div>`:""}
+   ${top?`<section class="answer"><p class="lead">${T(crisis?"While you reach out, here is Krishna's promise to you:":"It sounds like this might help:")} <b>${T(top.en)}</b></p>
+      ${verseBox(top)}
+      <button type="button" id="goTop">${T("Let's work through it together")}</button></section>`
+     :`<section class="answer"><p class="lead">${T("I couldn't find the right verse for that. Pick the feeling that's closest:")}</p></section>`}
+   ${others.length?`<h2>${T("Other verses that may help")}</h2><div class="chips">${others.map(f=>`<button type="button" class="opt" data-id="${f.id}">${T(f.en)}</button>`).join("")}</div>`:""}
+   <p><button type="button" class="ghost" id="allFeel">${T("See all feelings")}</button></p>
+   <p class="tiny">${T("What you type stays on this phone. It isn't sent anywhere or saved.")}</p>
+   ${crisis?"":HOME_HELP_()}`;
+  document.getElementById("toHome").onclick=()=>mainHome();
+  document.getElementById("allFeel").onclick=()=>window.openFeelings();
+  const g=document.getElementById("goTop"); if(g) g.onclick=()=>open(top.id);
+  app.querySelectorAll(".chips .opt").forEach(b=>b.onclick=()=>open(b.dataset.id));
+  window.scrollTo(0,0);
+}
 const HOME_HELP_EN=`<div class="help quiet">Gita Saathi shares the Gita's wisdom. It isn't a replacement for talking to someone. If things feel very heavy, call <strong>Samaritans 116 123</strong> (UK) or <strong>Tele-MANAS 14416</strong> (India).</div>`;
 const HOME_HELP_=()=>T(HOME_HELP_EN);
 function stopVoice(){try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}}
@@ -544,8 +638,14 @@ function mainHome(msg){
    <div class="topbar"><span class="brand">${T("Gita Saathi")}</span>${langBar()}</div>
    <div class="hero">${svg(sky("#fff6e6","#fff6e6")+`<circle cx="800" cy="520" r="330" fill="#ffe7a8"/>`+krishna(800,900,1.9,{flute:true}),"300 80 1000 820")}
      <div><h1>${T("Namaste!")}</h1><p class="lead">${msg||T("Krishna's wisdom from the Bhagavad Gita, for the moments when life feels heavy.")}</p></div></div>
+   <form class="ask" id="askForm" autocomplete="off">
+     <label for="askIn">${T("Tell Krishna what's on your mind")}</label>
+     <div class="askrow"><textarea id="askIn" rows="2" maxlength="300" placeholder="${T("e.g. I failed my driving test and I feel useless")}"></textarea>
+     <button type="submit">${T("Ask")}</button></div>
+     <span class="tiny">${T("Write in English, Hindi, Gujarati or Hinglish.")}</span>
+   </form>
    <div class="doors">
-     <button class="door feelings" id="goFeel" type="button"><span class="k">${T("Mann ghabraya hai?")}</span><span class="d">${T("Tell Krishna what you're feeling and hear the verse that speaks to it.")}</span><span class="p">${T("9 feelings")}${n?" · "+T(n===1?"1 card saved":`${n} cards saved`):""}</span></button>
+     <button class="door feelings" id="goFeel" type="button"><span class="k">${T("Mann ghabraya hai?")}</span><span class="d">${T("Tell Krishna what you're feeling and hear the verse that speaks to it.")}</span><span class="p">${T(`${FEELINGS.length} feelings`)}${n?" · "+T(n===1?"1 card saved":`${n} cards saved`):""}</span></button>
      <div class="door gita"><button type="button" id="goGita" class="doorbtn"><span class="k">${T("Gita ki kahani")}</span><span class="d">${T("The whole Gita, chapter by chapter, as a story you take part in.")}</span></button>
        <div class="prog" role="img" aria-label="${T(`${dc} of 18 chapters done`)}"><i style="width:${dc/18*100}%"></i></div>
        <span class="p">${T(`${dc} of 18 chapters done`)}</span>
@@ -560,6 +660,8 @@ function mainHome(msg){
    ${HOME_HELP_()}`;
   bindLang(()=>mainHome()); bindInstall();
   document.getElementById("goFeel").onclick=()=>window.openFeelings();
+  document.getElementById("askForm").addEventListener("submit",e=>{e.preventDefault();const v=document.getElementById("askIn").value.trim();if(!v){document.getElementById("askIn").focus();return;}askKrishna(v);});
+  document.getElementById("askIn").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();document.getElementById("askForm").requestSubmit();}});
   document.getElementById("goGita").onclick=()=>chapters();
   document.getElementById("goNext").onclick=()=>nx?storyOne(nx):chapters();
   document.getElementById("goToday").onclick=()=>open(V.id);
