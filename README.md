@@ -1,8 +1,8 @@
-# Gita Saathi
+# Gita Ghar
 
 An interactive Bhagavad Gita companion for Indian families living abroad, in English, Hindi and Gujarati.
 
-When someone feels stressed, they can tell Gita Saathi what's on their mind and hear what Krishna said about it in the Gita. Families can also play through the whole Gita together as a short story, in two languages side by side, making choices and doing small calming actions along the way.
+When someone feels stressed, they can tell Gita Ghar what's on their mind and hear what Krishna said about it in the Gita. Families can also play through the whole Gita together as a short story, in two languages side by side, making choices and doing small calming actions along the way.
 
 ## Features
 
@@ -25,6 +25,14 @@ A switch on the home page for reading together:
 - Bigger text
 - A short summary for children at the start of each chapter
 - A question for the family to talk about at the end of each chapter
+
+### Cloud features (when deployed on AWS)
+
+- **Sign in with an email code:** no password. Your diary, cards, practice days and chapter progress are backed up and merged across phones.
+- **Smart matching for Tell Krishna:** AI understands long sentences in any of the four ways of writing. It only *chooses* from the app's own verses and never writes words for Krishna. It is off until the person agrees, words that suggest danger are checked on the phone first, and if AWS is unavailable the app falls back to offline matching.
+- **Delete my account:** removes the cloud backup and the sign-in details.
+
+Without AWS (for example on GitHub Pages), the app works fully offline and these features are simply hidden.
 
 ### Mann ghabraya hai? (What's troubling you?)
 
@@ -108,7 +116,7 @@ Tap the round speaker button in the bottom corner to turn sound on or off. It is
 
 ## Install it as a phone app
 
-Gita Saathi can be added to a phone's home screen. It then opens full-screen with its own icon, and works without internet after the first visit.
+Gita Ghar can be added to a phone's home screen. It then opens full-screen with its own icon, and works without internet after the first visit.
 
 - **Android (Chrome):** open the site and tap **Install** on the home page, or use the browser menu → *Install app*.
 - **iPhone (Safari):** tap the **Share** button, then **Add to Home Screen**.
@@ -118,12 +126,35 @@ How it works:
 - `sw.js` is a service worker that saves the app's files on the phone so it works offline. It always tries the internet first, so updates still arrive.
 - **When you change any app file, increase `VERSION` in `sw.js`** (for example `gs-v1` → `gs-v2`) so phones pick up the new version.
 
+## Project structure
+
+| Path | What it is |
+|---|---|
+| `index.html` | The whole app (HTML, CSS, JavaScript and SVG drawings) |
+| `lang/hi.js`, `lang/gu.js` | Hindi and Gujarati translations |
+| `manifest.json`, `sw.js`, `icons/` | Installing on a phone and offline use |
+| `privacy.html` | Privacy policy |
+| `infra/template.yaml` | AWS infrastructure as code (SAM) |
+| `backend/sync`, `backend/match` | Lambda functions for cloud backup and smart matching, with tests in `backend/test` |
+| `deploy.sh` | One command to deploy to AWS |
+| `DEPLOY.md`, `PLAY-STORE.md` | Step-by-step guides |
+
+```
+Phone ──HTTPS──> CloudFront ──(private, OAC)──> S3 bucket (app files)
+  │
+  ├──> Cognito (email code sign-in)
+  └──HTTPS + token──> API Gateway (throttled)
+                         ├── /sync  ──> Lambda ──> DynamoDB (encrypted, per user)
+                         └── /match ──> Lambda ──> Amazon Bedrock (EU, Claude Haiku 4.5)
+```
+
 ## How to run it
 
 The app is `index.html`, two language files in `lang/`, and the install files (`manifest.json`, `sw.js`, `icons/`). There is no build step. Opening `index.html` directly works, but install and offline mode only work when the site is served over the web (for example on GitHub Pages).
 
 - **On your computer:** download the repository (Code → Download ZIP), unzip it, and open `index.html` in any browser.
-- **Online:** turn on GitHub Pages for this repository (Settings → Pages → Deploy from branch → `main`, folder `/ (root)`).
+- **Online, offline-only version:** turn on GitHub Pages for this repository (Settings → Pages → Deploy from branch → `main`, folder `/ (root)`).
+- **On AWS, with sign-in and smart matching:** see [DEPLOY.md](DEPLOY.md).
 
 ## Built with
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Gita Saathi: an interactive Bhagavad Gita companion in English mixed with Hindi.">
+<meta name="description" content="Gita Ghar: a Bhagavad Gita companion for Indian families abroad, in English, Hindi and Gujarati.">
 <style>*,*::before,*::after{box-sizing:border-box}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
 /* languages */
 :root:lang(gu){--display:"Baloo Bhai 2","Baloo 2","Trebuchet MS",system-ui,sans-serif;--body:"Hind Vadodara","Mukta","Segoe UI",system-ui,sans-serif;--deva:"Noto Serif Gujarati","Hind Vadodara",serif}
@@ -27,14 +27,14 @@
 .today .opt{align-self:flex-start}
 .note-lang{margin:0;background:#fff3d6;border:2px solid var(--marigold);border-radius:12px;padding:8px 12px;font-size:.95rem}
 </style>
-<title>Gita Saathi</title>
+<title>Gita Ghar</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#1f8a8a">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Gita Saathi">
+<meta name="apple-mobile-web-app-title" content="Gita Ghar">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Baloo+Bhai+2:wght@500;600;700;800&family=Hind+Vadodara:wght@400;600&family=Mukta:wght@400;600&family=Noto+Serif+Gujarati:wght@400;600&family=Tiro+Devanagari+Sanskrit&display=swap">
 <style>
@@ -217,6 +217,23 @@ html.family button{font-size:1.08rem}
 .talk{background:#e8f0fb;border:2px solid #b9d0ef;border-radius:16px;padding:12px 16px;margin-top:12px}
 .talk b{font-family:var(--display);color:var(--krishna)}
 .talk p{margin:.3em 0 0;line-height:1.5;font-size:1.1rem}
+
+.cloudcard{background:var(--card);border:2px solid var(--peacock);border-radius:18px;padding:14px 18px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.cloudcard div{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1 1 220px}
+.cloudcard b{font-family:var(--display);font-size:1.1rem;color:var(--peacock)}
+.cloudcard span{color:var(--soft);font-size:.95rem;line-height:1.4}
+#emailIn,#codeIn{flex:1;min-width:0;font:400 1.1rem var(--body);padding:.6em .8em;border-radius:12px;border:2px solid var(--line);background:#fff;color:var(--ink)}
+#codeIn{letter-spacing:.3em;font-variant-numeric:tabular-nums}
+.danger-zone{border:2px solid #efc4c2;border-radius:18px;padding:14px 18px;background:#fff7f6;display:flex;flex-direction:column;gap:8px}
+.danger-zone h2{color:var(--rose)}
+.danger-zone p{margin:0;color:var(--soft)}
+button.danger{border-color:var(--rose)!important;color:var(--rose)!important;align-self:flex-start}
+ul.plain{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px;line-height:1.45}
+.thinking{min-height:50vh;display:grid;place-items:center;align-content:center;gap:14px;text-align:center}
+.thinking p{font-family:var(--display);font-size:1.3rem;color:var(--peacock);margin:0}
+.thinking .dots{display:flex;gap:8px}
+.thinking .dots i{width:14px;height:14px;border-radius:50%;background:var(--marigold);display:block;animation:pulse 1.2s infinite}
+.thinking .dots i:nth-child(2){animation-delay:.2s}.thinking .dots i:nth-child(3){animation-delay:.4s}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 .who.A{background:var(--rose)} .who.N{background:var(--peacock)}
@@ -268,6 +285,7 @@ label.tts{display:flex;align-items:center;gap:6px;color:var(--soft);font-size:.9
 <body>
 <div class="wrap" id="app"></div>
 
+<script src="config.js"></script>
 <script src="lang/hi.js"></script>
 <script src="lang/gu.js"></script>
 <script>
@@ -364,8 +382,8 @@ window.addEventListener("appinstalled",()=>{installEvt=null;const h=document.get
 if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol)){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(()=>{});});}
 function installCard(){
   if(isStandalone()) return "";
-  if(installEvt) return `<div class="install"><img src="icons/icon-192.png" alt="" width="44" height="44"><div><b>${T("Add Gita Saathi to your phone")}</b><span>${T("Opens like an app, and works without internet.")}</span></div><button type="button" id="installBtn">${T("Install")}</button></div>`;
-  if(isIOS()) return `<div class="install"><img src="icons/icon-192.png" alt="" width="44" height="44"><div><b>${T("Add Gita Saathi to your phone")}</b><span>${T("In Safari, tap the Share button, then “Add to Home Screen”.")}</span></div></div>`;
+  if(installEvt) return `<div class="install"><img src="icons/icon-192.png" alt="" width="44" height="44"><div><b>${T("Add Gita Ghar to your phone")}</b><span>${T("Opens like an app, and works without internet.")}</span></div><button type="button" id="installBtn">${T("Install")}</button></div>`;
+  if(isIOS()) return `<div class="install"><img src="icons/icon-192.png" alt="" width="44" height="44"><div><b>${T("Add Gita Ghar to your phone")}</b><span>${T("In Safari, tap the Share button, then “Add to Home Screen”.")}</span></div></div>`;
   return "";
 }
 function bindInstall(){const b=document.getElementById("installBtn");if(b)b.onclick=async()=>{if(!installEvt)return;installEvt.prompt();try{await installEvt.userChoice;}catch(e){}installEvt=null;const h=document.getElementById("installHost");if(h)h.innerHTML="";};}
@@ -506,7 +524,7 @@ const FEELINGS=[
 
 /* ---------- saved cards (this device only) ---------- */
 function loadCards(){try{return JSON.parse(localStorage.getItem("mgh-cards")||"[]");}catch(e){return [];}}
-function saveCards(c){try{localStorage.setItem("mgh-cards",JSON.stringify(c.slice(-300)));}catch(e){}}
+function saveCards(c){try{localStorage.setItem("mgh-cards",JSON.stringify(c.slice(-300)));}catch(e){} if(window.__ggChanged) window.__ggChanged();}
 function addCard(c){cards=loadCards();cards.push(Object.assign({when:Date.now()},c));saveCards(cards);}
 let cards=loadCards();
 const HELP_FULL_=()=>T(HELP_FULL_EN), HELP_QUIET_=()=>T(HELP_QUIET_EN);
@@ -653,9 +671,25 @@ function matchFeelings(text){
 }
 function askKrishna(text){
   stopVoice();
-  const crisis=CRISIS.test(text), m=matchFeelings(text);
-  const top=crisis?FEELINGS.find(f=>f.id==="alone"):(m[0]?FEELINGS.find(f=>f.id===m[0].id):null);
-  const others=m.filter(x=>!top||x.id!==top.id).slice(0,2).map(x=>FEELINGS.find(f=>f.id===x.id));
+  const crisis=CRISIS.test(text);
+  if(crisis) return showAnswer(text,{crisis:true,ids:matchFeelings(text).map(x=>x.id),source:"rules"});
+  if(CFG&&navigator.onLine!==false){
+    const choice=aiChoice();
+    if(choice===null) return aiConsent(text);
+    if(choice==="yes"){
+      app.innerHTML=`<div class="thinking" role="status"><div class="dots"><i></i><i></i><i></i></div><p>${T("Krishna is listening…")}</p></div>`;
+      const timeout=new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),7000));
+      return Promise.race([Cloud.match(text),timeout])
+        .then(r=>showAnswer(text,{crisis:!!r.crisis,ids:(r.feelings&&r.feelings.length)?r.feelings:matchFeelings(text).map(x=>x.id),source:(r.feelings&&r.feelings.length)?"ai":"phone"}))
+        .catch(()=>showAnswer(text,{crisis:false,ids:matchFeelings(text).map(x=>x.id),source:"phone"}));
+    }
+  }
+  return showAnswer(text,{crisis:false,ids:matchFeelings(text).map(x=>x.id),source:"phone"});
+}
+function showAnswer(text,res){
+  const crisis=res.crisis, ids=[...new Set(res.ids)];
+  const top=crisis?FEELINGS.find(f=>f.id==="alone"):(ids[0]?FEELINGS.find(f=>f.id===ids[0]):null);
+  const others=ids.filter(id=>!top||id!==top.id).slice(0,2).map(id=>FEELINGS.find(f=>f.id===id)).filter(Boolean);
   const verseBox=f=>`<div class="verse"><span class="ref">${TR(f.ref)}</span><div class="dev" lang="sa">${SCR(f.dev)}</div>${LANG==="en"?`<div class="rom">${f.rom}</div>`:""}<div class="mean">${T(f.mean)}</div></div>`;
   app.innerHTML=`<div class="controls"><button class="ghost" id="toHome" type="button">${T("‹ Home")}</button></div>
    <h1>${T("Krishna's words for you")}</h1>
@@ -667,12 +701,233 @@ function askKrishna(text){
      :`<section class="answer"><p class="lead">${T("I couldn't find the right verse for that. Pick the feeling that's closest:")}</p></section>`}
    ${others.length?`<h2>${T("Other verses that may help")}</h2><div class="chips">${others.map(f=>`<button type="button" class="opt" data-id="${f.id}">${T(f.en)}</button>`).join("")}</div>`:""}
    <p><button type="button" class="ghost" id="allFeel">${T("See all feelings")}</button></p>
-   <p class="tiny">${T("What you type stays on this phone. It isn't sent anywhere or saved.")}</p>
+   <p class="tiny">${res.source==="ai"?T("Matched with smart matching. Your words were not saved."):T("What you type stays on this phone. It isn't sent anywhere or saved.")}</p>
    ${crisis?"":HOME_HELP_()}`;
   document.getElementById("toHome").onclick=()=>mainHome();
   document.getElementById("allFeel").onclick=()=>window.openFeelings();
   const g=document.getElementById("goTop"); if(g) g.onclick=()=>open(top.id);
   app.querySelectorAll(".chips .opt").forEach(b=>b.onclick=()=>open(b.dataset.id));
+  window.scrollTo(0,0);
+}
+
+
+/* ---------- cloud: sign in with an email code, back up to AWS, smart matching ---------- */
+const CFG=(window.GG_CONFIG&&window.GG_CONFIG.apiUrl)?window.GG_CONFIG:null;
+const Cloud=(()=>{
+  const KEY="gs-auth";
+  let auth=(()=>{try{return JSON.parse(localStorage.getItem(KEY)||"null");}catch(e){return null;}})();
+  let state={status:"idle",last:null,error:null};
+  try{state.last=+localStorage.getItem("gs-last-sync")||null;}catch(e){}
+  let timer=0, running=null;
+  const saveAuth=()=>{try{auth?localStorage.setItem(KEY,JSON.stringify(auth)):localStorage.removeItem(KEY);}catch(e){}};
+  async function cognito(target,body){
+    const r=await fetch(`https://cognito-idp.${CFG.region}.amazonaws.com/`,{method:"POST",headers:{"content-type":"application/x-amz-json-1.1","x-amz-target":"AWSCognitoIdentityProviderService."+target},body:JSON.stringify(body)});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok){const e=new Error(j.message||target);e.code=String(j.__type||"").split("#").pop();throw e;}
+    return j;
+  }
+  function keep(res,email){
+    const a=res.AuthenticationResult; if(!a) throw new Error("No tokens");
+    auth={email:email||(auth&&auth.email),access:a.AccessToken,refresh:a.RefreshToken||(auth&&auth.refresh),exp:Date.now()+(a.ExpiresIn||3600)*1000};
+    saveAuth();
+  }
+  async function start(email){
+    email=email.trim().toLowerCase();
+    try{await cognito("SignUp",{ClientId:CFG.clientId,Username:email,UserAttributes:[{Name:"email",Value:email}]});return {mode:"signup",email};}
+    catch(e){if(e.code!=="UsernameExistsException") throw e;}
+    try{
+      let r=await cognito("InitiateAuth",{ClientId:CFG.clientId,AuthFlow:"USER_AUTH",AuthParameters:{USERNAME:email,PREFERRED_CHALLENGE:"EMAIL_OTP"}});
+      if(r.ChallengeName==="SELECT_CHALLENGE") r=await cognito("RespondToAuthChallenge",{ClientId:CFG.clientId,ChallengeName:"SELECT_CHALLENGE",Session:r.Session,ChallengeResponses:{USERNAME:email,ANSWER:"EMAIL_OTP"}});
+      return {mode:"signin",email,session:r.Session};
+    }catch(e){
+      if(e.code!=="UserNotConfirmedException") throw e;
+      await cognito("ResendConfirmationCode",{ClientId:CFG.clientId,Username:email});
+      return {mode:"signup",email};
+    }
+  }
+  async function verify(st,code){
+    code=String(code).replace(/\D/g,"");
+    if(st.mode==="signup"){
+      const c=await cognito("ConfirmSignUp",{ClientId:CFG.clientId,Username:st.email,ConfirmationCode:code});
+      const r=await cognito("InitiateAuth",{ClientId:CFG.clientId,AuthFlow:"USER_AUTH",AuthParameters:{USERNAME:st.email},Session:c.Session});
+      keep(r,st.email);
+    }else{
+      const r=await cognito("RespondToAuthChallenge",{ClientId:CFG.clientId,ChallengeName:"EMAIL_OTP",Session:st.session,ChallengeResponses:{USERNAME:st.email,EMAIL_OTP_CODE:code}});
+      keep(r,st.email);
+    }
+    await sync();
+  }
+  async function token(){
+    if(!auth) throw Object.assign(new Error("Not signed in"),{code:"NotSignedIn"});
+    if(Date.now()<auth.exp-60000) return auth.access;
+    try{keep(await cognito("InitiateAuth",{ClientId:CFG.clientId,AuthFlow:"REFRESH_TOKEN_AUTH",AuthParameters:{REFRESH_TOKEN:auth.refresh}}));}
+    catch(e){ if(e.code==="NotAuthorizedException"){auth=null;saveAuth();} throw e; }
+    return auth.access;
+  }
+  async function api(method,path,body){
+    const r=await fetch(CFG.apiUrl+path,{method,headers:{"content-type":"application/json",...(path==="/match"?{}:{authorization:"Bearer "+await token()})},body:body?JSON.stringify(body):undefined});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok){const e=new Error(j.error||("HTTP "+r.status));e.status=r.status;throw e;}
+    return j;
+  }
+  /* ---- merge local and cloud copies: nothing is lost, deletions are remembered ---- */
+  const ls=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||"null")??d;}catch(e){return d;}};
+  const lsSet=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}};
+  function localCollections(){
+    const done=[];for(let i=1;i<=18;i++){try{if(localStorage.getItem("gs-story-"+i)==="done")done.push(i);}catch(e){}}
+    return {cards:ls("mgh-cards",[]),notes:{items:ls("gs-notes",[]),deleted:ls("gs-notes-del",[])},practice:ls("gs-practice",[]),progress:done};
+  }
+  function merge(loc,cloud){
+    const c=cloud||{};
+    const byKey=(arr,f)=>{const m=new Map();arr.forEach(x=>{if(x)m.set(f(x),x);});return [...m.values()];};
+    const cards=byKey([...(c.cards||[]),...loc.cards],x=>(x.when||0)+"|"+(x.ref||"")+"|"+(x.html||"").length).sort((a,b)=>(a.when||0)-(b.when||0)).slice(-300);
+    const deleted=[...new Set([...((c.notes&&c.notes.deleted)||[]),...loc.notes.deleted])].slice(-1000);
+    const notes=byKey([...((c.notes&&c.notes.items)||[]),...loc.notes.items],x=>x.when).filter(n=>!deleted.includes(n.when)).sort((a,b)=>a.when-b.when);
+    const practice=[...new Set([...(c.practice||[]),...loc.practice])].sort();
+    const progress=[...new Set([...(c.progress||[]),...loc.progress])].sort((a,b)=>a-b);
+    return {cards,notes:{items:notes,deleted},practice,progress};
+  }
+  function applyLocal(m){
+    lsSet("mgh-cards",m.cards); lsSet("gs-notes",m.notes.items); lsSet("gs-notes-del",m.notes.deleted); lsSet("gs-practice",m.practice);
+    m.progress.forEach(n=>{try{localStorage.setItem("gs-story-"+n,"done");}catch(e){}});
+    try{cards=loadCards();}catch(e){}
+  }
+  async function sync(){
+    if(!CFG||!auth) return;
+    if(running) return running;
+    state.status="syncing"; paintStatus();
+    running=(async()=>{
+      try{
+        const got=await api("GET","/sync");
+        const cloud={}; Object.entries(got.collections||{}).forEach(([k,v])=>cloud[k]=v.data);
+        const m=merge(localCollections(),cloud);
+        applyLocal(m);
+        await api("PUT","/sync",{collections:m});
+        state={status:"ok",last:Date.now(),error:null}; try{localStorage.setItem("gs-last-sync",state.last);}catch(e){}
+      }catch(e){ state.status=navigator.onLine===false?"offline":"error"; state.error=e.message; }
+      finally{ running=null; paintStatus(); }
+    })();
+    return running;
+  }
+  function schedule(){ if(!CFG||!auth) return; clearTimeout(timer); timer=setTimeout(sync,2500); }
+  function paintStatus(){ const el=document.getElementById("syncStatus"); if(el) el.innerHTML=statusText(); }
+  function statusText(){
+    if(!auth) return "";
+    if(state.status==="syncing") return T("Backing up…");
+    if(state.status==="offline") return T("Offline. Your changes will be backed up when you're online.");
+    if(state.status==="error") return T("Backup didn't work just now. It will try again.");
+    return state.last?TF("Backed up {v}",fmtTime(state.last)):T("Not backed up yet");
+  }
+  function fmtTime(ms){try{return new Date(ms).toLocaleString(LANG==="hi"?"hi-IN":LANG==="gu"?"gu-IN":"en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});}catch(e){return "";}}
+  async function signOut(){
+    const a=auth; auth=null; saveAuth(); state={status:"idle",last:null,error:null};
+    try{localStorage.removeItem("gs-last-sync");}catch(e){}
+    if(a&&a.refresh&&CFG){try{await cognito("RevokeToken",{Token:a.refresh,ClientId:CFG.clientId});}catch(e){}}
+  }
+  async function deleteAccount(){
+    await api("DELETE","/sync");
+    await cognito("DeleteUser",{AccessToken:await token()});
+    await signOut();
+  }
+  function forgetNote(when){const d=ls("gs-notes-del",[]);if(!d.includes(when)){d.push(when);lsSet("gs-notes-del",d);}}
+  async function match(text){ return api("POST","/match",{text,lang:LANG}); }
+  window.__ggChanged=schedule;
+  window.addEventListener("online",schedule);
+  if(CFG&&auth) setTimeout(sync,1500);
+  return {get on(){return !!CFG;}, get user(){return auth&&auth.email;}, start, verify, sync, schedule, signOut, deleteAccount, forgetNote, match, statusText, _merge:merge};
+})();
+
+function aiChoice(){try{return localStorage.getItem("gs-ai");}catch(e){return null;}}
+function setAiChoice(v){try{localStorage.setItem("gs-ai",v);}catch(e){}}
+
+function cloudCard(){
+  if(!Cloud.on) return "";
+  return Cloud.user
+    ?`<section class="cloudcard"><div><b>${T("Your diary is backed up")}</b><span id="syncStatus">${Cloud.statusText()}</span></div><button type="button" class="opt" id="goAccount">${T("Account & settings")}</button></section>`
+    :`<section class="cloudcard"><div><b>${T("Keep your diary safe")}</b><span>${T("Sign in with your email to back up your cards, notes and progress, and use them on any phone.")}</span></div><button type="button" id="goAccount">${T("Sign in")}</button></section>`;
+}
+
+let authStep=null;
+function account(msg){
+  stopVoice();
+  const user=Cloud.user, ai=aiChoice();
+  const signIn=!user?(authStep
+     ?`<form class="ask" id="codeForm" autocomplete="off">
+         <label for="codeIn">${TF("We sent a 6-digit code to {v}",esc(authStep.email))}</label>
+         <div class="askrow"><input id="codeIn" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="123456"><button type="submit">${T("Sign in")}</button></div>
+         <span class="tiny">${T("Can't find it? Check your spam folder. The code works for a few minutes.")}</span>
+         <button type="button" class="ghost" id="useOther">${T("Use a different email")}</button>
+       </form>`
+     :`<form class="ask" id="emailForm" autocomplete="on">
+         <label for="emailIn">${T("Sign in or create an account")}</label>
+         <div class="askrow"><input id="emailIn" type="email" autocomplete="email" placeholder="${T("your email address")}"><button type="submit">${T("Send code")}</button></div>
+         <span class="tiny">${T("No password needed. We email you a code each time you sign in.")}</span>
+       </form>`)
+    :`<section class="answer"><p class="lead">${TF("Signed in as {v}",`<b>${esc(user)}</b>`)}</p>
+        <p class="tiny" id="syncStatus">${Cloud.statusText()}</p>
+        <div class="prow"><button type="button" id="syncNow">${T("Back up now")}</button><button type="button" class="ghost" id="signOut">${T("Sign out")}</button></div>
+      </section>`;
+  app.innerHTML=`<div class="controls"><button class="ghost" id="toHome" type="button">${T("‹ Home")}</button></div>
+   <h1>${T("Account & settings")}</h1>
+   ${msg?`<p class="note-lang" role="status">${msg}</p>`:""}
+   <div id="authErr" class="help" role="alert" hidden></div>
+   ${Cloud.on?signIn:""}
+   <section class="famcard">
+     <div class="famtop"><h2 id="aiH">${T("Smart matching")}</h2>
+       <button type="button" class="switch" id="aiBtn" role="switch" aria-checked="${ai==="yes"}" aria-labelledby="aiH"><i></i></button></div>
+     <p>${T("When you tell Krishna what's on your mind, smart matching uses AI on Amazon Web Services in Europe to understand it and choose the best verse from this app. Your words are not saved. When it's off, matching happens only on this phone.")}</p>
+   </section>
+   ${user?`<section class="danger-zone"><h2>${T("Delete my account")}</h2><p>${T("This deletes your account and everything backed up in the cloud. What's on this phone stays here.")}</p><button type="button" class="ghost danger" id="delAcc">${T("Delete my account")}</button></section>`:""}
+   <p class="tiny">${T("Read how your information is handled:")} <a href="privacy.html" target="_blank" rel="noopener">${T("Privacy policy")}</a></p>`;
+  const err=t=>{const e=document.getElementById("authErr");e.textContent=t;e.hidden=false;};
+  const busy=(f,on)=>{const b=f.querySelector('button[type="submit"]');if(b){b.disabled=on;}};
+  document.getElementById("toHome").onclick=()=>{authStep=null;mainHome();};
+  document.getElementById("aiBtn").onclick=()=>{setAiChoice(aiChoice()==="yes"?"no":"yes");account();};
+  const ef=document.getElementById("emailForm");
+  if(ef) ef.addEventListener("submit",async e=>{e.preventDefault();const v=document.getElementById("emailIn").value.trim();
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){err(T("Please enter a valid email address."));return;}
+    busy(ef,true);try{authStep=await Cloud.start(v);account();}catch(x){busy(ef,false);err(authError(x));}});
+  const cf=document.getElementById("codeForm");
+  if(cf){ cf.addEventListener("submit",async e=>{e.preventDefault();const v=document.getElementById("codeIn").value;
+      if(!/\d{6}/.test(v.replace(/\D/g,""))){err(T("Please enter the 6-digit code from the email."));return;}
+      busy(cf,true);try{await Cloud.verify(authStep,v);authStep=null;account(T("You're signed in. Your diary is now backed up."));}catch(x){busy(cf,false);err(authError(x));}});
+    document.getElementById("useOther").onclick=()=>{authStep=null;account();};
+    setTimeout(()=>{try{document.getElementById("codeIn").focus();}catch(e){}},50); }
+  const sn=document.getElementById("syncNow"); if(sn) sn.onclick=()=>Cloud.sync();
+  const so=document.getElementById("signOut"); if(so) so.onclick=async()=>{await Cloud.signOut();account(T("You're signed out. Everything is still on this phone."));};
+  const da=document.getElementById("delAcc"); if(da) da.onclick=async()=>{
+    if(!da.dataset.sure){da.dataset.sure="1";da.textContent=T("Yes, delete my account and cloud backup");return;}
+    da.disabled=true;
+    try{await Cloud.deleteAccount();account(T("Your account and cloud backup have been deleted."));}catch(x){da.disabled=false;err(T("We couldn't delete your account just now. Please try again."));}
+  };
+  window.scrollTo(0,0);
+}
+function authError(x){
+  const c=x&&x.code;
+  if(c==="CodeMismatchException") return T("That code isn't right. Please check it and try again.");
+  if(c==="ExpiredCodeException"||c==="NotAuthorizedException") return T("That code has expired. Please ask for a new one.");
+  if(c==="LimitExceededException"||c==="TooManyRequestsException") return T("Too many tries. Please wait a few minutes and try again.");
+  if(c==="InvalidParameterException") return T("Please enter a valid email address.");
+  if(navigator.onLine===false) return T("You're offline. Please connect to the internet and try again.");
+  return T("Something went wrong. Please try again.");
+}
+
+function aiConsent(text){
+  app.innerHTML=`<div class="controls"><button class="ghost" id="toHome" type="button">${T("‹ Home")}</button></div>
+   <h1>${T("Use smart matching?")}</h1>
+   <section class="answer">
+     <p class="lead">${T("Smart matching understands what you write much better, even long sentences in Gujarati, Hindi or Hinglish.")}</p>
+     <ul class="plain">
+       <li>${T("Your words are sent securely to AI on Amazon Web Services in Europe.")}</li>
+       <li>${T("The AI only chooses which of this app's verses fits. It never writes its own words for Krishna.")}</li>
+       <li>${T("Your words are not saved or used to train AI.")}</li>
+       <li>${T("You can change this any time in Account & settings.")}</li>
+     </ul>
+     <div class="prow"><button type="button" id="aiYes">${T("Yes, use smart matching")}</button><button type="button" class="ghost" id="aiNo">${T("No, keep it on this phone")}</button></div>
+   </section>`;
+  document.getElementById("toHome").onclick=()=>mainHome();
+  document.getElementById("aiYes").onclick=()=>{setAiChoice("yes");askKrishna(text);};
+  document.getElementById("aiNo").onclick=()=>{setAiChoice("no");askKrishna(text);};
   window.scrollTo(0,0);
 }
 
@@ -696,9 +951,9 @@ const PRACTICES=[
 const dayKey=(d)=>{d=d||new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");};
 const dayNum=()=>{const d=new Date();return Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000);};
 function practiceDays(){try{return JSON.parse(localStorage.getItem("gs-practice")||"[]");}catch(e){return [];}}
-function savePracticeDays(a){try{localStorage.setItem("gs-practice",JSON.stringify(a));}catch(e){}}
+function savePracticeDays(a){try{localStorage.setItem("gs-practice",JSON.stringify(a));}catch(e){} if(window.__ggChanged) window.__ggChanged();}
 function loadNotes(){try{return JSON.parse(localStorage.getItem("gs-notes")||"[]");}catch(e){return [];}}
-function saveNotes(a){try{localStorage.setItem("gs-notes",JSON.stringify(a));}catch(e){}}
+function saveNotes(a){try{localStorage.setItem("gs-notes",JSON.stringify(a));}catch(e){} if(window.__ggChanged) window.__ggChanged();}
 const todayPractice=()=>PRACTICES[dayNum()%PRACTICES.length];
 function fmtDate(ms){try{return new Date(ms).toLocaleDateString(LANG==="hi"?"hi-IN":LANG==="gu"?"gu-IN":"en-GB",{day:"numeric",month:"short",year:"numeric"});}catch(e){return new Date(ms).toDateString();}}
 function weekDots(){
@@ -747,7 +1002,7 @@ function diary(){
   document.getElementById("toHome").onclick=()=>mainHome();
   document.getElementById("noteForm").addEventListener("submit",e=>{e.preventDefault();const v=document.getElementById("noteIn").value.trim();if(!v){document.getElementById("noteIn").focus();return;}const a=loadNotes();a.push({text:v,when:Date.now()});saveNotes(a);diary();});
   app.querySelectorAll(".del").forEach(b=>b.onclick=()=>{
-    if(b.dataset.sure){const a=loadNotes();a.splice(+b.dataset.i,1);saveNotes(a);diary();}
+    if(b.dataset.sure){const a=loadNotes();const gone=a.splice(+b.dataset.i,1)[0];if(gone)Cloud.forgetNote(gone.when);saveNotes(a);diary();}
     else{b.dataset.sure="1";b.textContent=T("Yes, delete this note");b.classList.add("danger");}
   });
   const cp=document.getElementById("copyDiary"); if(cp) cp.onclick=function(){
@@ -793,7 +1048,7 @@ function bindFamily(){
   const b=document.getElementById("famBtn"); if(b) b.onclick=()=>{FAM.on=!FAM.on; if(FAM.on&&!FAM.second) FAM.second=famSecond(); saveFam(); mainHome();};
   app.querySelectorAll("[data-sec]").forEach(x=>x.onclick=()=>{FAM.second=x.dataset.sec; saveFam(); mainHome();});
 }
-const HOME_HELP_EN=`<div class="help quiet">Gita Saathi shares the Gita's wisdom. It isn't a replacement for talking to someone. If things feel very heavy, call <strong>Samaritans 116 123</strong> (UK) or <strong>Tele-MANAS 14416</strong> (India).</div>`;
+const HOME_HELP_EN=`<div class="help quiet">Gita Ghar shares the Gita's wisdom. It isn't a replacement for talking to someone. If things feel very heavy, call <strong>Samaritans 116 123</strong> (UK) or <strong>Tele-MANAS 14416</strong> (India).</div>`;
 const HOME_HELP_=()=>T(HOME_HELP_EN);
 function stopVoice(){try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}}
 const ORDER=[1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18];
@@ -806,7 +1061,7 @@ function mainHome(msg){
   const day=Math.floor(Date.now()/86400000), V=FEELINGS[day%FEELINGS.length];
   const cont=nx?(nx===1&&dc===0?T("Start with Chapter 1"):T(`Continue: Chapter ${nx}`)):T("You've finished all 18 chapters. Play any chapter again");
   app.innerHTML=`
-   <div class="topbar"><span class="brand">${T("Gita Saathi")}</span>${langBar()}</div>
+   <div class="topbar"><span class="brand">${T("Gita Ghar")}</span>${langBar()}</div>
    <div class="hero">${svg(sky("#fff6e6","#fff6e6")+`<circle cx="800" cy="520" r="330" fill="#ffe7a8"/>`+krishna(800,900,1.9,{flute:true}),"300 80 1000 820")}
      <div><h1>${T("Namaste!")}</h1><p class="lead">${msg||T("Krishna's wisdom from the Bhagavad Gita, for the moments when life feels heavy.")}</p></div></div>
    <form class="ask" id="askForm" autocomplete="off">
@@ -823,6 +1078,7 @@ function mainHome(msg){
        <button type="button" id="goNext" class="cont">▶ ${cont}</button></div>
    </div>
    ${todayCard()}
+   ${cloudCard()}
    ${familyCard()}
    <button type="button" class="door diary" id="goDiary"><span class="k">${T("My Gita diary")}</span><span class="d">${T("Your cards, your notes and your practice, all in one place.")}</span></button>
    <div id="installHost">${installCard()}</div>
@@ -833,7 +1089,7 @@ function mainHome(msg){
   document.getElementById("askIn").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();document.getElementById("askForm").requestSubmit();}});
   document.getElementById("goGita").onclick=()=>chapters();
   document.getElementById("goNext").onclick=()=>nx?storyOne(nx):chapters();
-  bindToday(); bindFamily(); document.getElementById("goDiary").onclick=()=>diary();
+  bindToday(); bindFamily(); {const ga=document.getElementById("goAccount"); if(ga) ga.onclick=()=>account();} document.getElementById("goDiary").onclick=()=>diary();
   window.scrollTo(0,0);
 }
 function chapters(){
@@ -1789,7 +2045,7 @@ function finish(){
   nextB.disabled=true; act.innerHTML="";
   const b=document.createElement("button"); b.textContent=T("Play again"); b.onclick=()=>storyOne(CH);
   act.appendChild(b);
-  try{localStorage.setItem("gs-story-"+CH,"done");}catch(e){}
+  try{localStorage.setItem("gs-story-"+CH,"done");}catch(e){} if(window.__ggChanged) window.__ggChanged();
   const c=document.createElement("button"); c.type="button"; c.className="ghost"; c.textContent=T("Back to chapters"); c.onclick=()=>chapters(); act.appendChild(c);
   if(FAM.on&&TALKQ[CH]&&!document.getElementById("talkCard")) cardHost.insertAdjacentHTML("beforeend",`<div class="talk" id="talkCard"><b>${T("Talk about it together")}</b><p>${bil(TALKQ[CH])}</p></div>`);
 }
