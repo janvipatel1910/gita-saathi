@@ -1,4 +1,4 @@
-# Deploying Gita Ghar to AWS
+# Deploying Gyaan Ghar to AWS
 
 This puts the app on AWS in London (`eu-west-2`) with:
 
@@ -69,5 +69,5 @@ npm test
   ```
   aws cloudfront list-origin-access-controls --query "OriginAccessControlList.Items[].{Id:Id,Name:Name}"
   ```
-- **Deleting everything:** the user database and sign-in pool are protected from accidental deletion. To remove the app completely, turn off deletion protection on the DynamoDB table and the Cognito user pool first, then run `sam delete --stack-name gita-ghar --region eu-west-2`.
+- **Deleting everything:** the user database and sign-in pool are protected from accidental deletion. To remove the app completely, turn off deletion protection on the DynamoDB table and the Cognito user pool first, then run `sam delete --stack-name gyaan-ghar --region eu-west-2`.
 - **GitHub Pages** keeps working as an offline-only version (no sign-in or smart matching), because it has no `config.js`.

@@ -1,10 +1,10 @@
-// Gujarati (ગુજરાતી) translations for Gita Ghar.
+// Gujarati (ગુજરાતી) translations for Gyaan Ghar.
 // Keys are the English text; values are what the app shows in Gujarati.
 // To fix a translation, edit the text on the right-hand side only.
 window.I18N=window.I18N||{};I18N.done=I18N.done||{};
 I18N.done.gu=[1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
 I18N.gu={
- "Gita Ghar": "ગીતા ઘર",
+ "Gyaan Ghar": "જ્ઞાન ઘર",
  "Language": "ભાષા",
  "Namaste!": "નમસ્તે!",
  "Krishna's wisdom from the Bhagavad Gita, for the moments when life feels heavy.": "ભગવદ્ ગીતામાંથી શ્રીકૃષ્ણનું જ્ઞાન, એ ક્ષણો માટે જ્યારે જીવન ભારે લાગે.",
@@ -24,7 +24,7 @@ I18N.gu={
  "Read more about this verse": "આ શ્લોક વિશે વધુ જાણો",
  "All 18 chapters": "બધા 18 અધ્યાય",
  "{v} in some editions": "કેટલીક આવૃત્તિઓમાં {v}",
- "<div class=\"help quiet\">Gita Ghar shares the Gita's wisdom. It isn't a replacement for talking to someone. If things feel very heavy, call <strong>Samaritans 116 123</strong> (UK) or <strong>Tele-MANAS 14416</strong> (India).</div>": "<div class=\"help quiet\">ગીતા ઘર ગીતાનું જ્ઞાન વહેંચે છે. તે કોઈની સાથે વાત કરવાનો વિકલ્પ નથી. જો બધું બહુ ભારે લાગે, તો <strong>Samaritans 116 123</strong> (UK) અથવા <strong>Tele-MANAS 14416</strong> (ભારત) પર કૉલ કરો.</div>",
+ "<div class=\"help quiet\">Gyaan Ghar shares the Gita's wisdom. It isn't a replacement for talking to someone. If things feel very heavy, call <strong>Samaritans 116 123</strong> (UK) or <strong>Tele-MANAS 14416</strong> (India).</div>": "<div class=\"help quiet\">જ્ઞાન ઘર ગીતાનું જ્ઞાન વહેંચે છે. તે કોઈની સાથે વાત કરવાનો વિકલ્પ નથી. જો બધું બહુ ભારે લાગે, તો <strong>Samaritans 116 123</strong> (UK) અથવા <strong>Tele-MANAS 14416</strong> (ભારત) પર કૉલ કરો.</div>",
  "<div class=\"help quiet\">This app shares the Gita's wisdom. It isn't a replacement for talking to someone. If things feel very heavy, call <strong>Samaritans 116 123</strong> (UK) or <strong>Tele-MANAS 14416</strong> (India).</div>": "<div class=\"help quiet\">આ ઍપ ગીતાનું જ્ઞાન વહેંચે છે. તે કોઈની સાથે વાત કરવાનો વિકલ્પ નથી. જો બધું બહુ ભારે લાગે, તો <strong>Samaritans 116 123</strong> (UK) અથવા <strong>Tele-MANAS 14416</strong> (ભારત) પર કૉલ કરો.</div>",
  "<div class=\"help\"><strong>If you feel unsafe or are thinking of harming yourself</strong>, please talk to someone now. In the UK, call Samaritans free on <strong>116 123</strong>, any time. In India, call Tele-MANAS on <strong>14416</strong>. In an emergency, call 999 (UK) or 112 (India).</div>": "<div class=\"help\"><strong>જો તમે અસુરક્ષિત અનુભવો છો અથવા પોતાને નુકસાન પહોંચાડવાનું વિચારો છો</strong>, તો કૃપા કરીને હમણાં જ કોઈની સાથે વાત કરો. UKમાં, Samaritansને <strong>116 123</strong> પર મફત કૉલ કરો, ગમે ત્યારે. ભારતમાં, Tele-MANASને <strong>14416</strong> પર કૉલ કરો. કટોકટીમાં 999 (UK) અથવા 112 (ભારત) પર કૉલ કરો.</div>",
  "Jai Shri Krishna. Come back any time your mann ghabraye.": "જય શ્રી કૃષ્ણ. જ્યારે પણ મન ગભરાય, ફરી આવજો.",
@@ -730,7 +730,7 @@ I18N.gu={
  "e.g. do my duty and let go of the worry about results": "જેમ કે, મારું કર્તવ્ય કરવું અને પરિણામની ચિંતા છોડવી",
  "The lesson I'll carry with me: <strong>{v}</strong>": "જે શીખ સાથે રહેશે: <strong>{v}</strong>",
  "<em>Jai Shri Krishna.</em> Come back whenever your mann ghabraye. Krishna is always here.": "<em>જય શ્રી કૃષ્ણ.</em> જ્યારે પણ મન ગભરાય, પાછા આવજો. શ્રીકૃષ્ણ હંમેશા અહીં છે.",
- "Add Gita Ghar to your phone": "ગીતા ઘરને તમારા ફોન પર ઉમેરો",
+ "Add Gyaan Ghar to your phone": "જ્ઞાન ઘરને તમારા ફોન પર ઉમેરો",
  "Opens like an app, and works without internet.": "તે ઍપની જેમ ખૂલે છે, અને ઇન્ટરનેટ વગર પણ ચાલે છે.",
  "Install": "ઇન્સ્ટૉલ કરો",
  "In Safari, tap the Share button, then “Add to Home Screen”.": "Safariમાં ‘શેર’ બટન દબાવો, પછી “Add to Home Screen” પસંદ કરો.",

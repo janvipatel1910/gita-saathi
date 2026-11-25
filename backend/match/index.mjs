@@ -1,4 +1,4 @@
-// Gita Ghar - smart matching for "Tell Krishna".
+// Gyaan Ghar - smart matching for "Tell Krishna".
 // POST /match   body: {"text": "what the person typed", "lang": "en" | "hi" | "gu"}
 // Returns:      {"feelings": ["homesick", "alone"], "crisis": false}
 //

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Gita Ghar: a Bhagavad Gita companion for Indian families abroad, in English, Hindi and Gujarati.">
+<meta name="description" content="Gyaan Ghar: a Bhagavad Gita companion for Indian families abroad, in English, Hindi and Gujarati.">
 <style>*,*::before,*::after{box-sizing:border-box}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
 /* languages */
 :root:lang(gu){--display:"Baloo Bhai 2","Baloo 2","Trebuchet MS",system-ui,sans-serif;--body:"Hind Vadodara","Mukta","Segoe UI",system-ui,sans-serif;--deva:"Noto Serif Gujarati","Hind Vadodara",serif}
@@ -27,14 +27,14 @@
 .today .opt{align-self:flex-start}
 .note-lang{margin:0;background:#fff3d6;border:2px solid var(--marigold);border-radius:12px;padding:8px 12px;font-size:.95rem}
 </style>
-<title>Gita Ghar</title>
+<title>Gyaan Ghar</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#1f8a8a">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Gita Ghar">
+<meta name="apple-mobile-web-app-title" content="Gyaan Ghar">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Baloo+Bhai+2:wght@500;600;700;800&family=Hind+Vadodara:wght@400;600&family=Mukta:wght@400;600&family=Noto+Serif+Gujarati:wght@400;600&family=Tiro+Devanagari+Sanskrit&display=swap">
 <style>
@@ -268,6 +268,12 @@ label.tts{display:flex;align-items:center;gap:6px;color:var(--soft);font-size:.9
 .door .d{font-size:1.02rem;line-height:1.4;opacity:.95}
 .door .p{margin-top:auto;font-family:var(--display);font-weight:700;font-size:.95rem;background:rgba(255,255,255,.22);align-self:flex-start;padding:.15em .8em;border-radius:99px}
 .door.feelings{background:var(--peacock)} .door.gita{background:var(--krishna)}
+.door.gita.ramayan{background:#d2691e}
+.door.ramayan .cont{color:#b5541a}
+.stage .chr.spk{filter:drop-shadow(0 0 14px rgba(255,236,160,.95))}
+.stage.talking .chr.spk .mo{animation:mouthO .36s steps(1) infinite}
+.stage.talking .chr.spk .mc{animation:mouthC .36s steps(1) infinite}
+.ch:disabled{opacity:.55;cursor:default}
 .chlist{display:flex;flex-direction:column;gap:8px}
 .ch{display:grid;grid-template-columns:3.2em 1fr auto;gap:12px;align-items:center;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:10px 14px;text-align:left;font:inherit;color:var(--ink)}
 .ch > span{min-width:0}
@@ -288,6 +294,7 @@ label.tts{display:flex;align-items:center;gap:6px;color:var(--soft);font-size:.9
 <script src="config.js"></script>
 <script src="lang/hi.js"></script>
 <script src="lang/gu.js"></script>
+<script src="ramayan.js"></script>
 <script>
 (function(){
 /* ---------- languages ---------- */
@@ -382,8 +389,8 @@ window.addEventListener("appinstalled",()=>{installEvt=null;const h=document.get
 if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol)){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(()=>{});});}
 function installCard(){
   if(isStandalone()) return "";
-  if(installEvt) return `<div class="install"><img src="icons/icon-192.png" alt="" width="44" height="44"><div><b>${T("Add Gita Ghar to your phone")}</b><span>${T("Opens like an app, and works without internet.")}</span></div><button type="button" id="installBtn">${T("Install")}</button></div>`;
-  if(isIOS()) return `<div class="install"><img src="icons/icon-192.png" alt="" width="44" height="44"><div><b>${T("Add Gita Ghar to your phone")}</b><span>${T("In Safari, tap the Share button, then “Add to Home Screen”.")}</span></div></div>`;
+  if(installEvt) return `<div class="install"><img src="icons/icon-192.png" alt="" width="44" height="44"><div><b>${T("Add Gyaan Ghar to your phone")}</b><span>${T("Opens like an app, and works without internet.")}</span></div><button type="button" id="installBtn">${T("Install")}</button></div>`;
+  if(isIOS()) return `<div class="install"><img src="icons/icon-192.png" alt="" width="44" height="44"><div><b>${T("Add Gyaan Ghar to your phone")}</b><span>${T("In Safari, tap the Share button, then “Add to Home Screen”.")}</span></div></div>`;
   return "";
 }
 function bindInstall(){const b=document.getElementById("installBtn");if(b)b.onclick=async()=>{if(!installEvt)return;installEvt.prompt();try{await installEvt.userChoice;}catch(e){}installEvt=null;const h=document.getElementById("installHost");if(h)h.innerHTML="";};}
@@ -1048,7 +1055,7 @@ function bindFamily(){
   const b=document.getElementById("famBtn"); if(b) b.onclick=()=>{FAM.on=!FAM.on; if(FAM.on&&!FAM.second) FAM.second=famSecond(); saveFam(); mainHome();};
   app.querySelectorAll("[data-sec]").forEach(x=>x.onclick=()=>{FAM.second=x.dataset.sec; saveFam(); mainHome();});
 }
-const HOME_HELP_EN=`<div class="help quiet">Gita Ghar shares the Gita's wisdom. It isn't a replacement for talking to someone. If things feel very heavy, call <strong>Samaritans 116 123</strong> (UK) or <strong>Tele-MANAS 14416</strong> (India).</div>`;
+const HOME_HELP_EN=`<div class="help quiet">Gyaan Ghar shares the Gita's wisdom. It isn't a replacement for talking to someone. If things feel very heavy, call <strong>Samaritans 116 123</strong> (UK) or <strong>Tele-MANAS 14416</strong> (India).</div>`;
 const HOME_HELP_=()=>T(HOME_HELP_EN);
 function stopVoice(){try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}}
 const ORDER=[1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18];
@@ -1061,9 +1068,9 @@ function mainHome(msg){
   const day=Math.floor(Date.now()/86400000), V=FEELINGS[day%FEELINGS.length];
   const cont=nx?(nx===1&&dc===0?T("Start with Chapter 1"):T(`Continue: Chapter ${nx}`)):T("You've finished all 18 chapters. Play any chapter again");
   app.innerHTML=`
-   <div class="topbar"><span class="brand">${T("Gita Ghar")}</span>${langBar()}</div>
+   <div class="topbar"><span class="brand">${T("Gyaan Ghar")}</span>${langBar()}</div>
    <div class="hero">${svg(sky("#fff6e6","#fff6e6")+`<circle cx="800" cy="520" r="330" fill="#ffe7a8"/>`+krishna(800,900,1.9,{flute:true}),"300 80 1000 820")}
-     <div><h1>${T("Namaste!")}</h1><p class="lead">${msg||T("Krishna's wisdom from the Bhagavad Gita, for the moments when life feels heavy.")}</p></div></div>
+     <div><h1>${T("Namaste!")}</h1><p class="lead">${msg||T("Wisdom from the Bhagavad Gita and the Ramayan, for the moments when life feels heavy.")}</p></div></div>
    <form class="ask" id="askForm" autocomplete="off">
      <label for="askIn">${T("Tell Krishna what's on your mind")}</label>
      <div class="askrow"><textarea id="askIn" rows="2" maxlength="300" placeholder="${T("e.g. I failed my driving test and I feel useless")}"></textarea>
@@ -1076,6 +1083,7 @@ function mainHome(msg){
        <div class="prog" role="img" aria-label="${T(`${dc} of 18 chapters done`)}"><i style="width:${dc/18*100}%"></i></div>
        <span class="p">${T(`${dc} of 18 chapters done`)}</span>
        <button type="button" id="goNext" class="cont">▶ ${cont}</button></div>
+     ${ramDoor()}
    </div>
    ${todayCard()}
    ${cloudCard()}
@@ -1089,8 +1097,18 @@ function mainHome(msg){
   document.getElementById("askIn").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();document.getElementById("askForm").requestSubmit();}});
   document.getElementById("goGita").onclick=()=>chapters();
   document.getElementById("goNext").onclick=()=>nx?storyOne(nx):chapters();
+  {const gr=document.getElementById("goRam"); if(gr){gr.onclick=()=>window.Ramayan.open(); document.getElementById("goRamNext").onclick=()=>{const n=window.Ramayan.next(); n?window.Ramayan.play(n):window.Ramayan.open();};}}
   bindToday(); bindFamily(); {const ga=document.getElementById("goAccount"); if(ga) ga.onclick=()=>account();} document.getElementById("goDiary").onclick=()=>diary();
   window.scrollTo(0,0);
+}
+function ramDoor(){
+  const R=window.Ramayan; if(!R) return "";
+  const d=R.done(), n=R.next();
+  const cont=n?(d===0?T("Start with Bal Kand"):T(`Continue: Kand ${n}`)):T("Play any Kand again");
+  return `<div class="door gita ramayan"><button type="button" id="goRam" class="doorbtn"><span class="k">${T("Ramayan ki kahani")}</span><span class="d">${T("Tulsidas's Ramcharitmanas, Kand by Kand, as a story you take part in.")}</span></button>
+     <div class="prog" role="img" aria-label="${T(`${d} of 7 Kands done`)}"><i style="width:${d/7*100}%"></i></div>
+     <span class="p">${T(`${d} of 7 Kands done`)} · ${T(`${R.ready()} of 7 ready so far`)}</span>
+     <button type="button" id="goRamNext" class="cont">▶ ${cont}</button></div>`;
 }
 function chapters(){
   stopVoice();
@@ -2145,6 +2163,8 @@ startScene(0);
 }
 
 (function(){const b=document.createElement("button");b.type="button";b.id="soundBtn";b.className="soundbtn";b.onclick=()=>Sound.toggle();document.body.appendChild(b);Sound.paint();})();
+// Helpers the Ramayan section (ramayan.js) uses.
+window.GG={T,TF,bil,bilVerses,SCR,svg,sky,hills,esc,Sound,addCard,mainHome,HOME_HELP_,stopVoice,lang:()=>LANG,fam:()=>FAM};
 mainHome();
 })();
 </script>

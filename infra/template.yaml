@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  Gita Ghar - hosting (S3 + CloudFront), sign-in with an email code (Cognito),
+  Gyaan Ghar - hosting (S3 + CloudFront), sign-in with an email code (Cognito),
   cloud backup (API Gateway + Lambda + DynamoDB), smart verse matching
   (Lambda + Amazon Bedrock) and a monthly budget alert.
   Deploy in eu-west-2 (London), the same region as the S3 bucket.
@@ -35,7 +35,7 @@ Globals:
     MemorySize: 256
     Timeout: 10
     Tags:
-      app: gita-ghar
+      app: gyaan-ghar
 
 Resources:
 
@@ -54,7 +54,7 @@ Resources:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
-        Comment: Gita Ghar app
+        Comment: Gyaan Ghar app
         Enabled: true
         DefaultRootObject: index.html
         HttpVersion: http2and3
@@ -108,7 +108,7 @@ Resources:
   UserPool:
     Type: AWS::Cognito::UserPool
     Properties:
-      UserPoolName: gita-ghar-users
+      UserPoolName: gyaan-ghar-users
       UserPoolTier: ESSENTIALS            # needed for passwordless email codes
       DeletionProtection: ACTIVE
       UsernameAttributes: [email]
@@ -127,14 +127,14 @@ Resources:
         EmailSendingAccount: COGNITO_DEFAULT  # up to 50 emails a day; switch to Amazon SES before a public launch
       VerificationMessageTemplate:
         DefaultEmailOption: CONFIRM_WITH_CODE
-        EmailSubject: Your Gita Ghar code
-        EmailMessage: "Jai Shri Krishna. Your Gita Ghar code is {####}"
+        EmailSubject: Your Gyaan Ghar code
+        EmailMessage: "Jai Shri Krishna. Your Gyaan Ghar code is {####}"
 
   UserPoolClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
       UserPoolId: !Ref UserPool
-      ClientName: gita-ghar-app
+      ClientName: gyaan-ghar-app
       GenerateSecret: false
       ExplicitAuthFlows: [ALLOW_USER_AUTH, ALLOW_REFRESH_TOKEN_AUTH]
       PreventUserExistenceErrors: ENABLED
@@ -154,7 +154,7 @@ Resources:
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
     Properties:
-      TableName: gita-ghar-user-data
+      TableName: gyaan-ghar-user-data
       BillingMode: PAY_PER_REQUEST
       DeletionProtectionEnabled: true
       AttributeDefinitions:
@@ -202,13 +202,13 @@ Resources:
   SyncFunctionLogs:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: /aws/lambda/gita-ghar-sync
+      LogGroupName: /aws/lambda/gyaan-ghar-sync
       RetentionInDays: 14
 
   SyncFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: gita-ghar-sync
+      FunctionName: gyaan-ghar-sync
       Description: Saves and loads a signed-in user's cards, notes and progress
       CodeUri: ../backend/sync/
       Handler: index.handler
@@ -236,13 +236,13 @@ Resources:
   MatchFunctionLogs:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: /aws/lambda/gita-ghar-match
+      LogGroupName: /aws/lambda/gyaan-ghar-match
       RetentionInDays: 14
 
   MatchFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: gita-ghar-match
+      FunctionName: gyaan-ghar-match
       Description: Picks the best-matching feelings for what someone types (never writes verses itself)
       CodeUri: ../backend/match/
       Handler: index.handler
@@ -269,7 +269,7 @@ Resources:
     Type: AWS::Budgets::Budget
     Properties:
       Budget:
-        BudgetName: gita-ghar-monthly
+        BudgetName: gyaan-ghar-monthly
         BudgetType: COST
         TimeUnit: MONTHLY
         BudgetLimit:

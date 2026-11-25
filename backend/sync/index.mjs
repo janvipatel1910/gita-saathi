@@ -1,4 +1,4 @@
-// Gita Ghar - cloud backup for signed-in users.
+// Gyaan Ghar - cloud backup for signed-in users.
 // GET    /sync  -> returns every saved collection for this user
 // PUT    /sync  -> saves one or more collections   body: {"collections": {"cards": [...], ...}}
 // DELETE /sync  -> deletes everything saved for this user (used by "Delete my account")
