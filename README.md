@@ -34,7 +34,7 @@ A switch on the home page for reading together:
 
 Without AWS (for example on GitHub Pages), the app works fully offline and these features are simply hidden.
 
-### Mann ghabraya hai? (What's troubling you?)
+### Feeling anxious?
 
 The user picks one of 12 feelings. Each one shows:
 
@@ -59,7 +59,7 @@ The user picks one of 12 feelings. Each one shows:
 | Homesick, far from family | 6.30 |
 | Guilt over a mistake | 4.36 |
 
-### Gita ki kahani (The Gita story)
+### The Gita Story
 
 All 18 chapters are playable as levels. Progress is saved on the device.
 
@@ -98,7 +98,7 @@ Choose **English**, **हिन्दी (Hindi)** or **ગુજરાતી (G
 | Part of the app | Hindi | Gujarati |
 |---|---|---|
 | Home page, menus, chapter list | Done | Done |
-| Mann ghabraya hai? (all 12 feelings) | Done | Done |
+| Feeling anxious? (all 12 feelings) | Done | Done |
 | Tell Krishna, daily practice, diary, Family mode | Done | Done |
 | Verse meanings in the chapters | Done | Done |
 | All 18 chapter stories | Done | Done |

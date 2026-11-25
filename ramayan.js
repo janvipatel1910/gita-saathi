@@ -111,13 +111,13 @@ const shivBow=(broken)=>broken
 
 /* ---------- Bal Kand ---------- */
 const KANDS={1:{
-  title:"Bal Kand · Ram ka Janam aur Sita ka Swayamvar",
+  title:"Bal Kand · Ram's Birth and Sita's Swayamvar",
   sub:"An interactive Ramayan story",
   kids:"Ram is born in Ayodhya, helps a wise sage, frees a lady who was turned to stone, and marries Sita after gently breaking a huge bow.",
   talk:"Who is someone you love who lives far away? What would you like to tell them today?",
   scenes:[
  { art:()=>svg(sky("#ffd9a8","#fff3dc",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+forest("#e8c27a","#d9a95a")+RAM(640,780,.9,{still:true})+SITA(960,780,.9,{still:true})),
-   title:"Ram ki Kahani", sub:"Tulsidas's Ramcharitmanas · Bal Kand",
+   title:"The Story of Ram", sub:"Tulsidas's Ramcharitmanas · Bal Kand",
    steps:[
     {w:"N",t:"Namaste! About 450 years ago, the poet-saint Tulsidas wrote the story of Shri Ram in Awadhi, the everyday language of his people."},
     {w:"N",t:"He called it the <em>Ramcharitmanas</em>, the \"lake of Ram's deeds\". In homes across India and abroad, families still sing it together."},
@@ -130,7 +130,7 @@ const KANDS={1:{
     {w:"N",t:"Ayodhya. King Dasharath has three queens: Kaushalya, Kaikeyi and Sumitra. For years they have prayed for a child."},
     {w:"N",t:"On Ram Navami, at noon, Lord Vishnu appears before Queen Kaushalya, glowing, with four arms."},
     {w:"N",t:()=>RV(REF_BAL,"भए प्रगट कृपाला दीनदयाला कौसल्या हित कारी।","Bhaye pragat kripaala deenadayaala, Kausalya hitakaari.","The kind one, who cares for everyone in need, appeared, for the good of Kaushalya.")},
-    {w:"U",t:"Prabhu, this form is too great for me. Please become my little baby, so I can hold you and love you."},
+    {w:"U",t:"Lord, this form is too great for me. Please become my little baby, so I can hold you and love you."},
     {w:"N",t:"And he does. The Lord of the whole universe becomes a crying baby in his mother's arms, because that is what love asked for."},
     {act:"tapcount",key:"diyas",n:5,w:"N",q:"Ayodhya is celebrating! Light five diyas for baby Ram.",label:k=>`Light a diya (${k} of 5)`,
      on:()=>{S.cradle=true;return [
@@ -142,8 +142,8 @@ const KANDS={1:{
  { art:()=>svg(sky("#cfe8f5","#f3f9fc")+palace()+KING(520,780,.85,{id:"D",mood:S.letgo?"happy":"sad"})+SAGE(860,780,.85,{id:"V",bless:true})+RAM(1180,780,.7,{})+LAKSH(1360,780,.66,{})),
    steps:[
     {w:"N",t:"The boys grow up. One day the great sage Vishwamitra arrives at the palace."},
-    {w:"V",t:"Rajan, demons keep spoiling our yagya in the forest. Send Ram and Lakshman with me. They will protect it."},
-    {w:"D",t:"Muniraj, ask for my kingdom, my wealth, even my life. But don't ask for Ram. He is still so young."},
+    {w:"V",t:"O King, demons keep spoiling our yagya in the forest. Send Ram and Lakshman with me. They will protect it."},
+    {w:"D",t:"Great sage, ask for my kingdom, my wealth, even my life. But don't ask for Ram. He is still so young."},
     {w:"N",t:"Guru Vasishtha gently explains that the boys will be safe, and that this journey will make them who they are meant to be."},
     {act:"choice",w:"N",q:"If you were King Dasharath, what would you do?",
      opts:[["Keep them safe at home","keep"],["Let them go, with blessings","go"]],
@@ -167,8 +167,8 @@ const KANDS={1:{
    steps:[
     {w:"N",t:"In Janakpur, King Janak has set a test: whoever can lift and string Lord Shiva's great bow will marry his daughter, Sita."},
     {w:"N",t:"Early one morning, in the palace garden, Ram goes to pick flowers for his guru. Sita has come to pray to Mother Gauri."},
-    {w:"N",t:"For the first time, they see each other. Neither says a word. Sita quietly prays: <em>Maa, may the one my heart has chosen be mine.</em>"},
-    {w:"S",t:"Gauri Maa, you know what is in my heart. Please bless me."},
+    {w:"N",t:"For the first time, they see each other. Neither says a word. Sita quietly prays: <em>Mother, may the one my heart has chosen be mine.</em>"},
+    {w:"S",t:"Mother Gauri, you know what is in my heart. Please bless me."},
     {w:"N",t:"The goddess's garland slips down, as if to say: <em>Your wish will come true.</em>"}
  ]},
  { art:()=>svg(sky("#ffe3b0","#fff6e6")+palace()+shivBow(S.broken)+KING(240,800,.7,{mood:S.broken?"happy":"sad"})+(S.broken?SITA(1360,800,.75,{fold:true}):"")+RAM(800,560,.62,{glow:!!S.broken})),
@@ -207,7 +207,7 @@ function kandList(){
   init(); stopVoice();
   const ready=READY();
   app.innerHTML=`<div class="controls"><button class="ghost" id="toHome" type="button">${T("‹ Home")}</button></div>
-   <h1>${T("Ramayan ki kahani")}</h1><p class="lead">${T("Tulsidas's Ramcharitmanas, Kand by Kand. Each one is a story where you make choices and keep a card at the end.")}</p>
+   <h1>${T("The Ramayan Story")}</h1><p class="lead">${T("Tulsidas's Ramcharitmanas, Kand by Kand. Each one is a story where you make choices and keep a card at the end.")}</p>
    <div class="chlist">${KANDLIST.map(([n,name,about])=>{const ok=ready.includes(n),d=kandDone(n);
      return `<button class="ch${ok?" open":""}${d?" done":""}" type="button" data-k="${n}"${ok?"":" disabled aria-disabled=\"true\""}><span class="n">${n}</span><span class="t"><b>${T(about)}</b><i>${T(name)}</i></span><span class="s">${T(!ok?"Coming soon":d?"Play again":"Play")}</span></button>`;}).join("")}</div>
    <p class="tiny">${T("Stories are retold in simple words. Tulsidas's own lines are always shown with the Kand they come from.")}</p>
