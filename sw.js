@@ -1,7 +1,7 @@
 // Gyaan Ghar service worker: lets the app open and work offline.
 // When you change any app file, bump VERSION so phones fetch the new files.
-const VERSION = "gs-v8";
-const CORE = ["./", "index.html", "privacy.html", "lang/hi.js", "lang/gu.js", "manifest.json",
+const VERSION = "gs-v9";
+const CORE = ["./", "index.html", "privacy.html", "lang/hi.js", "lang/gu.js", "ramayan.js", "manifest.json",
   "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-512.png", "icons/icon-180.png", "icons/icon-32.png"];
 
 self.addEventListener("install", e => {

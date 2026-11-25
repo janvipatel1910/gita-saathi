@@ -268,6 +268,12 @@ label.tts{display:flex;align-items:center;gap:6px;color:var(--soft);font-size:.9
 .door .d{font-size:1.02rem;line-height:1.4;opacity:.95}
 .door .p{margin-top:auto;font-family:var(--display);font-weight:700;font-size:.95rem;background:rgba(255,255,255,.22);align-self:flex-start;padding:.15em .8em;border-radius:99px}
 .door.feelings{background:var(--peacock)} .door.gita{background:var(--krishna)}
+.door.gita.ramayan{background:#d2691e}
+.door.ramayan .cont{color:#b5541a}
+.stage .chr.spk{filter:drop-shadow(0 0 14px rgba(255,236,160,.95))}
+.stage.talking .chr.spk .mo{animation:mouthO .36s steps(1) infinite}
+.stage.talking .chr.spk .mc{animation:mouthC .36s steps(1) infinite}
+.ch:disabled{opacity:.55;cursor:default}
 .chlist{display:flex;flex-direction:column;gap:8px}
 .ch{display:grid;grid-template-columns:3.2em 1fr auto;gap:12px;align-items:center;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:10px 14px;text-align:left;font:inherit;color:var(--ink)}
 .ch > span{min-width:0}
@@ -288,6 +294,7 @@ label.tts{display:flex;align-items:center;gap:6px;color:var(--soft);font-size:.9
 <script src="config.js"></script>
 <script src="lang/hi.js"></script>
 <script src="lang/gu.js"></script>
+<script src="ramayan.js"></script>
 <script>
 (function(){
 /* ---------- languages ---------- */
@@ -1063,7 +1070,7 @@ function mainHome(msg){
   app.innerHTML=`
    <div class="topbar"><span class="brand">${T("Gyaan Ghar")}</span>${langBar()}</div>
    <div class="hero">${svg(sky("#fff6e6","#fff6e6")+`<circle cx="800" cy="520" r="330" fill="#ffe7a8"/>`+krishna(800,900,1.9,{flute:true}),"300 80 1000 820")}
-     <div><h1>${T("Namaste!")}</h1><p class="lead">${msg||T("Krishna's wisdom from the Bhagavad Gita, for the moments when life feels heavy.")}</p></div></div>
+     <div><h1>${T("Namaste!")}</h1><p class="lead">${msg||T("Wisdom from the Bhagavad Gita and the Ramayan, for the moments when life feels heavy.")}</p></div></div>
    <form class="ask" id="askForm" autocomplete="off">
      <label for="askIn">${T("Tell Krishna what's on your mind")}</label>
      <div class="askrow"><textarea id="askIn" rows="2" maxlength="300" placeholder="${T("e.g. I failed my driving test and I feel useless")}"></textarea>
@@ -1076,6 +1083,7 @@ function mainHome(msg){
        <div class="prog" role="img" aria-label="${T(`${dc} of 18 chapters done`)}"><i style="width:${dc/18*100}%"></i></div>
        <span class="p">${T(`${dc} of 18 chapters done`)}</span>
        <button type="button" id="goNext" class="cont">▶ ${cont}</button></div>
+     ${ramDoor()}
    </div>
    ${todayCard()}
    ${cloudCard()}
@@ -1089,8 +1097,18 @@ function mainHome(msg){
   document.getElementById("askIn").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();document.getElementById("askForm").requestSubmit();}});
   document.getElementById("goGita").onclick=()=>chapters();
   document.getElementById("goNext").onclick=()=>nx?storyOne(nx):chapters();
+  {const gr=document.getElementById("goRam"); if(gr){gr.onclick=()=>window.Ramayan.open(); document.getElementById("goRamNext").onclick=()=>{const n=window.Ramayan.next(); n?window.Ramayan.play(n):window.Ramayan.open();};}}
   bindToday(); bindFamily(); {const ga=document.getElementById("goAccount"); if(ga) ga.onclick=()=>account();} document.getElementById("goDiary").onclick=()=>diary();
   window.scrollTo(0,0);
+}
+function ramDoor(){
+  const R=window.Ramayan; if(!R) return "";
+  const d=R.done(), n=R.next();
+  const cont=n?(d===0?T("Start with Bal Kand"):T(`Continue: Kand ${n}`)):T("Play any Kand again");
+  return `<div class="door gita ramayan"><button type="button" id="goRam" class="doorbtn"><span class="k">${T("Ramayan ki kahani")}</span><span class="d">${T("Tulsidas's Ramcharitmanas, Kand by Kand, as a story you take part in.")}</span></button>
+     <div class="prog" role="img" aria-label="${T(`${d} of 7 Kands done`)}"><i style="width:${d/7*100}%"></i></div>
+     <span class="p">${T(`${d} of 7 Kands done`)} · ${T(`${R.ready()} of 7 ready so far`)}</span>
+     <button type="button" id="goRamNext" class="cont">▶ ${cont}</button></div>`;
 }
 function chapters(){
   stopVoice();
@@ -2145,6 +2163,8 @@ startScene(0);
 }
 
 (function(){const b=document.createElement("button");b.type="button";b.id="soundBtn";b.className="soundbtn";b.onclick=()=>Sound.toggle();document.body.appendChild(b);Sound.paint();})();
+// Helpers the Ramayan section (ramayan.js) uses.
+window.GG={T,TF,bil,bilVerses,SCR,svg,sky,hills,esc,Sound,addCard,mainHome,HOME_HELP_,stopVoice,lang:()=>LANG,fam:()=>FAM};
 mainHome();
 })();
 </script>
