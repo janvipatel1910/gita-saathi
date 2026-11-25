@@ -274,6 +274,7 @@ label.tts{display:flex;align-items:center;gap:6px;color:var(--soft);font-size:.9
 .stage.talking .chr.spk .mo{animation:mouthO .36s steps(1) infinite}
 .stage.talking .chr.spk .mc{animation:mouthC .36s steps(1) infinite}
 .ch:disabled{opacity:.55;cursor:default}
+.ramtag{margin:0;color:#b5541a;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
 .chlist{display:flex;flex-direction:column;gap:8px}
 .ch{display:grid;grid-template-columns:3.2em 1fr auto;gap:12px;align-items:center;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:10px 14px;text-align:left;font:inherit;color:var(--ink)}
 .ch > span{min-width:0}
@@ -446,7 +447,7 @@ const FEELINGS=[
   rom:"Krodhad bhavati sammohah, sammohat smriti vibhramah. Smriti bhranshad buddhi nasho, buddhi nashat pranashyati.",
   mean:"From anger comes confusion. Confusion clouds memory. When memory is lost, judgement is destroyed, and when judgement is destroyed, a person falls.",
   simple:"Anger feels powerful, but it switches off our wisdom. A pause switches it back on. <em>Breathe first, then answer.</em>",
-  act:{type:"count",q:"Before you reply to anyone, take 10 slow breaths. Tap once for each breath.",card:()=>T("I pause before I reply. <strong>Gussa jayega, samajh rahegi.</strong>")}},
+  act:{type:"count",q:"Before you reply to anyone, take 10 slow breaths. Tap once for each breath.",card:()=>T("I pause before I reply. <strong>The anger will pass; my good sense will stay.</strong>")}},
  {id:"sad",hi:"Mann udaas hai",en:"Feeling low",color:"#6c8fb3",sky:["#b4c4d8","#eef2f7"],
   open:"Krishna taught Arjuna that pain and happiness both pass. This is from Chapter 2.",
   ref:"Bhagavad Gita 2.14",
@@ -454,7 +455,7 @@ const FEELINGS=[
   rom:"Matra sparshas tu kaunteya, shitoshna sukha duhkha dah. Agamapayino 'nityas, tans titikshasva bharata.",
   mean:"Heat and cold, happiness and pain, come from our contact with the world. They come and they go; they do not last. Bear them patiently, Arjuna.",
   simple:"This feeling is real, but it is like weather. It came, and it will move on. <em>This weather will change.</em>",
-  act:{type:"cloud",q:"Type a word or two for what you're feeling. Then let it float away like a cloud.",ph:"e.g. lonely, tired, hurt",card:()=>T("This feeling came, and it will pass. <strong>Yeh bhi guzar jayega.</strong>")}},
+  act:{type:"cloud",q:"Type a word or two for what you're feeling. Then let it float away like a cloud.",ph:"e.g. lonely, tired, hurt",card:()=>T("This feeling came, and it will pass. <strong>This too shall pass.</strong>")}},
  {id:"fail",hi:"Haar gaya hoon",en:"Feeling like a failure",color:"#8a6a4a",sky:["#f2d3a6","#fff4e2"],
   open:"In Chapter 6, Krishna says something about how we treat ourselves.",
   ref:"Bhagavad Gita 6.5",
@@ -486,7 +487,7 @@ const FEELINGS=[
   rom:"Asanshayam mahabaho, mano durnigraham chalam. Abhyasena tu kaunteya, vairagyena cha grihyate.",
   mean:"No doubt, mighty Arjuna, the mind is restless and hard to control. But with practice and letting go, it can be held steady.",
   simple:"Even Krishna said the mind is hard to control. You're not doing anything wrong. A little practice each day.",
-  act:{type:"breathe",q:"Press and hold the button while you breathe in. Let go and breathe out. Three times.",card:()=>T("<strong>Abhyaas se mann shaant hota hai.</strong> Practice calms the mind.")}},
+  act:{type:"breathe",q:"Press and hold the button while you breathe in. Let go and breathe out. Three times.",card:()=>T("<strong>Practice calms the mind.</strong>")}},
  {id:"tired",hi:"Bahut thak gaya hoon",en:"Tired, burnt out",color:"#4f9a48",sky:["#bfe3c0","#f0faf0"],
   open:"Krishna never asked anyone to work without rest. In Chapter 6, he said this.",
   ref:"Bhagavad Gita 6.17",
@@ -547,8 +548,8 @@ function feelings(msg){
   const seen=new Set(cards.map(c=>c.id));
   app.innerHTML=`<div class="controls"><button class="ghost" id="toHome" type="button">${T("‹ Home")}</button></div>
    <div class="hero">${svg(sky("#fff6e6","#fff6e6")+`<circle cx="800" cy="520" r="330" fill="#ffe7a8"/>`+krishna(800,900,1.9,{flute:true}),"300 80 1000 820")}
-     <div><h1>${T("Mann Ghabraya Hai?")}</h1><p class="lead">${msg||T("Batao, kya ho raha hai? Pick what you're feeling, and hear what Krishna said about it.")}</p></div></div>
-   <div class="grid">${FEELINGS.map(f=>`<button class="feel${seen.has(f.id)?" done":""}" data-id="${f.id}" type="button"><span class="dot" style="background:${f.color}"></span><span class="hi">${T(f.hi)}</span><span class="en">${T(f.en)}</span></button>`).join("")}</div>
+     <div><h1>${T("Feeling Anxious?")}</h1><p class="lead">${msg||T("Tell me, what's going on? Pick what you're feeling, and hear what Krishna said about it.")}</p></div></div>
+   <div class="grid">${FEELINGS.map(f=>`<button class="feel${seen.has(f.id)?" done":""}" data-id="${f.id}" type="button"><span class="dot" style="background:${f.color}"></span>${LANG==="en"?`<span class="hi">${f.en}</span>`:`<span class="hi">${T(f.hi)}</span><span class="en">${T(f.en)}</span>`}</button>`).join("")}</div>
    ${cards.length?`<h2>${T("My cards")} <span class="tiny">${T(`(${cards.length}, saved on this device)`)}</span></h2><div class="cards">${cards.slice().reverse().slice(0,6).map(c=>`<div class="mini"><span class="r">${esc(TR(c.ref))}</span><span>${c.html}</span></div>`).join("")}</div>`:""}
    ${HELP_QUIET_()}`;
   app.querySelectorAll(".feel").forEach(b=>b.onclick=()=>open(b.dataset.id));document.getElementById("toHome").onclick=()=>mainHome();
@@ -557,6 +558,24 @@ function feelings(msg){
 
 /* ---------- feeling journey ---------- */
 let F=null, st={};
+/* Ramayan moments that match a feeling (Tulsidas's Ramcharitmanas). Add more as each Kand is built. */
+const RAMF={
+ fear:{kand:1,ref:"Ramcharitmanas · Bal Kand",play:"Play Bal Kand",
+  dev:"मंगल भवन अमंगल हारी। द्रवौ सो दसरथ अजिर बिहारी॥",
+  rom:"Mangal bhavan amangal haari, dravau so Dasarath ajir bihaari.",
+  mean:"He is the home of all that is good, and he takes away what is bad. May the one who played as a child in King Dasharath's courtyard be kind to us.",
+  story:"Families have sung this line for centuries before exams, journeys and big days. You've done your part. Say it slowly, and hand the rest of the worry over."},
+ anger:{kand:1,ref:"Ramcharitmanas · Bal Kand",play:"Play Bal Kand",
+  dev:"नाथ संभु धनु भंजनि हारा। होइहि कोउ एक दास तुम्हारा॥",
+  rom:"Naath Sambhu dhanu bhanjani haara, hoihi kou ek daas tumhaara.",
+  mean:"My lord, the one who broke Shiva's bow must surely be one of your own servants.",
+  story:"When the fierce sage Parashuram stormed in, furious that Shiva's bow was broken, Ram didn't shout back. He answered softly and with respect, and the anger melted. Softness gave the anger nowhere to go."},
+ guilt:{kand:1,ref:"Ramcharitmanas · Bal Kand",play:"Play Bal Kand",
+  dev:"परसत पद पावन सोक नसावन प्रगट भई तपपुंज सही।<br>देखत रघुनायक जन सुख दायक सनमुख होइ कर जोरि रही॥",
+  rom:"Parasat pad paavan sok nasaavan pragat bhai tapapunj sahi. Dekhat Raghunaayak jan sukh daayak sanmukh hoi kar jori rahi.",
+  mean:"At the touch of his holy feet, which take away sorrow, she appeared, shining with all her years of tapasya. Seeing Ram, who brings joy to all, she stood before him with her hands joined.",
+  story:"After a wrong long ago, Ahalya was cursed to become stone. When Ram's feet touched the stone, she was free. He didn't ask what she had done or remind her of the past. One chapter is not your whole story."}
+};
 function open(id){
   F=FEELINGS.find(f=>f.id===id); st={taps:0,breaths:0,lit:false,cloud:"",gone:false};
   app.innerHTML=`
@@ -590,7 +609,12 @@ function step(n){
   if(n===1){st.glow=true;draw();who(F.speaker||"K");
     document.getElementById("say").innerHTML=`<div class="verse"><span class="ref">${TR(F.ref)}</span><div class="dev" lang="sa">${SCR(F.dev)}</div>${LANG==="en"?`<div class="rom">${F.rom}</div>`:""}<div class="mean" data-k="${encodeURIComponent(F.mean)}">${T(F.mean)}</div></div>`;bilVerses(document.getElementById("say"));
     setAct("");nextBtn("What does it mean for me?",()=>step(2));}
-  if(n===2){who("N");setSay(F.simple);setAct("");nextBtn("Let's try something",()=>step(3));}
+  if(n===2){who("N");setSay(F.simple);setAct("");
+    if(RAMF[F.id]) nextBtn("A moment from the Ramayan",()=>step(5)); else nextBtn("Let's try something",()=>step(3));}
+  if(n===5){const R=RAMF[F.id];who("N");
+    document.getElementById("say").innerHTML=`<p class="tiny ramtag">${T("From the Ramayan")}</p><div class="verse"><span class="ref">${T(R.ref)}</span><div class="dev" lang="awa">${SCR(R.dev)}</div>${LANG==="en"?`<div class="rom">${R.rom}</div>`:""}<div class="mean" data-k="${encodeURIComponent(R.mean)}">${T(R.mean)}</div></div><p>${T(R.story)}</p>`;bilVerses(document.getElementById("say"));
+    setAct("");nextBtn("Let's try something",()=>step(3));
+    if(window.Ramayan){const b=document.createElement("button");b.type="button";b.className="ghost";b.textContent=T(R.play);b.onclick=()=>window.Ramayan.play(R.kand);document.getElementById("act").appendChild(b);}}
   if(n===3){who("N");setSay(F.act.q);setAct("");ACT[F.act.type]();}
 }
 function finish(val){
