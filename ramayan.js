@@ -113,10 +113,11 @@ const shivBow=(broken)=>broken
 const KANDS={1:{
   title:"Bal Kand · Ram's Birth and Sita's Swayamvar",
   sub:"An interactive Ramayan story",
+  langs:["hi","gu"],
   kids:"Ram is born in Ayodhya, helps a wise sage, frees a lady who was turned to stone, and marries Sita after gently breaking a huge bow.",
   talk:"Who is someone you love who lives far away? What would you like to tell them today?",
   scenes:[
- { art:()=>svg(sky("#ffd9a8","#fff3dc",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+forest("#e8c27a","#d9a95a")+RAM(640,780,.9,{still:true})+SITA(960,780,.9,{still:true})),
+ { art:()=>svg(sky("#ffd9a8","#fff3dc",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+forest("#e8c27a","#d9a95a")+RAM(800,780,.9,{still:true})),
    title:"The Story of Ram", sub:"Tulsidas's Ramcharitmanas · Bal Kand",
    steps:[
     {w:"N",t:"Namaste! About 450 years ago, the poet-saint Tulsidas wrote the story of Shri Ram in Awadhi, the everyday language of his people."},
@@ -224,7 +225,7 @@ function kandStory(N){
   app.innerHTML=`<div class="controls"><button class="ghost" id="toKands" type="button">${T("‹ Kands")}</button></div>
   <header class="shead"><h2>${T(K.title)}</h2><div class="dots" id="dots" aria-hidden="true"></div></header>
   ${FAMon()&&K.kids?`<div class="kids"><b>${T("For children")}</b><p>${bil(K.kids)}</p></div>`:""}
-  ${LG()!=="en"?`<p class="note-lang">${T("This Kand hasn't been translated yet, so it's shown in English for now.")}</p>`:""}
+  ${LG()!=="en"&&!(K.langs||[]).includes(LG())?`<p class="note-lang">${T("This Kand hasn't been translated yet, so it's shown in English for now.")}</p>`:""}
   <div class="stage story" id="stage" role="img" aria-label="${T("Story picture")}"></div>
   <div class="box story" aria-live="polite"><span class="who N" id="who">${T("Story")}</span><p class="say" id="say"></p><div class="act" id="act"></div></div>
   <div class="controls"><button class="ghost" id="back" type="button">${T("‹ Back")}</button><button id="next" type="button">${T("Next ›")}</button><span class="spacer"></span><label class="tts" for="tts"><input type="checkbox" id="tts"> ${T("Read aloud")}</label></div>

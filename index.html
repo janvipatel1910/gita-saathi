@@ -540,7 +540,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 const app=document.getElementById("app");
 
 const HELP_FULL_EN=`<div class="help"><strong>If you feel unsafe or are thinking of harming yourself</strong>, please talk to someone now. In the UK, call Samaritans free on <strong>116 123</strong>, any time. In India, call Tele-MANAS on <strong>14416</strong>. In an emergency, call 999 (UK) or 112 (India).</div>`;
-const HELP_QUIET_EN=`<div class="help quiet">This app shares the Gita's wisdom. It isn't a replacement for talking to someone. If things feel very heavy, call <strong>Samaritans 116 123</strong> (UK) or <strong>Tele-MANAS 14416</strong> (India).</div>`;
+const HELP_QUIET_EN=`<div class="help quiet">This app shares the wisdom of the Gita and the Ramayan. It isn't a replacement for talking to someone. If things feel very heavy, call <strong>Samaritans 116 123</strong> (UK) or <strong>Tele-MANAS 14416</strong> (India).</div>`;
 
 /* ---------- home ---------- */
 function feelings(msg){
@@ -1079,7 +1079,7 @@ function bindFamily(){
   const b=document.getElementById("famBtn"); if(b) b.onclick=()=>{FAM.on=!FAM.on; if(FAM.on&&!FAM.second) FAM.second=famSecond(); saveFam(); mainHome();};
   app.querySelectorAll("[data-sec]").forEach(x=>x.onclick=()=>{FAM.second=x.dataset.sec; saveFam(); mainHome();});
 }
-const HOME_HELP_EN=`<div class="help quiet">Gyaan Ghar shares the Gita's wisdom. It isn't a replacement for talking to someone. If things feel very heavy, call <strong>Samaritans 116 123</strong> (UK) or <strong>Tele-MANAS 14416</strong> (India).</div>`;
+const HOME_HELP_EN=`<div class="help quiet">Gyaan Ghar shares the wisdom of the Gita and the Ramayan. It isn't a replacement for talking to someone. If things feel very heavy, call <strong>Samaritans 116 123</strong> (UK) or <strong>Tele-MANAS 14416</strong> (India).</div>`;
 const HOME_HELP_=()=>T(HOME_HELP_EN);
 function stopVoice(){try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}}
 const ORDER=[1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18];
