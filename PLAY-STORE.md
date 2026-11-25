@@ -1,17 +1,17 @@
-# Publishing Gita Ghar on Google Play
+# Publishing Gyaan Ghar on Google Play
 
 Do this **after** the AWS deploy works and family testing is done.
 
 ## 1. Check the name
 
-Search Google Play for "Gita Ghar" and make sure no other app uses it.
+Search Google Play for "Gyaan Ghar" and make sure no other app uses it.
 
 ## 2. Create the Android package with PWABuilder
 
 1. Go to **pwabuilder.com** and enter your CloudFront address (or your own domain, if you add one).
 2. Choose **Android → Generate package**.
    - Package ID: `uk.gitaghar.app` (or similar; it can never be changed later)
-   - App name: `Gita Ghar`
+   - App name: `Gyaan Ghar`
    - Keep "Signing key: create new".
 3. Download the zip. It contains the app bundle (`.aab`), your **signing key** and an `assetlinks.json` file.
 4. **Back up the signing key and its passwords somewhere safe** (for example a password manager). Without them you can never update the app.
@@ -27,7 +27,7 @@ Before publishing, replace `[CONTACT EMAIL]` in `privacy.html` with the email yo
 
 ## Store listing
 
-**App name (max 30 characters):** Gita Ghar: Gita for Families
+**App name (max 30 characters):** Gyaan Ghar: Gita for Families
 
 **Short description (max 80 characters)**
 - English: Krishna's wisdom for families abroad, in English, Hindi and Gujarati.
@@ -36,9 +36,9 @@ Before publishing, replace `[CONTACT EMAIL]` in `privacy.html` with the email yo
 
 **Full description (English)**
 
-Gita Ghar brings the Bhagavad Gita home, for Indian families living abroad.
+Gyaan Ghar brings the Bhagavad Gita home, for Indian families living abroad.
 
-When life feels heavy, tell Krishna what's on your mind, in English, Hindi, Gujarati or Hinglish, and Gita Ghar finds a fitting verse from the Gita, explains it simply and suggests a small calming practice.
+When life feels heavy, tell Krishna what's on your mind, in English, Hindi, Gujarati or Hinglish, and Gyaan Ghar finds a fitting verse from the Gita, explains it simply and suggests a small calming practice.
 
 • Tell Krishna: write what you're feeling and get the right verse
 • 12 feelings, including homesick, worried, angry, grief and guilt
@@ -49,7 +49,7 @@ When life feels heavy, tell Krishna what's on your mind, in English, Hindi, Guja
 • Verses shown in Devanagari, Gujarati script and English, always with chapter and verse numbers
 • Works offline. No adverts, no tracking.
 
-Gita Ghar shares the Gita's wisdom. It is not a replacement for professional help. If you are struggling, please call Samaritans on 116 123 (UK) or Tele-MANAS on 14416 (India).
+Gyaan Ghar shares the Gita's wisdom. It is not a replacement for professional help. If you are struggling, please call Samaritans on 116 123 (UK) or Tele-MANAS on 14416 (India).
 
 **Category:** Books & Reference (or Lifestyle)
 

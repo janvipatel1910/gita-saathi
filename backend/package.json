@@ -1,8 +1,8 @@
 {
-  "name": "gita-ghar-backend",
+  "name": "gyaan-ghar-backend",
   "private": true,
   "type": "module",
-  "description": "Lambda functions for Gita Ghar. The AWS SDK is already included in the Lambda runtime, so it is only a dev dependency here, for tests.",
+  "description": "Lambda functions for Gyaan Ghar. The AWS SDK is already included in the Lambda runtime, so it is only a dev dependency here, for tests.",
   "scripts": {
     "test": "node --test test/*.test.mjs"
   },

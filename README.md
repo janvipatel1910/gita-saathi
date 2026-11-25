@@ -1,8 +1,8 @@
-# Gita Ghar
+# Gyaan Ghar
 
 An interactive Bhagavad Gita companion for Indian families living abroad, in English, Hindi and Gujarati.
 
-When someone feels stressed, they can tell Gita Ghar what's on their mind and hear what Krishna said about it in the Gita. Families can also play through the whole Gita together as a short story, in two languages side by side, making choices and doing small calming actions along the way.
+When someone feels stressed, they can tell Gyaan Ghar what's on their mind and hear what Krishna said about it in the Gita. Families can also play through the whole Gita together as a short story, in two languages side by side, making choices and doing small calming actions along the way.
 
 ## Features
 
@@ -116,7 +116,7 @@ Tap the round speaker button in the bottom corner to turn sound on or off. It is
 
 ## Install it as a phone app
 
-Gita Ghar can be added to a phone's home screen. It then opens full-screen with its own icon, and works without internet after the first visit.
+Gyaan Ghar can be added to a phone's home screen. It then opens full-screen with its own icon, and works without internet after the first visit.
 
 - **Android (Chrome):** open the site and tap **Install** on the home page, or use the browser menu → *Install app*.
 - **iPhone (Safari):** tap the **Share** button, then **Add to Home Screen**.
