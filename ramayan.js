@@ -23,7 +23,7 @@ function init(){
 /* ---------- who speaks ---------- */
 const SPEAKERS={
   N:["Story","#1f8a8a"], R:["Ram","#2f5fa8"], S:["Sita","#d9534f"], L:["Lakshman","#b7791f"],
-  D:["King Dasharath","#7a4fb0"], V:["Vishwamitra","#7a4fb0"], P:["Parashuram","#b03a2e"], U:["Kaushalya","#7a4fb0"]
+  D:["King Dasharath","#7a4fb0"], V:["Vishwamitra","#7a4fb0"], P:["Parashuram","#b03a2e"], U:["Kaushalya","#7a4fb0"], J:["King Janak","#7a4fb0"], G:["Guru Vasishtha","#7a4fb0"]
 };
 
 /* ---------- Kand list (only Bal Kand is ready so far) ---------- */
@@ -51,7 +51,7 @@ const INK="#1c1c2e", GOLDC="#f4c430";
 function face(mood){
   let eyes,mouth,extra="";
   if(mood==="sad"){
-    eyes=`<path d="M-27 -300 l16 4 M11 -296 l16 -4" stroke="${INK}" stroke-width="5" stroke-linecap="round"/><circle cx="-18" cy="-290" r="5" fill="${INK}"/><circle cx="18" cy="-290" r="5" fill="${INK}"/>`;
+    eyes=`<path d="M-32 -298 L-10 -308 M10 -308 L32 -298" stroke="${INK}" stroke-width="5" stroke-linecap="round"/><path d="M-27 -288 q9 6 18 0 M9 -288 q9 6 18 0" stroke="${INK}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
     mouth=`<path d="M-15 -262 q15 -12 30 0" stroke="${INK}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
   } else if(mood==="angry"){
     eyes=`<path d="M-30 -308 l20 8 M10 -300 l20 -8" stroke="${INK}" stroke-width="6" stroke-linecap="round"/><circle cx="-18" cy="-290" r="6" fill="${INK}"/><circle cx="18" cy="-290" r="6" fill="${INK}"/>`;
@@ -109,12 +109,18 @@ const shivBow=(broken)=>broken
   ?`<g transform="translate(800 700)"><path d="M-420 0 Q-260 -110 -40 -40" fill="none" stroke="#7a3d12" stroke-width="26" stroke-linecap="round" transform="rotate(14)"/><path d="M420 0 Q260 -110 40 -40" fill="none" stroke="#7a3d12" stroke-width="26" stroke-linecap="round" transform="rotate(-14)"/><circle r="60" fill="#fff3b0" class="pulse"/></g>`
   :`<g transform="translate(800 720)"><path d="M-430 0 Q0 -200 430 0" fill="none" stroke="#7a3d12" stroke-width="28" stroke-linecap="round"/><line x1="-430" y1="0" x2="430" y2="0" stroke="#5a3a20" stroke-width="4"/><rect x="-470" y="0" width="940" height="40" rx="12" fill="#c58a3c"/></g>`;
 
+const tears=(x,y,s)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-20 -282 C-34 -258 -30 -240 -20 -240 C-10 -240 -6 -258 -20 -282Z M20 -282 C6 -258 10 -240 20 -240 C30 -240 34 -258 20 -282Z" fill="#5fb4f0" stroke="#3a8fd0" stroke-width="2"/></g>`;
+const doli=()=>`<g transform="translate(1380 760)"><rect x="-130" y="-190" width="260" height="170" rx="18" fill="#e0453a"/><path d="M-150 -190 Q0 -290 150 -190Z" fill="#f4c430"/><rect x="-60" y="-160" width="120" height="110" rx="10" fill="#ffd36b" opacity=".8"/><line x1="-260" y1="-110" x2="260" y2="-110" stroke="#8b4a1c" stroke-width="16" stroke-linecap="round"/></g>`;
+const shadow=(gone)=>gone?`<circle cx="1180" cy="420" r="150" fill="#fff3b0" class="pulse"/><circle cx="1180" cy="420" r="60" fill="#fffbe0"/>`
+  :`<g transform="translate(1180 560)"><path d="M-230 260 Q-260 -40 -120 -200 Q0 -300 120 -200 Q260 -40 230 260Z" fill="#3b2a4a" opacity=".92"/><path d="M-90 -80 l50 20 M90 -80 l-50 20" stroke="#ff6b4a" stroke-width="14" stroke-linecap="round"/><circle cx="-60" cy="-50" r="16" fill="#ff6b4a"/><circle cx="60" cy="-50" r="16" fill="#ff6b4a"/></g>`;
+const BOY=(x,y,s,o)=>person(x,y,s,Object.assign({child:true,crown:"mukut",dress:"#f7c948",trim:"#e05a47"},o||{}));
+
 /* ---------- Bal Kand ---------- */
 const KANDS={1:{
   title:"Bal Kand · Ram's Birth and Sita's Swayamvar",
   sub:"An interactive Ramayan story",
   langs:["hi","gu"],
-  kids:"Ram is born in Ayodhya, helps a wise sage, frees a lady who was turned to stone, and marries Sita after gently breaking a huge bow.",
+  kids:"Ram is born in Ayodhya and grows up learning from his guru. He helps a wise sage, frees a lady who was turned to stone, and marries Sita after gently breaking a huge bow. Then Sita says a teary goodbye to her parents.",
   talk:"Who is someone you love who lives far away? What would you like to tell them today?",
   scenes:[
  { art:()=>svg(sky("#ffd9a8","#fff3dc",`<circle cx="1330" cy="170" r="80" fill="#ffe28a"/>`)+forest("#e8c27a","#d9a95a")+RAM(800,780,.9,{still:true})),
@@ -140,6 +146,18 @@ const KANDS={1:{
        opts:[["Family time together","family"],["Prayer or aarti","prayer"],["Good food and laughter","food"],["A call from someone far away","call"]],
        on:k=>[{w:"N",t:{family:"Then that time together is your Ayodhya. Protect it, even when life gets busy.",prayer:"Then keep that diya burning. Even two minutes a day keeps a home feeling like a mandir.",food:"Then that table is your Ayodhya. A shared meal is a small celebration.",call:"Then you know distance can't stop love. Love crossed the whole universe to reach Kaushalya."}[k]}]}]; }}
  ]},
+ { art:()=>svg(sky("#ffe9c2","#fff8ea")+palace()+SAGE(300,800,.8,{id:"G",bless:true,dress:"#f6eedf",trim:"#c45f12"})+BOY(640,800,.85,{id:"R",skin:"#3566b0"})+BOY(840,800,.85,{id:"L",skin:"#e2b48a",dress:"#f0a33a",trim:"#2f5fa8"})+BOY(1040,800,.85,{skin:"#3f6fb8",dress:"#2f8a6a",trim:GOLDC})+BOY(1240,800,.85,{skin:"#e2b48a",dress:"#d9534f",trim:GOLDC})),
+   steps:[
+    {w:"N",t:"The four brothers grow up together, laughing, playing and looking after each other."},
+    {w:"N",t:"When they are old enough, they go to live and study at their guru's home. Tulsidas says they learn everything in a very short time."},
+    {w:"N",t:"But Tulsidas remembers something even smaller, from every single day:"},
+    {w:"N",t:()=>RV(REF_BAL,"प्रातकाल उठि कै रघुनाथा। मातु पिता गुरु नावहिं माथा॥","Praatakaal uthi kai Raghunaatha, maatu pita guru naavahin maatha.","Every morning, as soon as he wakes up, Ram bows his head to his mother, his father and his guru.")},
+    {w:"G",t:"Knowledge grows quickly in a humble heart."},
+    {w:"N",t:"The Lord of the universe starts each day by showing respect. A small habit, done every day, keeps a family close, even across oceans."},
+    {act:"choice",w:"N",q:"Which small morning habit could you start?",
+     opts:[["A quick call or message to my parents","call"],["Saying thank you before I start the day","thanks"],["Two minutes of prayer","pray"],["Helping someone at home","help"]],
+     on:k=>[{w:"N",t:{call:"Lovely. A two-minute call can start someone's whole day with a smile, especially a parent far away.",thanks:"Lovely. A grateful start makes the whole day feel lighter.",pray:"Lovely. Two quiet minutes are enough to start the day calm, like Ram.",help:"Lovely. Helping at home is a way of bowing to your family too."}[k]}]}
+ ]},
  { art:()=>svg(sky("#cfe8f5","#f3f9fc")+palace()+KING(520,780,.85,{id:"D",mood:S.letgo?"happy":"sad"})+SAGE(860,780,.85,{id:"V",bless:true})+RAM(1180,780,.7,{})+LAKSH(1360,780,.66,{})),
    steps:[
     {w:"N",t:"The boys grow up. One day the great sage Vishwamitra arrives at the palace."},
@@ -151,8 +169,21 @@ const KANDS={1:{
      on:k=>{S.letgo=true;return [
       {w:"N",t:k==="go"?"That's what Dasharath chose too, though his heart ached.":"That's how Dasharath felt at first. Every parent does. But in the end he let them go, with blessings."},
       {w:"N",t:"Many families abroad know this feeling: a parent waving goodbye at the airport, or a child moving away to study or work."},
-      {w:"N",t:"Love doesn't mean holding on tight. Sometimes love means blessing someone and letting them grow."},
-      {w:"N",t:"In the forest, Ram and Lakshman protect the yagya, and the sage teaches them everything he knows."}];}}
+      {w:"N",t:"Love doesn't mean holding on tight. Sometimes love means blessing someone and letting them grow."}];}}
+ ]},
+ { art:()=>svg(sky(S.tadaka?"#cfe8d0":"#5b4a7a",S.tadaka?"#eef8f1":"#8a76a8")+forest(S.tadaka?"#7cc576":"#4a6b4a",S.tadaka?"#5aa85a":"#3d5a3d")+shadow(S.tadaka)+SAGE(260,800,.75,{})+RAM(560,800,.85,{mood:"happy"})+LAKSH(760,800,.75,{mood:S.tadaka?"happy":"sad"})),
+   steps:[
+    {w:"N",t:"On the way to the sage's ashram, the forest grows dark and silent. No birds sing here."},
+    {w:"V",t:"This is Tadaka's forest. She frightens everyone who passes. Nobody has dared to stand up to her."},
+    {w:"N",t:"Suddenly she rushes at them, roaring with anger. Lakshman steps closer to his brother. Ram stays calm."},
+    {act:"tap",flag:"tadaka",w:"N",q:"Ram must protect the sage. Help him stand firm.",label:"Ram lifts his bow",
+     on:()=>[
+      {w:"N",t:()=>RV(REF_BAL,"एकहिं बान प्रान हरि लीन्हा। दीन जानि तेहि निज पद दीन्हा॥","Ekahin baan praan hari leenha, deen jaani tehi nij pad deenha.","With a single arrow he ended her life. Then, seeing how lost she was, he gave her a place in his own divine home.")},
+      {w:"N",t:"Look at the second half. Even for someone who attacked him, Ram had no hatred, only kindness."},
+      {w:"N",t:"In the ashram, Ram and Lakshman protect the yagya, and the sage teaches them everything he knows."},
+      {act:"choice",w:"N",q:"Being brave doesn't mean feeling no fear. What's something you need to face right now?",
+       opts:[["A difficult conversation","talk"],["An exam or interview","exam"],["A habit I want to change","habit"],["Something I'm scared of","fear"]],
+       on:k=>[{w:"N",t:{talk:"Then go in like Ram: calm, firm and without hatred. Say what's true, kindly.",exam:"Then prepare well, breathe, and step forward. Ram didn't run from the dark forest.",habit:"Then face it one day at a time. Every small win counts.",fear:"Then you don't have to face it all at once. Even naming it, like you just did, is a brave first step."}[k]}]}]}
  ]},
  { art:()=>svg(sky("#bfe3d0","#eef8f1")+forest()+stone(S.freed)+(S.freed?person(1080,800,.85,{skin:"#e2b48a",dress:"#f6eedf",trim:"#2f8a6a",sari:true,fold:true,mood:"happy"}):"")+SAGE(260,800,.75,{})+RAM(560,800,.85,{})+LAKSH(760,800,.75,{})),
    steps:[
@@ -172,9 +203,15 @@ const KANDS={1:{
     {w:"S",t:"Mother Gauri, you know what is in my heart. Please bless me."},
     {w:"N",t:"The goddess's garland slips down, as if to say: <em>Your wish will come true.</em>"}
  ]},
- { art:()=>svg(sky("#ffe3b0","#fff6e6")+palace()+shivBow(S.broken)+KING(240,800,.7,{mood:S.broken?"happy":"sad"})+(S.broken?SITA(1360,800,.75,{fold:true}):"")+RAM(800,560,.62,{glow:!!S.broken})),
+ { art:()=>svg(sky("#ffe3b0","#fff6e6")+palace()+shivBow(S.broken)+KING(240,800,.7,{mood:S.broken?"happy":"sad"})+SITA(1360,800,.75,{fold:true,mood:S.broken?"happy":"sad"})+RAM(800,560,.62,{glow:!!S.broken})),
    steps:[
     {w:"N",t:"The day of the swayamvar. Kings and princes from everywhere come. One by one they try to lift the bow, and one by one they fail. Some can't even move it."},
+    {w:"N",t:"Sita watches from the side. Her heart is racing. What if nobody can do it? What if the one she prayed for fails too?"},
+    {w:"N",t:()=>RV(REF_BAL,"मनहीं मन मनाव अकुलानी। होहु प्रसन्न महेस भवानी॥","Manahin man manaav akulaani, hohu prasann Mahes Bhavaani.","Anxious and restless, she prays silently in her heart: Lord Shiva and Mother Bhavani, please be kind to me.")},
+    {act:"choice",w:"N",q:"Even Sita felt nervous before a big moment. What helps you when you feel like that?",
+     opts:[["Praying, like Sita","pray"],["Talking to someone","talk"],["Slow breaths","breathe"],["Keeping busy","busy"]],
+     on:k=>[{w:"N",t:{pray:"Then you're in good company. Sita did the same.",talk:"That's wise. A worry shared is a worry halved.",breathe:"That's wise. Slow breaths tell your body that you're safe.",busy:"That can help. Just remember to rest too."}[k]},
+      {w:"N",t:"Feeling nervous doesn't mean something will go wrong. It means it matters to you."}]},
     {w:"N",t:"Then Ram stands up, calm and humble. And Tulsidas says something beautiful about how everyone in that hall saw him:"},
     {w:"N",t:()=>RV(REF_BAL,"जिन्ह कै रही भावना जैसी। प्रभु मूरति तिन्ह देखी तैसी॥","Jinh kai rahi bhaavana jaisi, prabhu moorati tinh dekhi taisi.","Each person saw the Lord in the same way as the feeling in their own heart.")},
     {act:"choice",w:"N",q:"How do you think the proud kings saw Ram?",
@@ -196,9 +233,24 @@ const KANDS={1:{
       {w:"N",t:"Anger met with anger grows bigger. Anger met with softness has nowhere to go."},
       {act:"write",w:"N",q:"Make your card. When someone is angry with me, what will I do?",ph:"e.g. Take a breath and reply softly",
        ref:REF_BAL,rom:"Naath Sambhu dhanu bhanjani haara",card:v=>TF("When someone is angry with me, like Ram, I will: <strong>{v}</strong>",v),
-       on:()=>[
-        {w:"N",t:"Ram and Sita are married in Janakpur, and so are his three brothers. Ayodhya celebrates for days."},
-        {w:"N",t:"<em>Jai Siya Ram.</em> That is the end of Bal Kand. Next comes Ayodhya Kand, where life is about to change."}]}]}
+       on:()=>[]}]}
+ ]},
+ { art:()=>svg(sky("#ffe3ec","#fff6f8")+palace()+[180,420,700,980,1260,1460].map((x,i)=>`<circle cx="${x}" cy="${150+i%3*70}" r="16" fill="${["#ff8fa3","#f4c430","#ffb36b"][i%3]}"/>`).join("")+KING(260,800,.8,{id:"D"})+SITA(620,800,.85,{})+RAM(900,800,.85,{})+KING(1260,800,.8,{id:"J",dress:"#2f8a6a"})),
+   steps:[
+    {w:"N",t:"King Dasharath arrives from Ayodhya with a grand wedding procession. Ram and Sita are married in Janakpur, and so are his three brothers. There is music and joy everywhere."}
+ ]},
+ { art:()=>svg(sky("#ffd9c2","#fff1e6")+palace()+doli()+KING(260,800,.8,{id:"J",mood:"sad",dress:"#2f8a6a"})+tears(260,800,.8)+SITA(560,800,.8,{mood:"sad"})+tears(560,800,.8)+RAM(820,800,.8,{mood:"happy"})),
+   steps:[
+    {w:"N",t:"Then comes the bidai, the moment when Sita must leave her parents' home. Her mothers hold her close again and again, and give her loving advice."},
+    {w:"N",t:"King Janak is famous for his wisdom. People call him Videh, the one who is above all feelings. But when he sees his daughter leaving…"},
+    {w:"N",t:()=>RV(REF_BAL,"सीय बिलोकि धीरता भागी। रहे कहावत परम बिरागी॥<br>लीन्हि राय उर लाइ जानकी। मिटी महामरजाद ग्यान की॥","Siya biloki dheerata bhaagi, rahe kahaavat param biraagi. Leenhi raay ur laai Jaanaki, miti mahaamarajaad gyaan ki.","Seeing Sita, his calm ran away, though he was known as the most detached of all. The king held Janaki to his heart, and even the great walls of his wisdom gave way.")},
+    {w:"J",t:"Go happily, my daughter. Wherever you are, this home is always yours."},
+    {w:"N",t:"If even wise King Janak cried at a goodbye, then it's okay for us to cry too. The love that hurts at a goodbye is the same love that stays strong across the distance."},
+    {act:"choice",w:"N",q:"Who would you like to call or message today?",
+     opts:[["My parents","parents"],["My grandparents","grand"],["A brother or sister","sib"],["A friend far away","friend"]],
+     on:k=>[{w:"N",t:{parents:"Then call them today, even for two minutes. Somewhere, a parent is waiting to hear your voice.",grand:"Then call them today. Grandparents treasure every call, however short.",sib:"Then send them a message today. Siblings carry our childhood with them.",friend:"Then message them today. Old friendships are like Ayodhya: always there to come home to."}[k]},
+      {w:"N",t:"Sita reaches Ayodhya, and the whole city lights diyas to welcome her home."},
+      {w:"N",t:"<em>Jai Siya Ram.</em> That is the end of Bal Kand. Next comes Ayodhya Kand, where life is about to change."}]}
  ]}
 ]}};
 
